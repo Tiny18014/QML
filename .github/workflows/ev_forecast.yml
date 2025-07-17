@@ -15,9 +15,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out your repository code
+      # Step 1: Check out your repository code using a Personal Access Token (PAT)
+      # This is required to grant the workflow permission to push changes back to your private repo.
       - name: '1. Checkout Repository'
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ACTIONS_PAT }}
 
       # Step 2: Set up the Python environment
       - name: '2. Set up Python Environment'
@@ -30,7 +33,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           # Install all required libraries for data ingestion, training, and simulation.
-          # scikit-learn is added as it's a required dependency for lightgbm's scikit-learn API.
+          # scikit-learn is a required dependency for lightgbm's scikit-learn API.
           pip install pandas requests lightgbm optuna scikit-learn
 
       # Step 4: Run the data ingestion script to download the latest monthly data
