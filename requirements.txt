@@ -2,7 +2,7 @@ pandas
 river
 streamlit
 plotly
-sqlite3 
+ 
 requests
 lightgbm
 optuna
