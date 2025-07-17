@@ -1,27 +1,55 @@
-name: EV Demand Forecast
+# Name for the GitHub Actions workflow
+name: Monthly EV Demand Forecast CI/CD
 
 on:
+  # Schedule to run automatically on the 1st of every month at 02:30 UTC
   schedule:
-    - cron: '30 2 * * *'  # Every day at 8:00 AM IST
-  workflow_dispatch:      # Allow manual trigger from GitHub
+    - cron: '30 2 1 * *'
+  # Allows the workflow to be triggered manually from the GitHub Actions UI
+  workflow_dispatch:
 
 jobs:
-  forecast:
+  # The main job that runs the entire pipeline
+  forecast-pipeline:
+    # Use the latest version of Ubuntu as the runner environment
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # Step 1: Check out your repository code
+      - name: '1. Checkout Repository'
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      # Step 2: Set up the Python environment
+      - name: '2. Set up Python Environment'
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.11' # Use a specific version of Python
 
-      - name: Install dependencies
+      # Step 3: Install all necessary Python libraries for the project
+      - name: '3. Install Project Dependencies'
         run: |
           python -m pip install --upgrade pip
+          # Ensure your requirements.txt includes: pandas, requests, lightgbm, optuna
           pip install -r requirements.txt
 
-      - name: Run demand forecast
+      # Step 4: Run the data ingestion script to download the latest monthly data
+      - name: '4. Ingest Latest Monthly Data'
+        run: python scripts/data_ingestor.py
+
+      # Step 5: Run the training script to retrain the models on the new data
+      - name: '5. Run Model Training'
         run: python scripts/demand_forecast.py
+
+      # Step 6: Commit the newly trained model file back to the repository
+      - name: '6. Commit New Model'
+        run: |
+          # Configure git with a bot user name and email
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions-bot@github.com'
+          # Add the new model file to the staging area
+          git add models/ev_model.pkl
+          # Check if there are any changes to commit to avoid empty commits
+          # The "|| git commit" part means the commit command only runs if the diff command fails (i.e., finds changes)
+          git diff --staged --quiet || git commit -m "Auto-update: Retrain model with latest monthly data"
+          # Push the changes back to the main branch
+          git push

@@ -1,0 +1,4 @@
+2025-07-18 01:51:33,117 - INFO - Model bundle with 5 models loaded successfully
+2025-07-18 01:51:33,486 - INFO - Test data with pre-calculated features loaded: 113305 records
+2025-07-18 01:51:33,499 - INFO - Database initialized at C:\Users\shubh\OneDrive\Desktop\QML\output\live_predictions.db
+2025-07-18 01:51:33,499 - INFO - Starting live simulation with 1.0s delay...
