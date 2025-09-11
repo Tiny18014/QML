@@ -45,8 +45,16 @@ jobs:
       - name: '4. Preprocess Data (Datapush)'
         run: python scripts/run_pipeline.py --mode datapush
 
-      # Step 5: Prepare EV_Dataset.csv for trainer (map Vehicle_Class -> Vehicle_Category)
-      - name: '5. Prepare Training Dataset'
+      # Debug: list data and output directories to verify files
+      - name: '5. List data and output'
+        run: |
+          echo "== data =="
+          ls -la data || true
+          echo "== output =="
+          ls -la output || true
+
+      # Step 6: Prepare EV_Dataset.csv for trainer (map Vehicle_Class -> Vehicle_Category) with fallback
+      - name: '6. Prepare Training Dataset'
         run: |
           python - << 'PY'
           import pandas as pd
@@ -54,9 +62,15 @@ jobs:
           root = Path(__file__).resolve().parents[2]
           pre = root / 'output' / 'preprocessed_data.csv'
           out = root / 'data' / 'EV_Dataset.csv'
-          if not pre.exists():
-              raise SystemExit('output/preprocessed_data.csv not found; datapush step may have failed')
-          df = pd.read_csv(pre)
+          fallback = root / 'data' / 'EV_Dataset.csv'
+          if pre.exists():
+              df = pd.read_csv(pre)
+              print('Using output/preprocessed_data.csv')
+          elif fallback.exists():
+              df = pd.read_csv(fallback)
+              print('Fallback to data/EV_Dataset.csv')
+          else:
+              raise SystemExit('No training data found: neither output/preprocessed_data.csv nor data/EV_Dataset.csv exists')
           # Ensure required columns for advanced trainer
           if 'Vehicle_Category' not in df.columns and 'Vehicle_Class' in df.columns:
               df['Vehicle_Category'] = df['Vehicle_Class']
@@ -70,17 +84,17 @@ jobs:
           print(f'Wrote training dataset to {out}')
           PY
 
-      # Step 6: Train the advanced model on the latest data
-      - name: '6. Train Advanced Model'
+      # Step 7: Train the advanced model on the latest data
+      - name: '7. Train Advanced Model'
         run: python scripts/advanced_model_trainer.py
 
-      # Step 7: Optionally retrain baseline model for back-compat (non-blocking)
-      - name: '7. (Optional) Retrain Baseline Model'
+      # Step 8: Optionally retrain baseline model for back-compat (non-blocking)
+      - name: '8. (Optional) Retrain Baseline Model'
         run: |
           python scripts/demand_forecast.py || echo "Baseline model training skipped"
 
-      # Step 8: Commit the newly trained model files back to the repository
-      - name: '8. Commit New Models'
+      # Step 9: Commit the newly trained model files back to the repository
+      - name: '9. Commit New Models'
         run: |
           # Configure git with a bot user name and email
           git config --global user.name 'GitHub Actions Bot'
