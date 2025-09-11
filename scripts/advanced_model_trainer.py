@@ -327,6 +327,17 @@ def main():
         train_df = df_advanced.iloc[:1].copy()
         val_df = df_advanced.iloc[1:2].copy() if total_rows > 1 else df_advanced.iloc[:0].copy()
         test_df = df_advanced.iloc[2:].copy() if total_rows > 2 else df_advanced.iloc[:0].copy()
+
+    # Final fallback: if still empty (defensive), use all data as train
+    if train_df.empty:
+        train_df = df_advanced.copy()
+        val_df = df_advanced.iloc[:0].copy()
+        test_df = df_advanced.iloc[:0].copy()
+
+    print(f"\n📊 Data splits (final):")
+    print(f"  Training: {len(train_df)} samples")
+    print(f"  Validation: {len(val_df)} samples")
+    print(f"  Test: {len(test_df)} samples")
     
     print(f"\n📊 Data splits:")
     print(f"  Training: {len(train_df)} samples")
