@@ -1,0 +1,27 @@
+ADVANCED EV MODEL FORECASTING REPORT
+==================================================
+Generated: 2025-08-31 13:44:28
+Total Records: 812
+Date Range: 2025-01-15 to 2025-08-15
+
+PERFORMANCE SUMMARY
+------------------------------
+Mean Absolute Error (MAE): 81.88
+Mean Squared Error (MSE): 31406.94
+Root Mean Squared Error (RMSE): 177.22
+R-squared (R²): -0.1352
+
+CATEGORY PERFORMANCE
+------------------------------
+Bus: MAE=37.76, Records=88
+2-Wheelers: MAE=120.16, Records=146
+4-Wheelers: MAE=72.29, Records=311
+Others: MAE=24.44, Records=152
+3-Wheelers: MAE=168.88, Records=115
+
+RECOMMENDATIONS
+------------------------------
+1. Model performance is poor (negative R²)
+2. Check feature engineering pipeline
+3. Verify data preprocessing steps
+4. Consider retraining with better features

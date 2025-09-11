@@ -1,0 +1,76 @@
+2025-08-31 13:32:17,135 - INFO - Starting incremental training...
+2025-08-31 13:32:17,373 - INFO - Existing advanced model loaded successfully
+2025-08-31 13:32:17,373 - INFO - Loading new data from: C:\Users\shubh\OneDrive\Desktop\QML\data\Kerala.xlsx
+2025-08-31 13:32:17,617 - INFO - Loaded 13 new records
+2025-08-31 13:32:17,617 - INFO - Creating advanced features for new data...
+2025-08-31 13:32:17,618 - INFO - Created default Date column
+2025-08-31 13:32:17,619 - ERROR - ❌ Incremental training failed: 'State'
+2025-08-31 13:32:58,283 - INFO - Starting incremental training...
+2025-08-31 13:32:58,536 - INFO - Existing advanced model loaded successfully
+2025-08-31 13:32:58,536 - INFO - Loading new data from: C:\Users\shubh\OneDrive\Desktop\QML\data\Kerala.xlsx
+2025-08-31 13:32:58,771 - INFO - Successfully preprocessed Excel data using data push pipeline
+2025-08-31 13:32:58,771 - INFO - Loaded 65 new records
+2025-08-31 13:32:58,771 - INFO - Creating advanced features for new data...
+2025-08-31 13:32:58,774 - INFO - Created Date column from Month_Name and Year
+2025-08-31 13:32:58,776 - INFO - Mapped Vehicle_Class to Vehicle_Category
+2025-08-31 13:32:58,794 - ERROR - ❌ Incremental training failed: incompatible index of inserted column with frame index
+2025-08-31 13:33:27,339 - INFO - Starting incremental training...
+2025-08-31 13:33:27,562 - INFO - Existing advanced model loaded successfully
+2025-08-31 13:33:27,562 - INFO - Loading new data from: C:\Users\shubh\OneDrive\Desktop\QML\data\Kerala.xlsx
+2025-08-31 13:33:27,781 - INFO - Successfully preprocessed Excel data using data push pipeline
+2025-08-31 13:33:27,781 - INFO - Loaded 65 new records
+2025-08-31 13:33:27,781 - INFO - Creating advanced features for new data...
+2025-08-31 13:33:27,782 - INFO - Created Date column from Month_Name and Year
+2025-08-31 13:33:27,786 - INFO - Mapped Vehicle_Class to Vehicle_Category
+2025-08-31 13:33:27,885 - ERROR - ❌ Incremental training failed: Cannot setitem on a Categorical with a new category (0), set the categories first
+2025-08-31 13:33:48,530 - INFO - Starting incremental training...
+2025-08-31 13:33:48,762 - INFO - Existing advanced model loaded successfully
+2025-08-31 13:33:48,762 - INFO - Loading new data from: C:\Users\shubh\OneDrive\Desktop\QML\data\Kerala.xlsx
+2025-08-31 13:33:48,981 - INFO - Successfully preprocessed Excel data using data push pipeline
+2025-08-31 13:33:48,981 - INFO - Loaded 65 new records
+2025-08-31 13:33:48,982 - INFO - Creating advanced features for new data...
+2025-08-31 13:33:48,983 - INFO - Created Date column from Month_Name and Year
+2025-08-31 13:33:48,988 - INFO - Mapped Vehicle_Class to Vehicle_Category
+2025-08-31 13:33:49,088 - ERROR - ❌ Incremental training failed: Cannot setitem on a Categorical with a new category (0), set the categories first
+2025-08-31 13:34:05,687 - INFO - Starting incremental training...
+2025-08-31 13:34:05,918 - INFO - Existing advanced model loaded successfully
+2025-08-31 13:34:05,918 - INFO - Loading new data from: C:\Users\shubh\OneDrive\Desktop\QML\data\Kerala.xlsx
+2025-08-31 13:34:06,136 - INFO - Successfully preprocessed Excel data using data push pipeline
+2025-08-31 13:34:06,136 - INFO - Loaded 65 new records
+2025-08-31 13:34:06,136 - INFO - Creating advanced features for new data...
+2025-08-31 13:34:06,137 - INFO - Created Date column from Month_Name and Year
+2025-08-31 13:34:06,141 - INFO - Mapped Vehicle_Class to Vehicle_Category
+2025-08-31 13:34:06,241 - ERROR - ❌ Incremental training failed: could not convert string to float: 'Kerala'
+2025-08-31 13:34:24,618 - INFO - Starting incremental training...
+2025-08-31 13:34:24,879 - INFO - Existing advanced model loaded successfully
+2025-08-31 13:34:24,880 - INFO - Loading new data from: C:\Users\shubh\OneDrive\Desktop\QML\data\Kerala.xlsx
+2025-08-31 13:34:25,097 - INFO - Successfully preprocessed Excel data using data push pipeline
+2025-08-31 13:34:25,097 - INFO - Loaded 65 new records
+2025-08-31 13:34:25,097 - INFO - Creating advanced features for new data...
+2025-08-31 13:34:25,099 - INFO - Created Date column from Month_Name and Year
+2025-08-31 13:34:25,102 - INFO - Mapped Vehicle_Class to Vehicle_Category
+2025-08-31 13:34:25,213 - INFO - Performing incremental training...
+2025-08-31 13:34:25,213 - ERROR - ❌ Incremental training failed: lightgbm.sklearn.LGBMRegressor() got multiple values for keyword argument 'learning_rate'
+2025-08-31 13:34:41,195 - INFO - Starting incremental training...
+2025-08-31 13:34:41,429 - INFO - Existing advanced model loaded successfully
+2025-08-31 13:34:41,429 - INFO - Loading new data from: C:\Users\shubh\OneDrive\Desktop\QML\data\Kerala.xlsx
+2025-08-31 13:34:41,648 - INFO - Successfully preprocessed Excel data using data push pipeline
+2025-08-31 13:34:41,648 - INFO - Loaded 65 new records
+2025-08-31 13:34:41,648 - INFO - Creating advanced features for new data...
+2025-08-31 13:34:41,650 - INFO - Created Date column from Month_Name and Year
+2025-08-31 13:34:41,653 - INFO - Mapped Vehicle_Class to Vehicle_Category
+2025-08-31 13:34:41,755 - INFO - Performing incremental training...
+2025-08-31 13:34:41,756 - ERROR - ❌ Incremental training failed: lightgbm.sklearn.LGBMRegressor() got multiple values for keyword argument 'random_state'
+2025-08-31 13:34:58,557 - INFO - Starting incremental training...
+2025-08-31 13:34:58,781 - INFO - Existing advanced model loaded successfully
+2025-08-31 13:34:58,781 - INFO - Loading new data from: C:\Users\shubh\OneDrive\Desktop\QML\data\Kerala.xlsx
+2025-08-31 13:34:58,998 - INFO - Successfully preprocessed Excel data using data push pipeline
+2025-08-31 13:34:58,998 - INFO - Loaded 65 new records
+2025-08-31 13:34:58,998 - INFO - Creating advanced features for new data...
+2025-08-31 13:34:58,999 - INFO - Created Date column from Month_Name and Year
+2025-08-31 13:34:59,003 - INFO - Mapped Vehicle_Class to Vehicle_Category
+2025-08-31 13:34:59,101 - INFO - Performing incremental training...
+2025-08-31 13:34:59,111 - INFO - Creating ensemble prediction...
+2025-08-31 13:34:59,115 - INFO - Saving updated model...
+2025-08-31 13:34:59,165 - INFO - Created backup of existing model
+2025-08-31 13:34:59,199 - INFO - Incremental training completed successfully!

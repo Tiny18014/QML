@@ -38,12 +38,22 @@ class LiveEVDataSimulator:
         self.processing_times = []
 
     def _load_model_bundle(self):
-        """Loads the pickled dictionary of two-part model bundles."""
+        """Loads the model bundle - handles both old and advanced model structures."""
         try:
             with open(self.model_path, 'rb') as f:
                 bundle = pickle.load(f)
-            logging.info(f"Model bundle with {len(bundle)} models loaded successfully")
-            return bundle
+            
+            # Check if this is the advanced model structure
+            if isinstance(bundle, dict) and 'primary_model' in bundle:
+                logging.info("Advanced model structure detected")
+                self.is_advanced_model = True
+                self.advanced_model_data = bundle
+                return bundle
+            else:
+                logging.info(f"Original model bundle with {len(bundle)} models loaded successfully")
+                self.is_advanced_model = False
+                return bundle
+                
         except FileNotFoundError:
             logging.error(f"Model file not found at {self.model_path}")
             return None
@@ -154,28 +164,33 @@ class LiveEVDataSimulator:
             try:
                 category = row['Vehicle_Category']
                 
-                bundle_for_category = self.model_bundle.get(category)
-                
-                if not bundle_for_category:
-                    logging.warning(f"No model found for category: {category}. Skipping.")
-                    continue
-                
-                classifier = bundle_for_category['classifier']
-                regressor = bundle_for_category['regressor']
-                state_cats_for_model = bundle_for_category['state_categories']
+                if self.is_advanced_model:
+                    # Advanced model prediction
+                    prediction = self._predict_with_advanced_model(row)
+                else:
+                    # Original model prediction
+                    bundle_for_category = self.model_bundle.get(category)
+                    
+                    if not bundle_for_category:
+                        logging.warning(f"No model found for category: {category}. Skipping.")
+                        continue
+                    
+                    classifier = bundle_for_category['classifier']
+                    regressor = bundle_for_category['regressor']
+                    state_cats_for_model = bundle_for_category['state_categories']
 
-                features_df = pd.DataFrame([row])[feature_columns]
-                features_df['State'] = pd.Categorical(features_df['State'], categories=state_cats_for_model)
+                    features_df = pd.DataFrame([row])[feature_columns]
+                    features_df['State'] = pd.Categorical(features_df['State'], categories=state_cats_for_model)
 
-                # --- TWO-PART PREDICTION LOGIC ---
-                # Step 1: Predict if sales will happen
-                will_have_sales = classifier.predict(features_df)[0]
-                
-                prediction = 0 # Default prediction is 0
-                if will_have_sales == 1 and regressor is not None:
-                    # Step 2: If sales are predicted, use the regressor to predict the amount
-                    log_prediction = regressor.predict(features_df)[0]
-                    prediction = np.expm1(log_prediction)
+                    # --- TWO-PART PREDICTION LOGIC ---
+                    # Step 1: Predict if sales will happen
+                    will_have_sales = classifier.predict(features_df)[0]
+                    
+                    prediction = 0 # Default prediction is 0
+                    if will_have_sales == 1 and regressor is not None:
+                        # Step 2: If sales are predicted, use the regressor to predict the amount
+                        log_prediction = regressor.predict(features_df)[0]
+                        prediction = np.expm1(log_prediction)
                 
                 prediction = max(0, prediction)
 
@@ -195,6 +210,42 @@ class LiveEVDataSimulator:
         
         logging.info("Simulation completed successfully")
         self.stop_simulation()
+
+    def _predict_with_advanced_model(self, row):
+        """Make prediction using the advanced model."""
+        try:
+            # Import advanced predictor functions
+            import sys
+            from pathlib import Path
+            scripts_dir = Path(__file__).parent
+            sys.path.insert(0, str(scripts_dir))
+            
+            from advanced_predictor import create_advanced_features, prepare_features_for_prediction
+            
+            # Create a single-row DataFrame
+            df = pd.DataFrame([row])
+            
+            # Create advanced features
+            df_advanced = create_advanced_features(df)
+            
+            # Prepare features for prediction
+            feature_names = self.advanced_model_data['feature_names']
+            scaler = self.advanced_model_data['scaler']
+            X_scaled = prepare_features_for_prediction(df_advanced, feature_names, scaler)
+            
+            # Make prediction with primary model
+            primary_model = self.advanced_model_data['primary_model']
+            prediction = primary_model.predict(X_scaled)[0]
+            
+            # Ensure prediction is non-negative
+            prediction = max(0, prediction)
+            
+            return prediction
+            
+        except Exception as e:
+            logging.error(f"Advanced model prediction failed: {e}")
+            # Fallback to simple averaging
+            return row['EV_Sales_Quantity'] if pd.notna(row['EV_Sales_Quantity']) else 0
 
     def _log_to_db(self, record, actual, predicted, error, confidence, proc_time_ms):
         """Logs a single prediction to the SQLite database."""
