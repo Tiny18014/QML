@@ -332,6 +332,22 @@ def main():
         train_df = df_advanced.iloc[:cutoff_idx].copy()
         val_df = df_advanced.iloc[cutoff_idx:cutoff_idx].copy()  # empty
         test_df = df_advanced.iloc[cutoff_idx:].copy()
+
+    # Safety fallback if any split is empty: use index-based 70/10/20
+    if train_df.empty or val_df.empty:
+        total_rows = len(df_advanced)
+        if total_rows >= 5:
+            train_end = max(1, int(total_rows * 0.7))
+            val_end = max(train_end + 1, int(total_rows * 0.8))
+            train_df = df_advanced.iloc[:train_end].copy()
+            val_df = df_advanced.iloc[train_end:val_end].copy()
+            test_df = df_advanced.iloc[val_end:].copy()
+        else:
+            # Minimal fallback: 80/20 with single-sample val if possible
+            train_end = max(1, int(total_rows * 0.8))
+            train_df = df_advanced.iloc[:train_end].copy()
+            test_df = df_advanced.iloc[train_end:].copy()
+            val_df = train_df.iloc[-1:].copy() if not train_df.empty else df_advanced.iloc[:0].copy()
     
     print(f"\n📊 Data splits:")
     print(f"  Training: {len(train_df)} samples")
