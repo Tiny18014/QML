@@ -310,14 +310,28 @@ def main():
     # Create advanced features
     df_advanced = create_advanced_features(df)
     
-    # Split data by time
+    # Split data by time (dynamic, robust to different date ranges)
     df_advanced['Date'] = pd.to_datetime(df_advanced['Date'])
-    train_cutoff = '2023-06-01'
-    val_cutoff = '2024-01-01'
-    
-    train_df = df_advanced[df_advanced['Date'] < train_cutoff].copy()
-    val_df = df_advanced[(df_advanced['Date'] >= train_cutoff) & (df_advanced['Date'] < val_cutoff)].copy()
-    test_df = df_advanced[df_advanced['Date'] >= val_cutoff].copy()
+    df_advanced = df_advanced.sort_values('Date')
+
+    unique_dates = df_advanced['Date'].dropna().sort_values().unique()
+    if len(unique_dates) >= 5:
+        # 60/20/20 split on unique dates
+        n = len(unique_dates)
+        train_end_idx = max(1, int(n * 0.6))
+        val_end_idx = max(train_end_idx + 1, int(n * 0.8))
+        train_end_date = unique_dates[train_end_idx - 1]
+        val_end_date = unique_dates[val_end_idx - 1]
+
+        train_df = df_advanced[df_advanced['Date'] <= train_end_date].copy()
+        val_df = df_advanced[(df_advanced['Date'] > train_end_date) & (df_advanced['Date'] <= val_end_date)].copy()
+        test_df = df_advanced[df_advanced['Date'] > val_end_date].copy()
+    else:
+        # Fallback: 80/20 split if very few dates; no separate validation
+        cutoff_idx = max(1, int(len(df_advanced) * 0.8))
+        train_df = df_advanced.iloc[:cutoff_idx].copy()
+        val_df = df_advanced.iloc[cutoff_idx:cutoff_idx].copy()  # empty
+        test_df = df_advanced.iloc[cutoff_idx:].copy()
     
     print(f"\n📊 Data splits:")
     print(f"  Training: {len(train_df)} samples")
