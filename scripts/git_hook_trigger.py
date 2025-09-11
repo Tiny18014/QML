@@ -7,6 +7,7 @@ when changes are detected in the data folder.
 
 import subprocess
 import sys
+sys.stdout.reconfigure(encoding='utf-8')
 import os
 from pathlib import Path
 
