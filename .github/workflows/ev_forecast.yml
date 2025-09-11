@@ -63,7 +63,7 @@ jobs:
           python - << 'PY'
           import pandas as pd
           from pathlib import Path
-          root = Path(__file__).resolve().parents[2]
+          root = Path.cwd()  # use repo working directory
           pre = root / 'output' / 'preprocessed_data.csv'
           out = root / 'data' / 'EV_Dataset.csv'
           fallback = root / 'data' / 'EV_Dataset.csv'
@@ -74,11 +74,15 @@ jobs:
               df = pd.read_csv(fallback)
               print('Fallback to data/EV_Dataset.csv')
           else:
-              raise SystemExit('No training data found: neither output/preprocessed_data.csv nor data/EV_Dataset.csv exists')
-          # Ensure required columns for advanced trainer
+              # optional third fallback if you keep it committed:
+              backup = root / 'data' / 'EV_Dataset_backup.csv'
+              if backup.exists():
+                  df = pd.read_csv(backup)
+                  print('Fallback to data/EV_Dataset_backup.csv')
+              else:
+                  raise SystemExit('No training data found')
           if 'Vehicle_Category' not in df.columns and 'Vehicle_Class' in df.columns:
               df['Vehicle_Category'] = df['Vehicle_Class']
-          # Minimal column sanity
           required = ['Date','State','Vehicle_Category','EV_Sales_Quantity']
           missing = [c for c in required if c not in df.columns]
           if missing:
