@@ -1,0 +1,38 @@
+date,state,vehicle_category,actual,predicted,error
+2023-11-01,Assam,Bus,40,-0.72,40.72
+2023-12-01,Assam,Bus,118,49.81,68.19
+2024-01-01,Assam,Bus,20,76.95,56.95
+2023-06-01,Delhi,Bus,159,39.94,119.06
+2023-07-01,Delhi,Bus,70,98.34,28.34
+2023-08-01,Delhi,Bus,88,85.45,2.55
+2023-09-01,Delhi,Bus,108,91.87,16.13
+2023-10-01,Delhi,Bus,138,95.40,42.60
+2023-11-01,Delhi,Bus,85,146.10,61.10
+2023-12-01,Delhi,Bus,348,122.79,225.21
+2024-01-01,Delhi,Bus,178,126.03,51.97
+2023-06-01,Gujarat,Bus,1,213.05,212.05
+2023-08-01,Gujarat,Bus,25,27.55,2.55
+2023-09-01,Gujarat,Bus,28,88.31,60.31
+2024-01-01,Gujarat,Bus,59,6.22,52.78
+2023-07-01,Jammu and Kashmir,Bus,2,40.99,38.99
+2023-08-01,Jammu and Kashmir,Bus,22,-33.44,55.44
+2023-09-01,Jammu and Kashmir,Bus,64,72.87,8.87
+2023-10-01,Jammu and Kashmir,Bus,36,77.14,41.14
+2023-11-01,Jammu and Kashmir,Bus,20,35.58,15.58
+2023-12-01,Jammu and Kashmir,Bus,6,141.04,135.04
+2023-07-01,Karnataka,Bus,10,-33.12,43.12
+2023-09-01,Karnataka,Bus,8,27.68,19.68
+2023-11-01,Karnataka,Bus,63,13.31,49.69
+2023-12-01,Karnataka,Bus,55,110.64,55.64
+2024-01-01,Karnataka,Bus,92,75.95,16.05
+2023-08-01,Kerala,Bus,57,33.43,23.57
+2023-10-01,Kerala,Bus,3,48.59,45.59
+2024-01-01,Kerala,Bus,22,78.72,56.72
+2023-06-01,Maharashtra,Bus,28,-40.39,68.39
+2023-07-01,Maharashtra,Bus,30,1.81,28.19
+2023-08-01,Maharashtra,Bus,46,66.85,20.85
+2023-09-01,Maharashtra,Bus,36,7.98,28.02
+2023-10-01,Maharashtra,Bus,52,-19.61,71.61
+2023-11-01,Maharashtra,Bus,44,77.04,33.04
+2023-12-01,Maharashtra,Bus,38,84.06,46.06
+2024-01-01,Maharashtra,Bus,94,37.05,56.95
