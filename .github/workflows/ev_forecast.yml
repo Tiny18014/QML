@@ -40,13 +40,17 @@ jobs:
           # Ensure CI has Excel + gradient boosting stacks used by advanced model
           pip install openpyxl scikit-learn xgboost catboost
 
-
+      - name: '4. Sync Excel samples into data/'
+        run: |
+          mkdir -p data
+          cp -f .github/data/*.xlsx data/ || true
+          echo "== data ==" && ls -la data || true
       # Step 4: Build training data from manually added Excel via datapush preprocessing
-      - name: '4. Preprocess Data (Datapush)'
+      - name: '5. Preprocess Data (Datapush)'
         run: python scripts/run_pipeline.py --mode datapush
 
       # Debug: list data and output directories to verify files
-      - name: '5. List data and output'
+      - name: '6. List data and output'
         run: |
           echo "== data =="
           ls -la data || true
@@ -54,7 +58,7 @@ jobs:
           ls -la output || true
 
       # Step 6: Prepare EV_Dataset.csv for trainer (map Vehicle_Class -> Vehicle_Category) with fallback
-      - name: '6. Prepare Training Dataset'
+      - name: '7. Prepare Training Dataset'
         run: |
           python - << 'PY'
           import pandas as pd
@@ -85,16 +89,16 @@ jobs:
           PY
 
       # Step 7: Train the advanced model on the latest data
-      - name: '7. Train Advanced Model'
+      - name: '8. Train Advanced Model'
         run: python scripts/advanced_model_trainer.py
 
       # Step 8: Optionally retrain baseline model for back-compat (non-blocking)
-      - name: '8. (Optional) Retrain Baseline Model'
+      - name: '9. (Optional) Retrain Baseline Model'
         run: |
           python scripts/demand_forecast.py || echo "Baseline model training skipped"
 
       # Step 9: Commit the newly trained model files back to the repository
-      - name: '9. Commit New Models'
+      - name: '10. Commit New Models'
         run: |
           # Configure git with a bot user name and email
           git config --global user.name 'GitHub Actions Bot'
