@@ -310,44 +310,23 @@ def main():
     # Create advanced features
     df_advanced = create_advanced_features(df)
     
-    # Split data by time (dynamic, robust to different date ranges)
+    # Split data by index proportions (robust for short date ranges in CI)
     df_advanced['Date'] = pd.to_datetime(df_advanced['Date'])
     df_advanced = df_advanced.sort_values('Date')
 
-    unique_dates = df_advanced['Date'].dropna().sort_values().unique()
-    if len(unique_dates) >= 5:
-        # 60/20/20 split on unique dates
-        n = len(unique_dates)
-        train_end_idx = max(1, int(n * 0.6))
-        val_end_idx = max(train_end_idx + 1, int(n * 0.8))
-        train_end_date = unique_dates[train_end_idx - 1]
-        val_end_date = unique_dates[val_end_idx - 1]
+    total_rows = len(df_advanced)
+    train_end = max(1, int(total_rows * 0.7))
+    val_end = max(train_end + 1, int(total_rows * 0.85))
 
-        train_df = df_advanced[df_advanced['Date'] <= train_end_date].copy()
-        val_df = df_advanced[(df_advanced['Date'] > train_end_date) & (df_advanced['Date'] <= val_end_date)].copy()
-        test_df = df_advanced[df_advanced['Date'] > val_end_date].copy()
-    else:
-        # Fallback: 80/20 split if very few dates; no separate validation
-        cutoff_idx = max(1, int(len(df_advanced) * 0.8))
-        train_df = df_advanced.iloc[:cutoff_idx].copy()
-        val_df = df_advanced.iloc[cutoff_idx:cutoff_idx].copy()  # empty
-        test_df = df_advanced.iloc[cutoff_idx:].copy()
+    train_df = df_advanced.iloc[:train_end].copy()
+    val_df = df_advanced.iloc[train_end:val_end].copy()
+    test_df = df_advanced.iloc[val_end:].copy()
 
-    # Safety fallback if any split is empty: use index-based 70/10/20
-    if train_df.empty or val_df.empty:
-        total_rows = len(df_advanced)
-        if total_rows >= 5:
-            train_end = max(1, int(total_rows * 0.7))
-            val_end = max(train_end + 1, int(total_rows * 0.8))
-            train_df = df_advanced.iloc[:train_end].copy()
-            val_df = df_advanced.iloc[train_end:val_end].copy()
-            test_df = df_advanced.iloc[val_end:].copy()
-        else:
-            # Minimal fallback: 80/20 with single-sample val if possible
-            train_end = max(1, int(total_rows * 0.8))
-            train_df = df_advanced.iloc[:train_end].copy()
-            test_df = df_advanced.iloc[train_end:].copy()
-            val_df = train_df.iloc[-1:].copy() if not train_df.empty else df_advanced.iloc[:0].copy()
+    # Guarantee at least 1 sample in train
+    if train_df.empty and total_rows > 0:
+        train_df = df_advanced.iloc[:1].copy()
+        val_df = df_advanced.iloc[1:2].copy() if total_rows > 1 else df_advanced.iloc[:0].copy()
+        test_df = df_advanced.iloc[2:].copy() if total_rows > 2 else df_advanced.iloc[:0].copy()
     
     print(f"\n📊 Data splits:")
     print(f"  Training: {len(train_df)} samples")
