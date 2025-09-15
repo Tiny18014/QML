@@ -411,8 +411,11 @@ def main():
         r2_ensemble = r2_score(y_test, ensemble_pred)
         print(f"  Ensemble (Top 3): MAE={mae_ensemble:.2f}, R²={r2_ensemble:.4f}")
     else:
+        # Initialize variables with None or a default value
         mae_optimized = None
         r2_optimized = None
+        mae_ensemble = None
+        r2_ensemble = None
     
     # Save the best model and metadata
     print("\n💾 Saving models...")
