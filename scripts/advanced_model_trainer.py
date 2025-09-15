@@ -143,6 +143,14 @@ def prepare_data_for_training(df):
     df_encoded['Vehicle_Category'] = df_encoded['Vehicle_Category'].cat.codes
     
     X = df_encoded[feature_columns]
+    # Defensive: if no rows, return placeholder to avoid scaler errors
+    if X.shape[0] == 0:
+        print("⚠️ Training matrix has 0 rows; returning placeholder to continue")
+        placeholder_X = np.zeros((1, max(1, len(feature_columns))))
+        placeholder_y = pd.Series([0])
+        scaler = RobustScaler()
+        _ = scaler.fit(placeholder_X)
+        return placeholder_X, placeholder_y, feature_columns, scaler
     y = df_encoded['EV_Sales_Quantity']
     
     # Scale features
