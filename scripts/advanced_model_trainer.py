@@ -136,11 +136,18 @@ def prepare_data_for_training(df):
     
     # Create feature matrix
     feature_columns = [col for col in df.columns if col not in ['Date', 'EV_Sales_Quantity']]
+    # If both Vehicle_Class and Vehicle_Category exist, drop Vehicle_Class to avoid duplicate/strings
+    if 'Vehicle_Class' in feature_columns:
+        feature_columns.remove('Vehicle_Class')
     
     # Encode categorical variables
     df_encoded = df.copy()
     df_encoded['State'] = df_encoded['State'].cat.codes
     df_encoded['Vehicle_Category'] = df_encoded['Vehicle_Category'].cat.codes
+    # Encode any remaining object columns defensively (e.g., stray Vehicle_Class strings)
+    for col in feature_columns:
+        if df_encoded[col].dtype == 'object':
+            df_encoded[col] = pd.Categorical(df_encoded[col]).codes
     
     X = df_encoded[feature_columns]
     # Defensive: if no rows, return placeholder to avoid scaler errors
