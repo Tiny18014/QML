@@ -458,8 +458,11 @@ def main():
     print(f"✅ Feature names saved to {FEATURE_NAMES_PATH}")
     
     print("\n🎉 Training completed!")
-    print(f"🏆 Best R² Score: {r2_optimized:.4f}")
-    print(f"🏆 Best MAE Score: {mae_optimized:.2f}")
+    if r2_optimized is not None and mae_optimized is not None:
+        print(f"🏆 Best R² Score: {r2_optimized:.4f}")
+        print(f"🏆 Best MAE Score: {mae_optimized:.2f}")
+    else:
+        print("⚠️  Skipped final evaluation on test set (CI mode).")
     
     return model_data
 
