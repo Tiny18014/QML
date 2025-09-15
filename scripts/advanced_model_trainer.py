@@ -226,18 +226,22 @@ def train_models(X_train, y_train, X_val, y_val, feature_names):
         
         # Train the model
         if name.startswith('lightgbm'):
-            model.fit(X_train, y_train, eval_set=[(X_val, y_val)], callbacks=[lgb.early_stopping(50, verbose=False)])
+            if X_val is not None and len(X_val) > 0:
+                model.fit(X_train, y_train, eval_set=[(X_val, y_val)], callbacks=[lgb.early_stopping(50, verbose=False)])
+            else:
+                model.fit(X_train, y_train)
         else:
             model.fit(X_train, y_train)
         
         # Make predictions
-        y_pred = model.predict(X_val)
+        y_pred = model.predict(X_val if X_val is not None and len(X_val) > 0 else X_train)
         
         # Calculate metrics
-        mae = mean_absolute_error(y_val, y_pred)
-        mse = mean_squared_error(y_val, y_pred)
+        tgt_true = y_val if X_val is not None and len(X_val) > 0 else y_train
+        mae = mean_absolute_error(tgt_true, y_pred)
+        mse = mean_squared_error(tgt_true, y_pred)
         rmse = np.sqrt(mse)
-        r2 = r2_score(y_val, y_pred)
+        r2 = r2_score(tgt_true, y_pred)
         
         scores[name] = {
             'MAE': mae,
@@ -273,6 +277,14 @@ def train_models(X_train, y_train, X_val, y_val, feature_names):
 def create_optimized_model(X_train, y_train, X_val, y_val):
     """Create an optimized model using Optuna."""
     print("🔬 Creating optimized model with Optuna...")
+    if X_val is None or len(X_val) == 0:
+        print("ℹ️  Skipping Optuna (no validation set available)")
+        model = lgb.LGBMRegressor(objective='regression', metric='mae', n_estimators=1200, learning_rate=0.03,
+                                  num_leaves=63, max_depth=10, min_child_samples=15, subsample=0.9,
+                                  colsample_bytree=0.9, reg_alpha=0.1, reg_lambda=0.1, random_state=42,
+                                  n_jobs=-1, verbose=-1)
+        model.fit(X_train, y_train)
+        return model, {"strategy": "ci_default_no_val"}
     
     def objective(trial):
         params = {
@@ -366,39 +378,41 @@ def main():
     print(f"  Test: {len(test_df)} samples")
     
     # Prepare training data
+    ci_mode = os.getenv('GITHUB_ACTIONS', '').lower() == 'true'
     X_train, y_train, feature_names, scaler = prepare_data_for_training(train_df)
-    X_val, y_val, _, _ = prepare_data_for_training(val_df)
-    X_test, y_test, _, _ = prepare_data_for_training(test_df)
+    if ci_mode:
+        X_val, y_val, X_test, y_test = None, None, None, None
+    else:
+        X_val, y_val, _, _ = prepare_data_for_training(val_df)
+        X_test, y_test, _, _ = prepare_data_for_training(test_df)
     
-    # Train ensemble models
+    # Train models
     trained_models, scores, best_models = train_models(X_train, y_train, X_val, y_val, feature_names)
-    
-    # Create optimized model
+    # Optimized/primary model
     optimized_model, best_params = create_optimized_model(X_train, y_train, X_val, y_val)
     
-    # Evaluate on test set
-    print("\n🧪 Final Evaluation on Test Set:")
-    test_predictions = {}
-    
-    for name, model in trained_models.items():
-        y_pred = model.predict(X_test)
-        mae = mean_absolute_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
-        test_predictions[name] = y_pred
-        print(f"  {name}: MAE={mae:.2f}, R²={r2:.4f}")
-    
-    # Optimized model evaluation
-    y_pred_optimized = optimized_model.predict(X_test)
-    mae_optimized = mean_absolute_error(y_test, y_pred_optimized)
-    r2_optimized = r2_score(y_test, y_pred_optimized)
-    print(f"  Optimized: MAE={mae_optimized:.2f}, R²={r2_optimized:.4f}")
-    
-    # Create ensemble prediction (average of top 3 models)
-    top_models = sorted(scores.items(), key=lambda x: x[1]['R2'], reverse=True)[:3]
-    ensemble_pred = np.mean([test_predictions[name] for name, _ in top_models], axis=0)
-    mae_ensemble = mean_absolute_error(y_test, ensemble_pred)
-    r2_ensemble = r2_score(y_test, ensemble_pred)
-    print(f"  Ensemble (Top 3): MAE={mae_ensemble:.2f}, R²={r2_ensemble:.4f}")
+    # Evaluate on test set (only locally)
+    if X_test is not None and len(X_test) > 0:
+        print("\n🧪 Final Evaluation on Test Set:")
+        test_predictions = {}
+        for name, model in trained_models.items():
+            y_pred = model.predict(X_test)
+            mae = mean_absolute_error(y_test, y_pred)
+            r2 = r2_score(y_test, y_pred)
+            test_predictions[name] = y_pred
+            print(f"  {name}: MAE={mae:.2f}, R²={r2:.4f}")
+        y_pred_optimized = optimized_model.predict(X_test)
+        mae_optimized = mean_absolute_error(y_test, y_pred_optimized)
+        r2_optimized = r2_score(y_test, y_pred_optimized)
+        print(f"  Optimized: MAE={mae_optimized:.2f}, R²={r2_optimized:.4f}")
+        top_models = sorted(scores.items(), key=lambda x: x[1]['R2'], reverse=True)[:3]
+        ensemble_pred = np.mean([test_predictions[name] for name, _ in top_models], axis=0)
+        mae_ensemble = mean_absolute_error(y_test, ensemble_pred)
+        r2_ensemble = r2_score(y_test, ensemble_pred)
+        print(f"  Ensemble (Top 3): MAE={mae_ensemble:.2f}, R²={r2_ensemble:.4f}")
+    else:
+        mae_optimized = None
+        r2_optimized = None
     
     # Save the best model and metadata
     print("\n💾 Saving models...")
