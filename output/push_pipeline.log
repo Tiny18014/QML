@@ -82,3 +82,171 @@
 [2025-09-11 20:56:55] ✅ Advanced model predictions completed. Saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
 [2025-09-11 20:56:55] Generated 780 predictions
 [2025-09-11 20:56:55] ✅ Data push pipeline completed successfully!
+[2025-09-15 19:31:20] 🚀 Starting data push pipeline...
+[2025-09-15 19:31:20] Checking for data folder changes...
+[2025-09-15 19:31:20] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-15 19:31:20] 📊 Preprocessing data with simplified feature set...
+[2025-09-15 19:31:20] Loading dataset...
+[2025-09-15 19:31:20] Found 20 Excel files. Processing state-wise data...
+[2025-09-15 19:31:20] Processing state file: AndamanAndNicobarIsland.xlsx
+[2025-09-15 19:31:21] Detected state: Andaman & Nicobar Island
+[2025-09-15 19:31:21] Extracted 40 records from AndamanAndNicobarIsland.xlsx
+[2025-09-15 19:31:21] Processing state file: AndhraPradesh.xlsx
+[2025-09-15 19:31:21] Detected state: Andhra Pradesh
+[2025-09-15 19:31:21] Extracted 72 records from AndhraPradesh.xlsx
+[2025-09-15 19:31:21] Processing state file: ArunachalPradesh.xlsx
+[2025-09-15 19:31:21] Detected state: Arunachal Pradesh
+[2025-09-15 19:31:21] Extracted 24 records from ArunachalPradesh.xlsx
+[2025-09-15 19:31:21] Processing state file: Assam.xlsx
+[2025-09-15 19:31:21] Detected state: Assam
+[2025-09-15 19:31:21] Extracted 34 records from Assam.xlsx
+[2025-09-15 19:31:21] Processing state file: Bihar.xlsx
+[2025-09-15 19:31:21] Detected state: Bihar
+[2025-09-15 19:31:21] Extracted 24 records from Bihar.xlsx
+[2025-09-15 19:31:21] Processing state file: Chandigarh.xlsx
+[2025-09-15 19:31:21] Detected state: Chandigarh
+[2025-09-15 19:31:21] Extracted 48 records from Chandigarh.xlsx
+[2025-09-15 19:31:21] Processing state file: Chhattisgarh.xlsx
+[2025-09-15 19:31:21] Detected state: Chhattisgarh
+[2025-09-15 19:31:21] Extracted 32 records from Chhattisgarh.xlsx
+[2025-09-15 19:31:21] Processing state file: Delhi.xlsx
+[2025-09-15 19:31:21] Detected state: Delhi
+[2025-09-15 19:31:21] Extracted 33 records from Delhi.xlsx
+[2025-09-15 19:31:21] Processing state file: Goa.xlsx
+[2025-09-15 19:31:21] Detected state: Goa
+[2025-09-15 19:31:21] Extracted 48 records from Goa.xlsx
+[2025-09-15 19:31:21] Processing state file: Gujarat.xlsx
+[2025-09-15 19:31:21] Detected state: Gujarat
+[2025-09-15 19:31:21] Extracted 59 records from Gujarat.xlsx
+[2025-09-15 19:31:21] Processing state file: Haryana.xlsx
+[2025-09-15 19:31:21] Detected state: Haryana
+[2025-09-15 19:31:21] Extracted 54 records from Haryana.xlsx
+[2025-09-15 19:31:21] Processing state file: HimachalPradesh.xlsx
+[2025-09-15 19:31:21] Detected state: Himachal Pradesh
+[2025-09-15 19:31:21] Extracted 40 records from HimachalPradesh.xlsx
+[2025-09-15 19:31:21] Processing state file: JammuandKashmir.xlsx
+[2025-09-15 19:31:21] Detected state: Jammu and Kashmir
+[2025-09-15 19:31:21] Extracted 40 records from JammuandKashmir.xlsx
+[2025-09-15 19:31:21] Processing state file: Jharkhand.xlsx
+[2025-09-15 19:31:21] Detected state: Jharkhand
+[2025-09-15 19:31:21] Extracted 39 records from Jharkhand.xlsx
+[2025-09-15 19:31:21] Processing state file: Karnataka.xlsx
+[2025-09-15 19:31:21] Detected state: Karnataka
+[2025-09-15 19:31:21] Extracted 80 records from Karnataka.xlsx
+[2025-09-15 19:31:21] Processing state file: Kerala.xlsx
+[2025-09-15 19:31:21] Detected state: Kerala
+[2025-09-15 19:31:21] Extracted 65 records from Kerala.xlsx
+[2025-09-15 19:31:21] Processing state file: Ladakh.xlsx
+[2025-09-15 19:31:21] Detected state: Ladakh
+[2025-09-15 19:31:21] Extracted 8 records from Ladakh.xlsx
+[2025-09-15 19:31:21] Processing state file: Lakshadweep.xlsx
+[2025-09-15 19:31:21] Detected state: Lakshadweep
+[2025-09-15 19:31:21] Extracted 8 records from Lakshadweep.xlsx
+[2025-09-15 19:31:21] Processing state file: reportTable.xlsx
+[2025-09-15 19:31:21] Detected state: None
+[2025-09-15 19:31:21] ⚠️ No valid data extracted from reportTable.xlsx
+[2025-09-15 19:31:21] Processing state file: UTofDNHandDD.xlsx
+[2025-09-15 19:31:21] Detected state: UT of DNH and DD
+[2025-09-15 19:31:21] Extracted 32 records from UTofDNHandDD.xlsx
+[2025-09-15 19:31:21] ✅ Combined data from 20 state files. Total records: 780
+[2025-09-15 19:31:21] Dataset loaded with shape: (780, 6)
+[2025-09-15 19:31:21] Columns: ['State', 'Vehicle_Class', 'Month_Name', 'EV_Sales_Quantity', 'Year', 'Date']
+[2025-09-15 19:31:21] ⚠️ Warning: Unmapped vehicle categories: [nan]
+[2025-09-15 19:31:21] 📊 Vehicle category standardization results:
+[2025-09-15 19:31:21]   4-Wheelers: 295 records
+[2025-09-15 19:31:21]   Others: 160 records
+[2025-09-15 19:31:21]   2-Wheelers: 130 records
+[2025-09-15 19:31:21]   3-Wheelers: 115 records
+[2025-09-15 19:31:21]   Bus: 80 records
+[2025-09-15 19:31:21] ✅ Data preprocessed successfully. Shape: (780, 6)
+[2025-09-15 19:31:21] Preprocessed data saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\preprocessed_data.csv
+[2025-09-15 19:31:21] 🤖 Feeding data to Advanced EV model...
+[2025-09-15 19:31:27] Inserting advanced predictions into database...
+[2025-09-15 19:31:27] ✅ Advanced predictions inserted into database successfully
+[2025-09-15 19:31:27] ✅ Advanced model predictions completed. Saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
+[2025-09-15 19:31:27] Generated 780 predictions
+[2025-09-15 19:31:27] ✅ Data push pipeline completed successfully!
+[2025-09-15 19:37:13] 🚀 Starting data push pipeline...
+[2025-09-15 19:37:13] Checking for data folder changes...
+[2025-09-15 19:37:13] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-15 19:37:13] 📊 Preprocessing data with simplified feature set...
+[2025-09-15 19:37:13] Loading dataset...
+[2025-09-15 19:37:13] Found 20 Excel files. Processing state-wise data...
+[2025-09-15 19:37:13] Processing state file: AndamanAndNicobarIsland.xlsx
+[2025-09-15 19:37:13] Detected state: Andaman & Nicobar Island
+[2025-09-15 19:37:13] Extracted 40 records from AndamanAndNicobarIsland.xlsx
+[2025-09-15 19:37:13] Processing state file: AndhraPradesh.xlsx
+[2025-09-15 19:37:13] Detected state: Andhra Pradesh
+[2025-09-15 19:37:13] Extracted 72 records from AndhraPradesh.xlsx
+[2025-09-15 19:37:13] Processing state file: ArunachalPradesh.xlsx
+[2025-09-15 19:37:13] Detected state: Arunachal Pradesh
+[2025-09-15 19:37:13] Extracted 24 records from ArunachalPradesh.xlsx
+[2025-09-15 19:37:13] Processing state file: Assam.xlsx
+[2025-09-15 19:37:13] Detected state: Assam
+[2025-09-15 19:37:13] Extracted 34 records from Assam.xlsx
+[2025-09-15 19:37:13] Processing state file: Bihar.xlsx
+[2025-09-15 19:37:13] Detected state: Bihar
+[2025-09-15 19:37:13] Extracted 24 records from Bihar.xlsx
+[2025-09-15 19:37:13] Processing state file: Chandigarh.xlsx
+[2025-09-15 19:37:13] Detected state: Chandigarh
+[2025-09-15 19:37:13] Extracted 48 records from Chandigarh.xlsx
+[2025-09-15 19:37:13] Processing state file: Chhattisgarh.xlsx
+[2025-09-15 19:37:13] Detected state: Chhattisgarh
+[2025-09-15 19:37:13] Extracted 32 records from Chhattisgarh.xlsx
+[2025-09-15 19:37:13] Processing state file: Delhi.xlsx
+[2025-09-15 19:37:13] Detected state: Delhi
+[2025-09-15 19:37:13] Extracted 33 records from Delhi.xlsx
+[2025-09-15 19:37:13] Processing state file: Goa.xlsx
+[2025-09-15 19:37:13] Detected state: Goa
+[2025-09-15 19:37:13] Extracted 48 records from Goa.xlsx
+[2025-09-15 19:37:13] Processing state file: Gujarat.xlsx
+[2025-09-15 19:37:13] Detected state: Gujarat
+[2025-09-15 19:37:13] Extracted 59 records from Gujarat.xlsx
+[2025-09-15 19:37:13] Processing state file: Haryana.xlsx
+[2025-09-15 19:37:13] Detected state: Haryana
+[2025-09-15 19:37:13] Extracted 54 records from Haryana.xlsx
+[2025-09-15 19:37:13] Processing state file: HimachalPradesh.xlsx
+[2025-09-15 19:37:13] Detected state: Himachal Pradesh
+[2025-09-15 19:37:13] Extracted 40 records from HimachalPradesh.xlsx
+[2025-09-15 19:37:13] Processing state file: JammuandKashmir.xlsx
+[2025-09-15 19:37:13] Detected state: Jammu and Kashmir
+[2025-09-15 19:37:13] Extracted 40 records from JammuandKashmir.xlsx
+[2025-09-15 19:37:13] Processing state file: Jharkhand.xlsx
+[2025-09-15 19:37:13] Detected state: Jharkhand
+[2025-09-15 19:37:13] Extracted 39 records from Jharkhand.xlsx
+[2025-09-15 19:37:13] Processing state file: Karnataka.xlsx
+[2025-09-15 19:37:13] Detected state: Karnataka
+[2025-09-15 19:37:13] Extracted 80 records from Karnataka.xlsx
+[2025-09-15 19:37:13] Processing state file: Kerala.xlsx
+[2025-09-15 19:37:13] Detected state: Kerala
+[2025-09-15 19:37:13] Extracted 65 records from Kerala.xlsx
+[2025-09-15 19:37:13] Processing state file: Ladakh.xlsx
+[2025-09-15 19:37:13] Detected state: Ladakh
+[2025-09-15 19:37:13] Extracted 8 records from Ladakh.xlsx
+[2025-09-15 19:37:13] Processing state file: Lakshadweep.xlsx
+[2025-09-15 19:37:13] Detected state: Lakshadweep
+[2025-09-15 19:37:13] Extracted 8 records from Lakshadweep.xlsx
+[2025-09-15 19:37:13] Processing state file: reportTable.xlsx
+[2025-09-15 19:37:13] Detected state: None
+[2025-09-15 19:37:13] ⚠️ No valid data extracted from reportTable.xlsx
+[2025-09-15 19:37:13] Processing state file: UTofDNHandDD.xlsx
+[2025-09-15 19:37:13] Detected state: UT of DNH and DD
+[2025-09-15 19:37:13] Extracted 32 records from UTofDNHandDD.xlsx
+[2025-09-15 19:37:13] ✅ Combined data from 20 state files. Total records: 780
+[2025-09-15 19:37:13] Dataset loaded with shape: (780, 6)
+[2025-09-15 19:37:13] Columns: ['State', 'Vehicle_Class', 'Month_Name', 'EV_Sales_Quantity', 'Year', 'Date']
+[2025-09-15 19:37:13] ⚠️ Warning: Unmapped vehicle categories: [nan]
+[2025-09-15 19:37:13] 📊 Vehicle category standardization results:
+[2025-09-15 19:37:13]   4-Wheelers: 295 records
+[2025-09-15 19:37:13]   Others: 160 records
+[2025-09-15 19:37:13]   2-Wheelers: 130 records
+[2025-09-15 19:37:13]   3-Wheelers: 115 records
+[2025-09-15 19:37:13]   Bus: 80 records
+[2025-09-15 19:37:13] ✅ Data preprocessed successfully. Shape: (780, 6)
+[2025-09-15 19:37:13] Preprocessed data saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\preprocessed_data.csv
+[2025-09-15 19:37:13] 🤖 Feeding data to Advanced EV model...
+[2025-09-15 19:37:13] Inserting advanced predictions into database...
+[2025-09-15 19:37:13] ✅ Advanced predictions inserted into database successfully
+[2025-09-15 19:37:13] ✅ Advanced model predictions completed. Saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
+[2025-09-15 19:37:13] Generated 780 predictions
+[2025-09-15 19:37:13] ✅ Data push pipeline completed successfully!
