@@ -1,4 +1,4 @@
-Core Data Science & ML Libraries
+#Core Data Science & ML Libraries
 pandas
 scikit-learn
 numpy
@@ -6,20 +6,20 @@ matplotlib
 seaborn
 plotly
 
-Gradient Boosting Models
+#Gradient Boosting Models
 lightgbm
 xgboost
 catboost
 
-Hyperparameter Tuning
+#Hyperparameter Tuning
 optuna
 
-Data Input/Output
+#Data Input/Output
 openpyxl
 
-Web Application & Simulation
+#Web Application & Simulation
 streamlit
 holidays
 
-Other dependencies (from pipreqs scan)
+#Other dependencies (from pipreqs scan)
 joblib==1.4.2
