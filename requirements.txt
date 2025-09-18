@@ -23,24 +23,3 @@ holidays
 
 Other dependencies (from pipreqs scan)
 joblib==1.4.2
-
-
-### What This Cleaned File Does
-
-* **Removes Duplicates:** Each library is now listed only once.
-* **Pins Specific Versions:** It keeps the specific versions for libraries where it might be important (like `joblib`), ensuring reproducibility.
-* **Uses Correct Naming:** It uses the official package name `scikit-learn`.
-* **Is Easy to Read:** The comments help explain the purpose of each group of libraries.
-
----
-### Your Next Steps (Final)
-
-You are now ready to fix the pipeline.
-
-1.  **Save the Final `requirements.txt`:** Replace the content of your `requirements.txt` file with the cleaned-up version above.
-
-2.  **Commit and Push the Fix:**
-    ```bash
-    git add requirements.txt
-    git commit -m "fix: Create clean, platform-independent requirements.txt"
-    git push
