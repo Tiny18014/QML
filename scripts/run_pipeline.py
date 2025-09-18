@@ -941,7 +941,7 @@ def interactive_menu():
     """Display the interactive command-line menu."""
     # Set the working directory to the project root
     os.chdir(ROOT_DIR)
-    print(f"📍 Working directory set to: {ROOT_DIR}")
+    print(f"Working directory set to: {ROOT_DIR}")
 
     while True:
         print("\n🚗 EV Sales Live Pipeline Launcher")
