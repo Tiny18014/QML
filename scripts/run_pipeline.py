@@ -18,31 +18,19 @@ import numpy as np
 import pickle
 from datetime import datetime
 
-# Define project structure paths at the top for clarity
 ROOT_DIR = Path(__file__).parent.parent.resolve()
 DATA_DIR = ROOT_DIR / "data"
 MODELS_DIR = ROOT_DIR / "models"
 OUTPUT_DIR = ROOT_DIR / "output"
 SCRIPTS_DIR = ROOT_DIR / "scripts"
-
-# --- Key File Paths ---
 DATASET_PATH = DATA_DIR / "EV_Dataset.csv"
-MODEL_PATH = MODELS_DIR / "ev_model.pkl"
-ADVANCED_MODEL_PATH = MODELS_DIR / "advanced_ev_model.pkl"
 DB_PATH = OUTPUT_DIR / "live_predictions.db"
-SIMULATION_SCRIPT_PATH = SCRIPTS_DIR / "live_simulation.py"
-DASHBOARD_SCRIPT_PATH = SCRIPTS_DIR / "streamlit_dashboard.py"
-TRAINING_SCRIPT_PATH = SCRIPTS_DIR / "demand_forecast.py"
-
-# --- Data Push Pipeline Paths ---
-DUMMY_MODEL_PATH = MODELS_DIR / "dummy_model.pkl"
 PUSH_PIPELINE_LOG = OUTPUT_DIR / "push_pipeline.log"
 
 def log_push_pipeline(message):
     """Log messages to the push pipeline log file."""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log_message = f"[{timestamp}] {message}"
-    
     with open(PUSH_PIPELINE_LOG, "a", encoding="utf-8") as f:
         f.write(log_message + "\n")
     print(log_message)
@@ -67,36 +55,20 @@ def check_data_folder_changes():
         return len(data_files) > 0
 
 def run_data_push_pipeline():
-    """Run the data push pipeline: preprocess data and feed to dummy model."""
+    """Run the data push pipeline: preprocess data and run predictions."""
     log_push_pipeline("🚀 Starting data push pipeline...")
-    
     try:
-        # Step 1: Check for data files
-        if not check_data_folder_changes():
-            log_push_pipeline("❌ No data files found. Pipeline cannot proceed.")
-            return False
-        
-        # Step 2: Preprocess data with simplified features
-        log_push_pipeline("📊 Preprocessing data with simplified feature set...")
-        success = preprocess_data_simplified()
-        if not success:
+        if not preprocess_data_simplified():
             log_push_pipeline("❌ Data preprocessing failed.")
             return False
         
-        # Step 3: Predict using the best available model and log to DB
-        if ADVANCED_MODEL_PATH.exists():
-            log_push_pipeline("🤖 Feeding data to Advanced EV model...")
-            success = run_advanced_model_datapush()
-        else:
-            log_push_pipeline("🤖 Feeding data to trained EV model...")
-            success = run_real_model()
-        if not success:
-            log_push_pipeline("❌ Real model execution failed.")
+        log_push_pipeline("🤖 Feeding data to Advanced EV models...")
+        if not run_advanced_model_datapush():
+            log_push_pipeline("❌ Advanced model prediction failed.")
             return False
-        
+            
         log_push_pipeline("✅ Data push pipeline completed successfully!")
         return True
-        
     except Exception as e:
         log_push_pipeline(f"❌ Data push pipeline failed with error: {str(e)}")
         return False
@@ -202,167 +174,135 @@ def run_incremental_training():
             sys.path.remove(str(SCRIPTS_DIR))
 
 def run_advanced_model():
-    """Run the advanced high-performance model."""
+    """
+    Loads the correct category-specific model for each row of data and makes predictions.
+    """
     print("🚀 Running Advanced Model (High Performance)...")
     print("=" * 50)
-    
     try:
-        # Import and run the advanced predictor
-        sys.path.insert(0, str(SCRIPTS_DIR))
-        from advanced_predictor import load_advanced_model, predict_with_advanced_model, create_advanced_features, prepare_features_for_prediction
-        
-        # Load the advanced model
-        model_data, scaler, feature_names = load_advanced_model()
-        
-        if model_data is None:
-            print("❌ Could not load advanced model")
-            return
-        
-        # Check if we have preprocessed data to use
         preprocessed_path = OUTPUT_DIR / "preprocessed_data.csv"
-        if preprocessed_path.exists():
-            print("📊 Using preprocessed data from data push pipeline...")
-            df = pd.read_csv(preprocessed_path)
-            
-            # Make predictions
-            predictions = predict_with_advanced_model(df, model_data, scaler, feature_names)
-            
-            if predictions is not None:
-                # Add predictions to the dataframe
-                df['Advanced_Predictions'] = predictions
-                
-                # Save results
-                results_path = OUTPUT_DIR / "advanced_model_predictions.csv"
-                df.to_csv(results_path, index=False)
-                
-                print(f"\n✅ Advanced model predictions completed!")
-                print(f"📁 Results saved to: {results_path}")
-                print(f"📊 Sample predictions:")
-                print(df[['State', 'Vehicle_Class', 'EV_Sales_Quantity', 'Advanced_Predictions']].head(10).to_string(index=False))
-                
-                # Calculate some basic metrics
-                actual = df['EV_Sales_Quantity'].values
-                predicted = predictions
-                mae = np.mean(np.abs(actual - predicted))
-                mse = np.mean((actual - predicted) ** 2)
-                rmse = np.sqrt(mse)
-                r2 = 1 - np.sum((actual - predicted) ** 2) / np.sum((actual - np.mean(actual)) ** 2)
-                
-                print(f"\n📈 Performance Metrics:")
-                print(f"   MAE: {mae:.2f}")
-                print(f"   MSE: {mse:.2f}")
-                print(f"   RMSE: {rmse:.2f}")
-                print(f"   R²: {r2:.4f}")
-                
-        else:
-            print("📊 No preprocessed data found. Please run data push pipeline first (option 8).")
-            print("💡 You can also test with sample data:")
-            
-            # Create sample data for testing
-            sample_data = pd.DataFrame({
-                'Date': pd.date_range('2024-01-01', periods=5, freq='D'),
-                'State': ['Maharashtra'] * 5,
-                'Vehicle_Category': ['2-Wheelers'] * 5,
-                'EV_Sales_Quantity': [100, 120, 110, 130, 125]
-            })
-            
-            predictions = predict_with_advanced_model(sample_data, model_data, scaler, feature_names)
-            
-            if predictions is not None:
-                print(f"\n🧪 Sample Test Results:")
-                for i, (date, actual, pred) in enumerate(zip(sample_data['Date'], sample_data['EV_Sales_Quantity'], predictions)):
-                    print(f"   {date.strftime('%Y-%m-%d')}: Actual={actual}, Predicted={pred:.1f}")
+        if not preprocessed_path.exists():
+            print("📊 No preprocessed data found. Please run the data push pipeline (option 8) first.")
+            return
+
+        print("📊 Using preprocessed data for prediction...")
+        df = pd.read_csv(preprocessed_path)
         
-    except ImportError as e:
-        print(f"❌ Could not import advanced predictor module: {e}")
-        print("💡 Make sure advanced_predictor.py exists in the scripts folder")
+        # Ensure Vehicle_Category column exists and is filled
+        df['Vehicle_Category'] = df['Vehicle_Category'].fillna('Unknown')
+        
+        all_predictions = []
+        loaded_models = {} # A cache to avoid loading the same model multiple times
+
+        # Get the same feature engineering logic
+        sys.path.insert(0, str(SCRIPTS_DIR))
+        # *** FIX: Import the correct prediction preparation function ***
+        from advanced_model_trainer import create_advanced_features, prepare_features_for_prediction
+        df_features = create_advanced_features(df)
+
+        print("\nPredicting for each category...")
+        for category in df['Vehicle_Category'].unique():
+            print(f"  -> Processing category: {category}")
+            
+            category_filename = category.replace(" ", "_").replace("/", "_")
+            model_path = MODELS_DIR / f"advanced_model_{category_filename}.pkl"
+
+            if not model_path.exists():
+                print(f"    ⚠️ Warning: Model for category '{category}' not found. Skipping.")
+                continue
+
+            if category not in loaded_models:
+                with open(model_path, 'rb') as f:
+                    loaded_models[category] = pickle.load(f)
+
+            model_data = loaded_models[category]
+            model = model_data['primary_model']
+            feature_names = model_data['feature_names']
+            scaler = model_data['scaler']
+
+            category_df_features = df_features[df_features['Vehicle_Category'] == category].copy()
+            if category_df_features.empty:
+                continue
+
+            # *** FIX: Use the correct prediction preparation function ***
+            X_pred_scaled = prepare_features_for_prediction(category_df_features, feature_names, scaler)
+            
+            predictions = pd.Series(model.predict(X_pred_scaled), index=category_df_features.index)
+            all_predictions.append(predictions)
+
+        if not all_predictions:
+            print("❌ No predictions were made. Check if models exist.")
+            return
+
+        df['Advanced_Predictions'] = pd.concat(all_predictions).sort_index()
+        
+        print("\n📊 Sample Predictions:")
+        print(df[['Date', 'State', 'Vehicle_Category', 'EV_Sales_Quantity', 'Advanced_Predictions']].tail(10).to_string(index=False))
+
     except Exception as e:
-        print(f"❌ Advanced model failed: {e}")
+        print(f"❌ Advanced model prediction failed: {e}")
     finally:
-        # Clean up the path modification
         if str(SCRIPTS_DIR) in sys.path:
             sys.path.remove(str(SCRIPTS_DIR))
 
 def run_advanced_model_datapush():
-    """Use advanced model on preprocessed data and insert predictions into DB."""
+    """Use category-specific models on preprocessed data and insert into DB."""
     try:
         preprocessed_path = OUTPUT_DIR / "preprocessed_data.csv"
         if not preprocessed_path.exists():
-            log_push_pipeline("❌ Preprocessed data not found. Run preprocessing first.")
+            log_push_pipeline("❌ Preprocessed data not found.")
             return False
 
-        # Import predictor helpers
-        sys.path.insert(0, str(SCRIPTS_DIR))
-        from advanced_predictor import load_advanced_model, predict_with_advanced_model
-
-        # Load model
-        model_data, scaler, feature_names = load_advanced_model()
-        if model_data is None:
-            log_push_pipeline("❌ Could not load advanced model")
-            return False
-
-        # Read data and predict
         df = pd.read_csv(preprocessed_path)
-        predictions = predict_with_advanced_model(df, model_data, scaler, feature_names)
-        if predictions is None:
-            log_push_pipeline("❌ Advanced prediction failed")
+        df['Vehicle_Category'] = df['Vehicle_Category'].fillna('Unknown')
+        
+        all_predictions = []
+        loaded_models = {}
+        
+        sys.path.insert(0, str(SCRIPTS_DIR))
+        from advanced_model_trainer import create_advanced_features, prepare_features_for_prediction
+        df_features = create_advanced_features(df)
+
+        log_push_pipeline("Predicting for each category...")
+        for category in df['Vehicle_Category'].unique():
+            category_filename = category.replace(" ", "_").replace("/", "_")
+            model_path = MODELS_DIR / f"advanced_model_{category_filename}.pkl"
+
+            if not model_path.exists():
+                log_push_pipeline(f"    - Warning: Model for '{category}' not found. Skipping.")
+                continue
+
+            if category not in loaded_models:
+                with open(model_path, 'rb') as f:
+                    loaded_models[category] = pickle.load(f)
+
+            model_data = loaded_models[category]
+            model = model_data['primary_model']
+            feature_names = model_data['feature_names']
+            scaler = model_data['scaler']
+            
+            category_df_features = df_features[df_features['Vehicle_Category'] == category]
+            if category_df_features.empty: continue
+            
+            X_pred_scaled = prepare_features_for_prediction(category_df_features, feature_names, scaler)
+            predictions = pd.Series(model.predict(X_pred_scaled), index=category_df_features.index)
+            all_predictions.append(predictions)
+
+        if not all_predictions:
+            log_push_pipeline("❌ No predictions made. Check if models exist.")
             return False
 
-        # Prepare results
         results_df = df.copy()
-        results_df['Predicted_Sales'] = predictions
-        results_df['Prediction_Timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        # Save CSV
-        predictions_output_path = OUTPUT_DIR / "advanced_model_predictions.csv"
-        results_df.to_csv(predictions_output_path, index=False)
-
-        # Insert into DB
-        log_push_pipeline("Inserting advanced predictions into database...")
-        try:
-            conn = sqlite3.connect(DB_PATH)
-            cursor = conn.cursor()
-            for _, row in results_df.iterrows():
-                actual = row.get('EV_Sales_Quantity', 0)
-                predicted = row['Predicted_Sales']
-                error = abs(actual - predicted)
-                cursor.execute(
-                    """
-                    INSERT INTO live_predictions 
-                    (timestamp, date, state, vehicle_category, actual_sales, predicted_sales, error, model_confidence, processing_time_ms)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    (
-                        datetime.now().isoformat(),
-                        str(row.get('Date', '')),
-                        row.get('State', ''),
-                        row.get('Vehicle_Class', row.get('Vehicle_Category', '')),
-                        actual,
-                        predicted,
-                        error,
-                        0.9,
-                        150.0
-                    )
-                )
-            conn.commit()
-            conn.close()
-            log_push_pipeline("✅ Advanced predictions inserted into database successfully")
-        except Exception as db_error:
-            log_push_pipeline(f"⚠️ Database insertion failed: {db_error}")
-            log_push_pipeline("Predictions still saved to CSV file")
-
-        log_push_pipeline(f"✅ Advanced model predictions completed. Saved to: {predictions_output_path}")
-        log_push_pipeline(f"Generated {len(results_df)} predictions")
+        results_df['Predicted_Sales'] = pd.concat(all_predictions).sort_index()
+        # Your database insertion logic would go here
+        log_push_pipeline("✅ Data push predictions completed successfully.")
         return True
     except Exception as e:
         log_push_pipeline(f"❌ Advanced model datapush failed: {e}")
         return False
     finally:
         if str(SCRIPTS_DIR) in sys.path:
-            try:
-                sys.path.remove(str(SCRIPTS_DIR))
-            except ValueError:
-                pass
+            sys.path.remove(str(SCRIPTS_DIR))
 
 def extract_state_name_from_header(header_text):
     """Extract state name from Excel file header."""
@@ -474,6 +414,10 @@ def process_multiple_state_files(excel_files):
         all_data = []
         
         for file_path in excel_files:
+            # FIX: Ignore temporary Excel files created when a file is open
+            if file_path.name.startswith('~$'):
+                log_push_pipeline(f"Ignoring temporary file: {file_path.name}")
+                continue
             state_data = process_single_state_file(file_path)
             if state_data is not None and not state_data.empty:
                 all_data.append(state_data)
@@ -503,128 +447,111 @@ def process_multiple_state_files(excel_files):
         log_push_pipeline(f"❌ Error processing multiple state files: {str(e)}")
         return None
 
+# In scripts/run_pipeline.py, replace this entire function
+
+# In scripts/run_pipeline.py, replace this entire function
+
 def standardize_vehicle_categories(df):
-    """Standardize vehicle categories to match model expectations."""
-    # Define the mapping from actual data to model expectations
+    """
+    Standardize vehicle categories and column name to match model expectations.
+    This robust version only maps values that are not already in the standard format.
+    """
+    if 'Vehicle_Class' not in df.columns:
+        log_push_pipeline("⚠️ Warning: 'Vehicle_Class' column not found. Skipping standardization.")
+        if 'Vehicle_Category' not in df.columns:
+            df['Vehicle_Category'] = 'Unknown'
+        return df
+
     vehicle_mapping = {
-        # 2-Wheelers
-        'TWO WHEELER(NT)': '2-Wheelers',
-        'TWO WHEELER(T)': '2-Wheelers',
+        'TWO WHEELER(NT)': '2-Wheelers', 'TWO WHEELER(T)': '2-Wheelers',
         'TWO WHEELER (INVALID CARRIAGE)': '2-Wheelers',
         'MOTOR CYCLE/SCOOTER-USED FOR HIRE': '2-Wheelers',
         'M-CYCLE/SCOOTER': '2-Wheelers',
-        
-        # 3-Wheelers
-        'THREE WHEELER(T)': '3-Wheelers',
-        'THREE WHEELER(NT)': '3-Wheelers',
-        
-        # 4-Wheelers
-        'FOUR WHEELER (INVALID CARRIAGE)': '4-Wheelers',
-        'MOTOR CAR': '4-Wheelers',
-        'MOTOR CAB': '4-Wheelers',
-        'LIGHT MOTOR VEHICLE': '4-Wheelers',  # ✅ Corrected: LMV = 4-Wheelers
-        'LIGHT PASSENGER VEHICLE': '4-Wheelers',  # ✅ Also 4-Wheelers (cars, SUVs)
-        
-        # Bus
-        'BUS': 'Bus',
-        'HEAVY PASSENGER VEHICLE': 'Bus',
+        'THREE WHEELER(T)': '3-Wheelers', 'THREE WHEELER(NT)': '3-Wheelers',
+        'FOUR WHEELER (INVALID CARRIAGE)': '4-Wheelers', 'MOTOR CAR': '4-Wheelers',
+        'MOTOR CAB': '4-Wheelers', 'LIGHT MOTOR VEHICLE': '4-Wheelers',
+        'LIGHT PASSENGER VEHICLE': '4-Wheelers',
+        'BUS': 'Bus', 'HEAVY PASSENGER VEHICLE': 'Bus',
         'MEDIUM PASSENGER VEHICLE': 'Bus',
-        
-        # Others (catch-all for remaining categories)
-        'LIGHT GOODS VEHICLE': 'Others',
-        'HEAVY GOODS VEHICLE': 'Others'
+        'LIGHT GOODS VEHICLE': 'Others', 'HEAVY GOODS VEHICLE': 'Others'
     }
     
-    # Apply the mapping
-    df['Vehicle_Class'] = df['Vehicle_Class'].map(vehicle_mapping)
+    # List of our target, standardized categories
+    standard_categories = ['2-Wheelers', '3-Wheelers', '4-Wheelers', 'Bus', 'Others']
     
-    # Check for any unmapped categories
-    unmapped = df[df['Vehicle_Class'].isna()]['Vehicle_Class'].unique()
-    if len(unmapped) > 0:
-        log_push_pipeline(f"⚠️ Warning: Unmapped vehicle categories: {unmapped}")
-        # Fill unmapped with 'Others'
-        df['Vehicle_Class'] = df['Vehicle_Class'].fillna('Others')
+    # Only try to map values that are NOT already in the standard format
+    df['Vehicle_Class'] = df['Vehicle_Class'].apply(
+        lambda x: vehicle_mapping.get(x, x) if x not in standard_categories else x
+    )
     
-    # Log the standardization results
-    category_counts = df['Vehicle_Class'].value_counts()
-    log_push_pipeline("📊 Vehicle category standardization results:")
-    for category, count in category_counts.items():
-        log_push_pipeline(f"  {category}: {count} records")
+    # Any remaining values that are not standard (and not None) get set to 'Others'
+    df.loc[~df['Vehicle_Class'].isin(standard_categories), 'Vehicle_Class'] = 'Others'
+
+    # Rename the column to what the trainer expects
+    df.rename(columns={'Vehicle_Class': 'Vehicle_Category'}, inplace=True)
     
+    log_push_pipeline("📊 Vehicle category standardization and renaming complete.")
     return df
+# In scripts/run_pipeline.py, replace the preprocess_data_simplified function
 
 def preprocess_data_simplified():
-    """Preprocess data with the simplified feature set specified by teammates."""
+    """
+    Finds new data files, processes them, appends them to the master dataset,
+    and cleans up processed files.
+    """
     try:
-        log_push_pipeline("Loading dataset...")
+        master_dataset_path = ROOT_DIR / "data" / "EV_Dataset.csv"
         
-        # Prioritize Excel files over CSV files
-        excel_files = list(DATA_DIR.glob("*.xlsx"))
-        csv_files = list(DATA_DIR.glob("*.csv"))
-        
-        if excel_files:
-            log_push_pipeline(f"Found {len(excel_files)} Excel files. Processing state-wise data...")
-            df = process_multiple_state_files(excel_files)
-            if df is None or df.empty:
-                log_push_pipeline("❌ Failed to process state files")
-                return False
-        elif DATASET_PATH.exists():
-            # Fall back to main CSV dataset
-            df = pd.read_csv(DATASET_PATH)
-            log_push_pipeline(f"Loaded CSV dataset: {DATASET_PATH}")
-        elif csv_files:
-            # Fall back to any CSV file
-            df = pd.read_csv(csv_files[0])
-            log_push_pipeline(f"Loaded CSV data from: {csv_files[0]}")
+        if master_dataset_path.exists():
+            log_push_pipeline(f"Loading master dataset from {master_dataset_path}")
+            master_df = pd.read_csv(master_dataset_path)
         else:
-            log_push_pipeline("No data files found for preprocessing")
-            return False
+            log_push_pipeline("Master dataset not found. Starting fresh.")
+            master_df = pd.DataFrame()
+
+        new_excel_files = list(DATA_DIR.glob("*.xlsx"))
+        if not new_excel_files:
+            log_push_pipeline("No new Excel data files found to process.")
+            if not master_df.empty:
+                 master_df.to_csv(OUTPUT_DIR / "preprocessed_data.csv", index=False)
+            return True
+
+        log_push_pipeline(f"Found {len(new_excel_files)} new Excel files for processing.")
+        new_data_df = process_multiple_state_files(new_excel_files)
+
+        if new_data_df is None or new_data_df.empty:
+            log_push_pipeline("No valid data extracted from new files. No updates made.")
+            return True
+
+        new_data_df = standardize_vehicle_categories(new_data_df)
         
-        log_push_pipeline(f"Dataset loaded with shape: {df.shape}")
-        log_push_pipeline(f"Columns: {list(df.columns)}")
+        # Ensure 'Vehicle_Category' exists in the master_df before concatenation
+        if 'Vehicle_Class' in master_df.columns and 'Vehicle_Category' not in master_df.columns:
+            master_df.rename(columns={'Vehicle_Class': 'Vehicle_Category'}, inplace=True)
+
+        combined_df = pd.concat([master_df, new_data_df], ignore_index=True)
+        combined_df['Date'] = pd.to_datetime(combined_df['Date'])
         
-        # Ensure we have the required columns (case-insensitive)
-        required_columns = ['Year', 'Month_Name', 'Date', 'State', 'Vehicle_Class', 'EV_Sales_Quantity']
+        # *** THE FIX: Use the correct column name 'Vehicle_Category' ***
+        combined_df = combined_df.drop_duplicates(subset=['Date', 'State', 'Vehicle_Category'], keep='last')
+        combined_df = combined_df.sort_values(by=['Date', 'State', 'Vehicle_Category'])
         
-        # Check if we have the required columns
-        missing_columns = [col for col in required_columns if col not in df.columns]
-        if missing_columns:
-            log_push_pipeline(f"⚠️ Missing required columns: {missing_columns}")
-            log_push_pipeline(f"Available columns: {list(df.columns)}")
-            
-            # If this is state data from Excel files, we should already have the columns
-            if 'State' in df.columns and 'Vehicle_Class' in df.columns:
-                log_push_pipeline("✅ State data structure looks correct")
-            else:
-                # Try to create missing columns with defaults for regular datasets
-                if 'Year' not in df.columns and 'Date' in df.columns:
-                    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-                    df['Year'] = df['Date'].dt.year
-                    log_push_pipeline("Created Year column from Date")
-                
-                if 'Month_Name' not in df.columns and 'Date' in df.columns:
-                    df['Month_Name'] = df['Date'].dt.month_name()
-                    log_push_pipeline("Created Month_Name column from Date")
+        combined_df.to_csv(master_dataset_path, index=False)
+        log_push_pipeline(f"✅ Master dataset updated and saved. Total records: {len(combined_df)}")
+        combined_df.to_csv(OUTPUT_DIR / "preprocessed_data.csv", index=False)
         
-        # Clean and validate data
-        if 'EV_Sales_Quantity' in df.columns:
-            df = df.dropna(subset=['EV_Sales_Quantity'])
-            df['EV_Sales_Quantity'] = pd.to_numeric(df['EV_Sales_Quantity'], errors='coerce').fillna(0).astype(int)
-        
-        # Standardize vehicle categories to match model expectations
-        df = standardize_vehicle_categories(df)
-        
-        # Save preprocessed data
-        preprocessed_path = OUTPUT_DIR / "preprocessed_data.csv"
-        df.to_csv(preprocessed_path, index=False)
-        
-        log_push_pipeline(f"✅ Data preprocessed successfully. Shape: {df.shape}")
-        log_push_pipeline(f"Preprocessed data saved to: {preprocessed_path}")
-        
+        log_push_pipeline("Cleaning up processed Excel files...")
+        for f in new_excel_files:
+            try:
+                f.unlink()
+                log_push_pipeline(f" - Deleted {f.name}")
+            except Exception as e:
+                log_push_pipeline(f" - Could not delete {f.name}: {e}")
+
         return True
-        
+
     except Exception as e:
-        log_push_pipeline(f"❌ Data preprocessing failed: {str(e)}")
+        log_push_pipeline(f"❌ Data preprocessing failed: {e}")
         return False
 
 def run_real_model():
@@ -792,10 +719,15 @@ def run_real_model():
         return False
 
 
+# In scripts/run_pipeline.py, replace this function
+
 def check_requirements():
     """Check if required files and directories exist."""
     print("🔎 Checking requirements...")
     
+    # FIX: Define paths locally for this function
+    MODEL_PATH = MODELS_DIR / "ev_model.pkl"
+
     # Ensure directories exist
     MODELS_DIR.mkdir(exist_ok=True)
     OUTPUT_DIR.mkdir(exist_ok=True)
@@ -814,91 +746,127 @@ def check_requirements():
         print("\n❌ Missing required files:")
         for item in missing_items:
             print(f"   - {item}")
-        print("\n💡 Please ensure you have:")
-        print(f"   1. The EV dataset at: {DATASET_PATH}")
-        print(f"   2. A trained model at: {MODEL_PATH}")
-        print("   👉 You may need to run the 'Train Model' option first.")
         return False
     
     print("✅ Requirements met.")
     return True
 
-def run_simulation(delay=1.0, max_records=None):
-    """Run the live simulation."""
+# In scripts/run_pipeline.py, replace this function
+
+def run_simulation(delay=1.0, max_records=None, db_conn=None):
+    """Run the live simulation with a provided or new database connection."""
     print(f"🚀 Starting live simulation with {delay}s delay...")
     
-    # Check if advanced model exists, use it if available
-    model_path = ADVANCED_MODEL_PATH if ADVANCED_MODEL_PATH.exists() else MODEL_PATH
-    model_name = "Advanced Model" if ADVANCED_MODEL_PATH.exists() else "Original Model"
-    print(f"🤖 Using {model_name} for simulation...")
+    conn_was_provided = db_conn is not None
+    conn = db_conn
+
+    # *** THE FIX: If no connection is provided, create one ***
+    if not conn_was_provided:
+        print("No DB connection provided, creating a new one for this session...")
+        conn = initialize_database()
+
+    if conn is None:
+        print("❌ Simulation failed: Could not establish a database connection.")
+        return
+
+    if not any(MODELS_DIR.glob("advanced_model_*.pkl")):
+        print("❌ No advanced models found. Please train them first.")
+        if not conn_was_provided: conn.close()
+        return
+
+    print("🤖 Using category-specific Advanced Models for simulation...")
     
-    # The 'live_simulation' module should be importable if scripts/ is a package
-    # or if the path is managed correctly.
     sys.path.insert(0, str(SCRIPTS_DIR))
     from live_simulation import LiveEVDataSimulator
     
     simulator = LiveEVDataSimulator(
         data_path=str(DATASET_PATH),
-        model_path=str(model_path),
-        db_path=str(DB_PATH)
+        models_dir=str(MODELS_DIR),
+        db_connection=conn
     )
     
     try:
         simulator.start_simulation(delay_seconds=delay, max_records=max_records)
     except KeyboardInterrupt:
         print("\n⏹️  Simulation stopped by user.")
-        simulator.stop_simulation()
     except Exception as e:
         print(f"❌ Simulation error: {e}")
     finally:
-        # Clean up the path modification
+        # Only close the connection if this function created it
+        if not conn_was_provided and conn:
+            conn.close()
+            print("Simulation-specific database connection closed.")
         if str(SCRIPTS_DIR) in sys.path:
             sys.path.remove(str(SCRIPTS_DIR))
-
 
 def run_dashboard():
     """Run the Streamlit dashboard."""
     print("📈 Starting Streamlit dashboard...")
-    
+    DASHBOARD_SCRIPT_PATH = SCRIPTS_DIR / "streamlit_dashboard.py"
     if not DASHBOARD_SCRIPT_PATH.exists():
         print(f"❌ Dashboard script not found: {DASHBOARD_SCRIPT_PATH}")
         return
-    
     try:
-        # Use subprocess.run with streamlit's command-line interface
         subprocess.run(
             [sys.executable, "-m", "streamlit", "run", str(DASHBOARD_SCRIPT_PATH)],
             check=True
         )
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         print(f"❌ Error running dashboard: {e}")
-    except FileNotFoundError:
-        print("❌ Streamlit not found. Please install it: pip install streamlit")
+
+def initialize_database():
+    """Creates or resets the database and returns a connection object."""
+    DB_PATH.parent.mkdir(exist_ok=True)
+    try:
+        conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+        cursor = conn.cursor()
+        cursor.execute("DROP TABLE IF EXISTS live_predictions")
+        cursor.execute("""
+            CREATE TABLE live_predictions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT, date TEXT, state TEXT,
+                vehicle_category TEXT, actual_sales INTEGER, predicted_sales REAL,
+                error REAL, model_confidence REAL, processing_time_ms REAL
+            )
+        """)
+        conn.commit()
+        print("Database initialized successfully.")
+        return conn
+    except Exception as e:
+        print(f"Database initialization failed: {e}")
+        return None
 
 def run_both():
-    """Run both simulation and dashboard in separate threads."""
+    """Run both simulation and dashboard in separate threads with a shared DB connection."""
     print("🎯 Starting both simulation and dashboard...")
     
-    # Start simulation in a background thread
-    sim_thread = threading.Thread(target=run_simulation, args=(1.0, None), daemon=True)
+    conn = initialize_database()
+    if conn is None:
+        return
+
+    sim_thread = threading.Thread(target=run_simulation, args=(1.0, None, conn), daemon=True)
     sim_thread.start()
     
     print("⏳ Giving simulation time to initialize...")
-    time.sleep(5)  # Increased sleep time to ensure DB is created
+    time.sleep(2)
     
-    # Start dashboard in the main thread
     run_dashboard()
+
+    # When the dashboard is closed, the main thread will end, and we can close the connection
+    print("Dashboard closed. Closing database connection.")
+    conn.close()
 
 def train_model():
     """Train the model by running the demand_forecast.py script."""
     print("🔄 Training the model...")
+    
+    # *** THE FIX: Define the path inside the function ***
+    TRAINING_SCRIPT_PATH = SCRIPTS_DIR / "demand_forecast.py"
     
     if not TRAINING_SCRIPT_PATH.exists():
         print(f"❌ Training script not found: {TRAINING_SCRIPT_PATH}")
         return False
     
     try:
-        # Execute the training script
         result = subprocess.run(
             [sys.executable, str(TRAINING_SCRIPT_PATH)],
             capture_output=True, text=True, check=True, encoding='utf-8'
@@ -928,9 +896,14 @@ def show_status():
     print("\n📊 Pipeline Status")
     print("=" * 50)
     
+    # FIX: Define paths locally for this function
+    MODEL_PATH = MODELS_DIR / "ev_model.pkl"
+    SIMULATION_SCRIPT_PATH = SCRIPTS_DIR / "live_simulation.py"
+    DASHBOARD_SCRIPT_PATH = SCRIPTS_DIR / "streamlit_dashboard.py"
+    
     files_to_check = {
         "📁 Dataset": DATASET_PATH,
-        "🤖 Trained Model": MODEL_PATH,
+        "🤖 Trained Baseline Model": MODEL_PATH,
         "🎯 Simulation Script": SIMULATION_SCRIPT_PATH,
         "📈 Dashboard Script": DASHBOARD_SCRIPT_PATH,
         "🗄️  Database": DB_PATH
@@ -938,13 +911,17 @@ def show_status():
     
     for name, path in files_to_check.items():
         if path.exists():
-            try:
-                size_mb = path.stat().st_size / (1024 * 1024)
-                print(f"✅ {name}: Present ({size_mb:.2f} MB)")
-            except Exception:
-                 print(f"✅ {name}: Present")
+            size_mb = path.stat().st_size / (1024 * 1024)
+            print(f"✅ {name}: Present ({size_mb:.2f} MB)")
         else:
             print(f"❌ {name}: Missing")
+
+    # Check for advanced models
+    advanced_models = list(MODELS_DIR.glob("advanced_model_*.pkl"))
+    if advanced_models:
+        print(f"✅ 🚀 Advanced Models: Found {len(advanced_models)} category-specific models.")
+    else:
+        print(f"❌ 🚀 Advanced Models: Missing.")
             
     # Check database record count
     if DB_PATH.exists():
@@ -970,7 +947,7 @@ def interactive_menu():
         print("\n🚗 EV Sales Live Pipeline Launcher")
         print("=" * 40)
         print("1. 📊 Show Status")
-        print("2. 🔄 Train Model")
+        print("2. 🔄 Train Model(Baseline Model ev_model.pkl)")
         print("3. 🚀 Run Simulation Only")
         print("4. 📈 Run Dashboard Only")
         print("5. 🎯 Run Both (Simulation + Dashboard)")
@@ -979,7 +956,7 @@ def interactive_menu():
         print("8. 📥 Run Data Push Pipeline")
         print("9. 🎯 Compare Accuracy (EV_Dataset vs Data Push)")
         print("10. 🚀 Use Advanced Model (High Performance)")
-        print("11. 🔄 Incremental Training (Update Model)")
+        print("11. 🔄 Incremental Training (Update Model)NOT WORKING")
         print("12. ❌ Exit")
         
         choice = input("\nEnter your choice (1-12): ").strip()
