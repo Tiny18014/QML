@@ -250,3 +250,427 @@
 [2025-09-15 19:37:13] ✅ Advanced model predictions completed. Saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
 [2025-09-15 19:37:13] Generated 780 predictions
 [2025-09-15 19:37:13] ✅ Data push pipeline completed successfully!
+[2025-09-15 19:54:33] 🚀 Starting data push pipeline...
+[2025-09-15 19:54:33] Checking for data folder changes...
+[2025-09-15 19:54:33] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-15 19:54:33] 📊 Preprocessing data with simplified feature set...
+[2025-09-15 19:54:33] Loading dataset...
+[2025-09-15 19:54:33] Found 20 Excel files. Processing state-wise data...
+[2025-09-15 19:54:33] Processing state file: AndamanAndNicobarIsland.xlsx
+[2025-09-15 19:54:34] Detected state: Andaman & Nicobar Island
+[2025-09-15 19:54:34] Extracted 40 records from AndamanAndNicobarIsland.xlsx
+[2025-09-15 19:54:34] Processing state file: AndhraPradesh.xlsx
+[2025-09-15 19:54:34] Detected state: Andhra Pradesh
+[2025-09-15 19:54:34] Extracted 72 records from AndhraPradesh.xlsx
+[2025-09-15 19:54:34] Processing state file: ArunachalPradesh.xlsx
+[2025-09-15 19:54:34] Detected state: Arunachal Pradesh
+[2025-09-15 19:54:34] Extracted 24 records from ArunachalPradesh.xlsx
+[2025-09-15 19:54:34] Processing state file: Assam.xlsx
+[2025-09-15 19:54:34] Detected state: Assam
+[2025-09-15 19:54:34] Extracted 34 records from Assam.xlsx
+[2025-09-15 19:54:34] Processing state file: Bihar.xlsx
+[2025-09-15 19:54:34] Detected state: Bihar
+[2025-09-15 19:54:34] Extracted 24 records from Bihar.xlsx
+[2025-09-15 19:54:34] Processing state file: Chandigarh.xlsx
+[2025-09-15 19:54:34] Detected state: Chandigarh
+[2025-09-15 19:54:34] Extracted 48 records from Chandigarh.xlsx
+[2025-09-15 19:54:34] Processing state file: Chhattisgarh.xlsx
+[2025-09-15 19:54:34] Detected state: Chhattisgarh
+[2025-09-15 19:54:34] Extracted 32 records from Chhattisgarh.xlsx
+[2025-09-15 19:54:34] Processing state file: Delhi.xlsx
+[2025-09-15 19:54:34] Detected state: Delhi
+[2025-09-15 19:54:34] Extracted 33 records from Delhi.xlsx
+[2025-09-15 19:54:34] Processing state file: Goa.xlsx
+[2025-09-15 19:54:34] Detected state: Goa
+[2025-09-15 19:54:34] Extracted 48 records from Goa.xlsx
+[2025-09-15 19:54:34] Processing state file: Gujarat.xlsx
+[2025-09-15 19:54:34] Detected state: Gujarat
+[2025-09-15 19:54:34] Extracted 59 records from Gujarat.xlsx
+[2025-09-15 19:54:34] Processing state file: Haryana.xlsx
+[2025-09-15 19:54:34] Detected state: Haryana
+[2025-09-15 19:54:34] Extracted 54 records from Haryana.xlsx
+[2025-09-15 19:54:34] Processing state file: HimachalPradesh.xlsx
+[2025-09-15 19:54:34] Detected state: Himachal Pradesh
+[2025-09-15 19:54:34] Extracted 40 records from HimachalPradesh.xlsx
+[2025-09-15 19:54:34] Processing state file: JammuandKashmir.xlsx
+[2025-09-15 19:54:34] Detected state: Jammu and Kashmir
+[2025-09-15 19:54:34] Extracted 40 records from JammuandKashmir.xlsx
+[2025-09-15 19:54:34] Processing state file: Jharkhand.xlsx
+[2025-09-15 19:54:34] Detected state: Jharkhand
+[2025-09-15 19:54:34] Extracted 39 records from Jharkhand.xlsx
+[2025-09-15 19:54:34] Processing state file: Karnataka.xlsx
+[2025-09-15 19:54:34] Detected state: Karnataka
+[2025-09-15 19:54:34] Extracted 80 records from Karnataka.xlsx
+[2025-09-15 19:54:34] Processing state file: Kerala.xlsx
+[2025-09-15 19:54:34] Detected state: Kerala
+[2025-09-15 19:54:34] Extracted 65 records from Kerala.xlsx
+[2025-09-15 19:54:34] Processing state file: Ladakh.xlsx
+[2025-09-15 19:54:34] Detected state: Ladakh
+[2025-09-15 19:54:34] Extracted 8 records from Ladakh.xlsx
+[2025-09-15 19:54:34] Processing state file: Lakshadweep.xlsx
+[2025-09-15 19:54:34] Detected state: Lakshadweep
+[2025-09-15 19:54:34] Extracted 8 records from Lakshadweep.xlsx
+[2025-09-15 19:54:34] Processing state file: reportTable.xlsx
+[2025-09-15 19:54:34] Detected state: None
+[2025-09-15 19:54:34] ⚠️ No valid data extracted from reportTable.xlsx
+[2025-09-15 19:54:34] Processing state file: UTofDNHandDD.xlsx
+[2025-09-15 19:54:34] Detected state: UT of DNH and DD
+[2025-09-15 19:54:34] Extracted 32 records from UTofDNHandDD.xlsx
+[2025-09-15 19:54:34] ✅ Combined data from 20 state files. Total records: 780
+[2025-09-15 19:54:34] Dataset loaded with shape: (780, 6)
+[2025-09-15 19:54:34] Columns: ['State', 'Vehicle_Class', 'Month_Name', 'EV_Sales_Quantity', 'Year', 'Date']
+[2025-09-15 19:54:34] ⚠️ Warning: Unmapped vehicle categories: [nan]
+[2025-09-15 19:54:34] 📊 Vehicle category standardization results:
+[2025-09-15 19:54:34]   4-Wheelers: 295 records
+[2025-09-15 19:54:34]   Others: 160 records
+[2025-09-15 19:54:34]   2-Wheelers: 130 records
+[2025-09-15 19:54:34]   3-Wheelers: 115 records
+[2025-09-15 19:54:34]   Bus: 80 records
+[2025-09-15 19:54:34] ✅ Data preprocessed successfully. Shape: (780, 6)
+[2025-09-15 19:54:34] Preprocessed data saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\preprocessed_data.csv
+[2025-09-15 19:54:34] 🤖 Feeding data to Advanced EV model...
+[2025-09-15 19:54:36] Inserting advanced predictions into database...
+[2025-09-15 19:54:36] ✅ Advanced predictions inserted into database successfully
+[2025-09-15 19:54:36] ✅ Advanced model predictions completed. Saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
+[2025-09-15 19:54:36] Generated 780 predictions
+[2025-09-15 19:54:36] ✅ Data push pipeline completed successfully!
+[2025-09-17 19:48:49] 🚀 Starting data push pipeline...
+[2025-09-17 19:48:49] Checking for data folder changes...
+[2025-09-17 19:48:49] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 19:48:49] 📊 Preprocessing data with simplified feature set...
+[2025-09-17 19:48:49] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 19:48:49] Found 22 new Excel files for processing.
+[2025-09-17 19:48:49] Processing state file: AndamanAndNicobarIsland.xlsx
+[2025-09-17 19:48:49] Detected state: Andaman & Nicobar Island
+[2025-09-17 19:48:49] Extracted 40 records from AndamanAndNicobarIsland.xlsx
+[2025-09-17 19:48:49] Processing state file: AndhraPradesh.xlsx
+[2025-09-17 19:48:49] Detected state: Andhra Pradesh
+[2025-09-17 19:48:49] Extracted 72 records from AndhraPradesh.xlsx
+[2025-09-17 19:48:49] Processing state file: ArunachalPradesh.xlsx
+[2025-09-17 19:48:49] Detected state: Arunachal Pradesh
+[2025-09-17 19:48:49] Extracted 24 records from ArunachalPradesh.xlsx
+[2025-09-17 19:48:49] Processing state file: Assam.xlsx
+[2025-09-17 19:48:49] Detected state: Assam
+[2025-09-17 19:48:49] Extracted 34 records from Assam.xlsx
+[2025-09-17 19:48:49] Processing state file: Bihar.xlsx
+[2025-09-17 19:48:49] Detected state: Bihar
+[2025-09-17 19:48:49] Extracted 24 records from Bihar.xlsx
+[2025-09-17 19:48:49] Processing state file: Chandigarh.xlsx
+[2025-09-17 19:48:49] Detected state: Chandigarh
+[2025-09-17 19:48:49] Extracted 48 records from Chandigarh.xlsx
+[2025-09-17 19:48:49] Processing state file: Chhattisgarh.xlsx
+[2025-09-17 19:48:49] Detected state: Chhattisgarh
+[2025-09-17 19:48:49] Extracted 32 records from Chhattisgarh.xlsx
+[2025-09-17 19:48:49] Processing state file: Delhi.xlsx
+[2025-09-17 19:48:50] Detected state: Delhi
+[2025-09-17 19:48:50] Extracted 33 records from Delhi.xlsx
+[2025-09-17 19:48:50] Processing state file: Goa.xlsx
+[2025-09-17 19:48:50] Detected state: Goa
+[2025-09-17 19:48:50] Extracted 48 records from Goa.xlsx
+[2025-09-17 19:48:50] Processing state file: Gujarat.xlsx
+[2025-09-17 19:48:50] Detected state: Gujarat
+[2025-09-17 19:48:50] Extracted 59 records from Gujarat.xlsx
+[2025-09-17 19:48:50] Processing state file: Haryana.xlsx
+[2025-09-17 19:48:50] Detected state: Haryana
+[2025-09-17 19:48:50] Extracted 54 records from Haryana.xlsx
+[2025-09-17 19:48:50] Processing state file: HimachalPradesh.xlsx
+[2025-09-17 19:48:50] Detected state: Himachal Pradesh
+[2025-09-17 19:48:50] Extracted 40 records from HimachalPradesh.xlsx
+[2025-09-17 19:48:50] Processing state file: JammuandKashmir.xlsx
+[2025-09-17 19:48:50] Detected state: Jammu and Kashmir
+[2025-09-17 19:48:50] Extracted 40 records from JammuandKashmir.xlsx
+[2025-09-17 19:48:50] Processing state file: Jharkhand.xlsx
+[2025-09-17 19:48:50] Detected state: Jharkhand
+[2025-09-17 19:48:50] Extracted 39 records from Jharkhand.xlsx
+[2025-09-17 19:48:50] Processing state file: Karnataka.xlsx
+[2025-09-17 19:48:50] Detected state: Karnataka
+[2025-09-17 19:48:50] Extracted 80 records from Karnataka.xlsx
+[2025-09-17 19:48:50] Processing state file: Kerala.xlsx
+[2025-09-17 19:48:50] Detected state: Kerala
+[2025-09-17 19:48:50] Extracted 65 records from Kerala.xlsx
+[2025-09-17 19:48:50] Processing state file: Ladakh.xlsx
+[2025-09-17 19:48:50] Detected state: Ladakh
+[2025-09-17 19:48:50] Extracted 8 records from Ladakh.xlsx
+[2025-09-17 19:48:50] Processing state file: Lakshadweep.xlsx
+[2025-09-17 19:48:50] Detected state: Lakshadweep
+[2025-09-17 19:48:50] Extracted 8 records from Lakshadweep.xlsx
+[2025-09-17 19:48:50] Processing state file: reportTable (26).xlsx
+[2025-09-17 19:48:50] Detected state: None
+[2025-09-17 19:48:50] Extracted 80 records from reportTable (26).xlsx
+[2025-09-17 19:48:50] Processing state file: reportTable.xlsx
+[2025-09-17 19:48:50] Detected state: None
+[2025-09-17 19:48:50] ⚠️ No valid data extracted from reportTable.xlsx
+[2025-09-17 19:48:50] Processing state file: UTofDNHandDD.xlsx
+[2025-09-17 19:48:50] Detected state: UT of DNH and DD
+[2025-09-17 19:48:50] Extracted 32 records from UTofDNHandDD.xlsx
+[2025-09-17 19:48:50] Processing state file: ~$Karnataka.xlsx
+[2025-09-17 19:48:50] ❌ Error processing ~$Karnataka.xlsx: [Errno 13] Permission denied: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\~$Karnataka.xlsx'
+[2025-09-17 19:48:50] ✅ Combined data from 22 state files. Total records: 860
+[2025-09-17 19:48:50] ⚠️ Warning: Unmapped vehicle categories: [nan]
+[2025-09-17 19:48:50] 📊 Vehicle category standardization results:
+[2025-09-17 19:48:50]   4-Wheelers: 311 records
+[2025-09-17 19:48:50]   Others: 176 records
+[2025-09-17 19:48:50]   2-Wheelers: 146 records
+[2025-09-17 19:48:50]   3-Wheelers: 131 records
+[2025-09-17 19:48:50]   Bus: 96 records
+[2025-09-17 19:48:50] ✅ Master dataset updated and saved. Total records: 45864
+[2025-09-17 19:48:50] Cleaning up processed Excel files...
+[2025-09-17 19:48:50]  - Deleted AndamanAndNicobarIsland.xlsx
+[2025-09-17 19:48:50]  - Deleted AndhraPradesh.xlsx
+[2025-09-17 19:48:50]  - Deleted ArunachalPradesh.xlsx
+[2025-09-17 19:48:50]  - Deleted Assam.xlsx
+[2025-09-17 19:48:50]  - Deleted Bihar.xlsx
+[2025-09-17 19:48:50]  - Deleted Chandigarh.xlsx
+[2025-09-17 19:48:50]  - Deleted Chhattisgarh.xlsx
+[2025-09-17 19:48:50]  - Deleted Delhi.xlsx
+[2025-09-17 19:48:50]  - Deleted Goa.xlsx
+[2025-09-17 19:48:50]  - Deleted Gujarat.xlsx
+[2025-09-17 19:48:50]  - Deleted Haryana.xlsx
+[2025-09-17 19:48:50]  - Deleted HimachalPradesh.xlsx
+[2025-09-17 19:48:50]  - Deleted JammuandKashmir.xlsx
+[2025-09-17 19:48:50]  - Deleted Jharkhand.xlsx
+[2025-09-17 19:48:50]  - Could not delete Karnataka.xlsx: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\Karnataka.xlsx'
+[2025-09-17 19:48:50]  - Deleted Kerala.xlsx
+[2025-09-17 19:48:50]  - Deleted Ladakh.xlsx
+[2025-09-17 19:48:50]  - Deleted Lakshadweep.xlsx
+[2025-09-17 19:48:50]  - Deleted reportTable (26).xlsx
+[2025-09-17 19:48:50]  - Deleted reportTable.xlsx
+[2025-09-17 19:48:50]  - Deleted UTofDNHandDD.xlsx
+[2025-09-17 19:48:50]  - Could not delete ~$Karnataka.xlsx: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\~$Karnataka.xlsx'
+[2025-09-17 19:48:50] 🤖 Feeding data to trained EV model...
+[2025-09-17 19:48:50] Loading preprocessed data...
+[2025-09-17 19:48:50] Loaded preprocessed data with 45864 records
+[2025-09-17 19:48:50] Loading trained EV model...
+[2025-09-17 19:48:54] ✅ Trained model loaded successfully
+[2025-09-17 19:48:54] Preparing features for model prediction...
+[2025-09-17 19:48:55] Features prepared. Shape: (45864, 17)
+[2025-09-17 19:48:55] Making predictions with trained model...
+[2025-09-17 19:48:55] ⚠️ Model prediction failed: 'dict' object has no attribute 'predict'
+[2025-09-17 19:48:55] Falling back to simple averaging...
+[2025-09-17 19:48:55] Inserting predictions into database...
+[2025-09-17 19:48:57] ✅ Predictions inserted into database successfully
+[2025-09-17 19:48:57] ✅ Real model predictions completed. Saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\real_model_predictions.csv
+[2025-09-17 19:48:57] Generated 45864 predictions
+[2025-09-17 19:48:57] Sample predictions:
+[2025-09-17 19:48:57]   Andhra Pradesh - nan: Actual=2, Predicted=nan
+[2025-09-17 19:48:57]   Arunachal Pradesh - nan: Actual=0, Predicted=nan
+[2025-09-17 19:48:57]   Assam - nan: Actual=3, Predicted=nan
+[2025-09-17 19:48:57]   Bihar - nan: Actual=0, Predicted=nan
+[2025-09-17 19:48:57]   Chandigarh - nan: Actual=0, Predicted=nan
+[2025-09-17 19:48:57] ✅ Data push pipeline completed successfully!
+[2025-09-17 20:13:28] 🚀 Starting data push pipeline...
+[2025-09-17 20:13:28] Checking for data folder changes...
+[2025-09-17 20:13:28] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:13:28] 📊 Preprocessing data with simplified feature set...
+[2025-09-17 20:13:28] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:13:28] Found 2 new Excel files for processing.
+[2025-09-17 20:13:28] Processing state file: Karnataka.xlsx
+[2025-09-17 20:13:28] Detected state: Karnataka
+[2025-09-17 20:13:28] Extracted 80 records from Karnataka.xlsx
+[2025-09-17 20:13:28] Processing state file: ~$Karnataka.xlsx
+[2025-09-17 20:13:28] ❌ Error processing ~$Karnataka.xlsx: [Errno 13] Permission denied: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\~$Karnataka.xlsx'
+[2025-09-17 20:13:28] ✅ Combined data from 2 state files. Total records: 80
+[2025-09-17 20:13:28] 📊 Vehicle category standardization results:
+[2025-09-17 20:13:28]   4-Wheelers: 16 records
+[2025-09-17 20:13:28]   Others: 16 records
+[2025-09-17 20:13:28]   Bus: 16 records
+[2025-09-17 20:13:28]   3-Wheelers: 16 records
+[2025-09-17 20:13:28]   2-Wheelers: 16 records
+[2025-09-17 20:13:28] ✅ Master dataset updated and saved. Total records: 45864
+[2025-09-17 20:13:29] Cleaning up processed Excel files...
+[2025-09-17 20:13:29]  - Could not delete Karnataka.xlsx: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\Karnataka.xlsx'
+[2025-09-17 20:13:29]  - Could not delete ~$Karnataka.xlsx: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\~$Karnataka.xlsx'
+[2025-09-17 20:13:29] 🤖 Feeding data to Advanced EV model...
+[2025-09-17 20:13:29] ❌ Could not load advanced model
+[2025-09-17 20:13:29] ❌ Real model execution failed.
+[2025-09-17 20:16:01] 🚀 Starting data push pipeline...
+[2025-09-17 20:16:01] Checking for data folder changes...
+[2025-09-17 20:16:01] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:16:01] 📊 Preprocessing data with simplified feature set...
+[2025-09-17 20:16:01] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:16:01] Found 2 new Excel files for processing.
+[2025-09-17 20:16:01] Processing state file: Karnataka.xlsx
+[2025-09-17 20:16:01] Detected state: Karnataka
+[2025-09-17 20:16:01] Extracted 80 records from Karnataka.xlsx
+[2025-09-17 20:16:01] Ignoring temporary file: ~$Karnataka.xlsx
+[2025-09-17 20:16:01] ✅ Combined data from 2 state files. Total records: 80
+[2025-09-17 20:16:01] 📊 Vehicle category standardization results:
+[2025-09-17 20:16:01]   4-Wheelers: 16 records
+[2025-09-17 20:16:01]   Others: 16 records
+[2025-09-17 20:16:01]   Bus: 16 records
+[2025-09-17 20:16:01]   3-Wheelers: 16 records
+[2025-09-17 20:16:01]   2-Wheelers: 16 records
+[2025-09-17 20:16:01] ✅ Master dataset updated and saved. Total records: 45864
+[2025-09-17 20:16:01] Cleaning up processed Excel files...
+[2025-09-17 20:16:01]  - Could not delete Karnataka.xlsx: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\Karnataka.xlsx'
+[2025-09-17 20:16:01]  - Could not delete ~$Karnataka.xlsx: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\~$Karnataka.xlsx'
+[2025-09-17 20:16:01] 🤖 Feeding data to Advanced EV model...
+[2025-09-17 20:16:02] ❌ Could not load advanced model
+[2025-09-17 20:16:02] ❌ Real model execution failed.
+[2025-09-17 20:21:12] 🚀 Starting data push pipeline...
+[2025-09-17 20:21:12] Checking for data folder changes...
+[2025-09-17 20:21:12] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:21:12] 📊 Preprocessing data with simplified feature set...
+[2025-09-17 20:21:12] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:21:12] Found 2 new Excel files for processing.
+[2025-09-17 20:21:12] Processing state file: Karnataka.xlsx
+[2025-09-17 20:21:12] Detected state: Karnataka
+[2025-09-17 20:21:12] Extracted 80 records from Karnataka.xlsx
+[2025-09-17 20:21:12] Ignoring temporary file: ~$Karnataka.xlsx
+[2025-09-17 20:21:12] ✅ Combined data from 2 state files. Total records: 80
+[2025-09-17 20:21:12] 📊 Vehicle category standardization results:
+[2025-09-17 20:21:12]   4-Wheelers: 16 records
+[2025-09-17 20:21:12]   Others: 16 records
+[2025-09-17 20:21:12]   Bus: 16 records
+[2025-09-17 20:21:12]   3-Wheelers: 16 records
+[2025-09-17 20:21:12]   2-Wheelers: 16 records
+[2025-09-17 20:21:13] ✅ Master dataset updated and saved. Total records: 45864
+[2025-09-17 20:21:13] Cleaning up processed Excel files...
+[2025-09-17 20:21:13]  - Could not delete Karnataka.xlsx: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\Karnataka.xlsx'
+[2025-09-17 20:21:13]  - Could not delete ~$Karnataka.xlsx: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\~$Karnataka.xlsx'
+[2025-09-17 20:21:13] 🤖 Feeding data to Advanced EV model...
+[2025-09-17 20:21:13] Loading advanced model artifact...
+[2025-09-17 20:21:13] ✅ Advanced model and components loaded successfully.
+[2025-09-17 20:21:15] Making predictions on 45864 records...
+[2025-09-17 20:21:15] ✅ Predictions saved to C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
+[2025-09-17 20:21:15] Inserting advanced predictions into database...
+[2025-09-17 20:21:15] ⚠️ Database insertion failed: name 'cursor' is not defined
+[2025-09-17 20:21:15] ✅ Data push pipeline completed successfully!
+[2025-09-17 20:24:49] 🚀 Starting data push pipeline...
+[2025-09-17 20:24:49] Checking for data folder changes...
+[2025-09-17 20:24:49] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:24:49] 📊 Preprocessing data with simplified feature set...
+[2025-09-17 20:24:49] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:24:49] Found 1 new Excel files for processing.
+[2025-09-17 20:24:49] Processing state file: Karnataka.xlsx
+[2025-09-17 20:24:49] Detected state: Karnataka
+[2025-09-17 20:24:49] Extracted 80 records from Karnataka.xlsx
+[2025-09-17 20:24:49] ✅ Combined data from 1 state files. Total records: 80
+[2025-09-17 20:24:49] 📊 Vehicle category standardization results:
+[2025-09-17 20:24:49]   4-Wheelers: 16 records
+[2025-09-17 20:24:49]   Others: 16 records
+[2025-09-17 20:24:49]   Bus: 16 records
+[2025-09-17 20:24:49]   3-Wheelers: 16 records
+[2025-09-17 20:24:49]   2-Wheelers: 16 records
+[2025-09-17 20:24:49] ✅ Master dataset updated and saved. Total records: 45864
+[2025-09-17 20:24:49] Cleaning up processed Excel files...
+[2025-09-17 20:24:49]  - Deleted Karnataka.xlsx
+[2025-09-17 20:24:49] 🤖 Feeding data to Advanced EV model...
+[2025-09-17 20:24:49] Loading advanced model artifact...
+[2025-09-17 20:24:50] ✅ Advanced model and components loaded successfully.
+[2025-09-17 20:24:51] Making predictions on 45864 records...
+[2025-09-17 20:24:52] ✅ Predictions saved to C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
+[2025-09-17 20:24:52] Inserting advanced predictions into database...
+[2025-09-17 20:24:54] ✅ Advanced predictions inserted into database successfully
+[2025-09-17 20:24:54] ✅ Data push pipeline completed successfully!
+[2025-09-17 20:26:32] 🚀 Starting data push pipeline...
+[2025-09-17 20:26:32] Checking for data folder changes...
+[2025-09-17 20:26:32] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:26:32] 📊 Preprocessing data with simplified feature set...
+[2025-09-17 20:26:32] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:26:32] No new Excel data files found to process.
+[2025-09-17 20:26:32] 🤖 Feeding data to Advanced EV model...
+[2025-09-17 20:26:32] Loading advanced model artifact...
+[2025-09-17 20:26:33] ✅ Advanced model and components loaded successfully.
+[2025-09-17 20:26:34] Making predictions on 45864 records...
+[2025-09-17 20:26:35] ✅ Predictions saved to C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
+[2025-09-17 20:26:35] Inserting advanced predictions into database...
+[2025-09-17 20:26:37] ✅ Advanced predictions inserted into database successfully
+[2025-09-17 20:26:37] ✅ Data push pipeline completed successfully!
+[2025-09-17 20:30:37] 🚀 Starting data push pipeline...
+[2025-09-17 20:30:37] Checking for data folder changes...
+[2025-09-17 20:30:37] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:30:37] 📊 Preprocessing data with simplified feature set...
+[2025-09-17 20:30:37] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:30:37] Found 1 new Excel files for processing.
+[2025-09-17 20:30:37] Processing state file: reportTable (26).xlsx
+[2025-09-17 20:30:37] Detected state: None
+[2025-09-17 20:30:37] Extracted 80 records from reportTable (26).xlsx
+[2025-09-17 20:30:37] ✅ Combined data from 1 state files. Total records: 80
+[2025-09-17 20:30:37] ❌ Data preprocessing failed: 'Vehicle_Class'
+[2025-09-17 20:30:37] ❌ Data preprocessing failed.
+[2025-09-17 20:31:38] 🚀 Starting data push pipeline...
+[2025-09-17 20:31:38] Checking for data folder changes...
+[2025-09-17 20:31:38] Found main dataset: C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:31:38] 📊 Preprocessing data with simplified feature set...
+[2025-09-17 20:31:38] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-17 20:31:38] Found 1 new Excel files for processing.
+[2025-09-17 20:31:38] Processing state file: reportTable (26).xlsx
+[2025-09-17 20:31:38] Detected state: None
+[2025-09-17 20:31:38] Extracted 80 records from reportTable (26).xlsx
+[2025-09-17 20:31:38] ✅ Combined data from 1 state files. Total records: 80
+[2025-09-17 20:31:38] 📊 Vehicle category standardization and renaming complete.
+[2025-09-17 20:31:38] 📊 Standardized category counts:
+[2025-09-17 20:31:38]   4-Wheelers: 16 records
+[2025-09-17 20:31:38]   Others: 16 records
+[2025-09-17 20:31:38]   Bus: 16 records
+[2025-09-17 20:31:38]   3-Wheelers: 16 records
+[2025-09-17 20:31:38]   2-Wheelers: 16 records
+[2025-09-17 20:31:38] ✅ Master dataset updated and saved. Total records: 45872
+[2025-09-17 20:31:38] Cleaning up processed Excel files...
+[2025-09-17 20:31:38]  - Deleted reportTable (26).xlsx
+[2025-09-17 20:31:38] 🤖 Feeding data to Advanced EV model...
+[2025-09-17 20:31:38] Loading advanced model artifact...
+[2025-09-17 20:31:39] ✅ Advanced model and components loaded successfully.
+[2025-09-17 20:31:41] Making predictions on 45872 records...
+[2025-09-17 20:31:41] ✅ Predictions saved to C:\Users\shubh\OneDrive\Desktop\QML\output\advanced_model_predictions.csv
+[2025-09-17 20:31:41] Inserting advanced predictions into database...
+[2025-09-17 20:31:43] ✅ Advanced predictions inserted into database successfully
+[2025-09-17 20:31:43] ✅ Data push pipeline completed successfully!
+[2025-09-18 19:21:32] 🚀 Starting data push pipeline...
+[2025-09-18 19:21:32] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-18 19:21:32] No new Excel data files found to process.
+[2025-09-18 19:21:32] 🤖 Feeding data to Advanced EV models...
+[2025-09-18 19:21:37] Predicting for each category...
+[2025-09-18 19:21:38] ✅ Data push predictions completed successfully.
+[2025-09-18 19:21:38] ✅ Data push pipeline completed successfully!
+[2025-09-18 20:35:45] 🚀 Starting data push pipeline...
+[2025-09-18 20:35:45] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-18 20:35:45] Found 1 new Excel files for processing.
+[2025-09-18 20:35:45] Processing state file: reportTable (25).xlsx
+[2025-09-18 20:35:46] Detected state: Arunachal Pradesh
+[2025-09-18 20:35:46] Renamed/updated file to: ArunachalPradesh.xlsx
+[2025-09-18 20:35:46] Extracted 24 records from ArunachalPradesh.xlsx
+[2025-09-18 20:35:46] ✅ Combined data from 1 state files. Total records: 24
+[2025-09-18 20:35:46] 📊 Vehicle category standardization and renaming complete.
+[2025-09-18 20:35:46] ❌ Data preprocessing failed: Index(['Vehicle_Class'], dtype='object')
+[2025-09-18 20:35:46] ❌ Data preprocessing failed.
+[2025-09-18 20:38:22] 🚀 Starting data push pipeline...
+[2025-09-18 20:38:22] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-18 20:38:22] Found 1 new Excel files for processing.
+[2025-09-18 20:38:22] Processing state file: ArunachalPradesh.xlsx
+[2025-09-18 20:38:22] Detected state: Arunachal Pradesh
+[2025-09-18 20:38:22] Extracted 24 records from ArunachalPradesh.xlsx
+[2025-09-18 20:38:22] ✅ Combined data from 1 state files. Total records: 24
+[2025-09-18 20:38:22] 📊 Vehicle category standardization and renaming complete.
+[2025-09-18 20:38:22] ❌ Data preprocessing failed: Index(['Vehicle_Class'], dtype='object')
+[2025-09-18 20:38:22] ❌ Data preprocessing failed.
+[2025-09-18 20:38:33] 🚀 Starting data push pipeline...
+[2025-09-18 20:38:33] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-18 20:38:33] Found 1 new Excel files for processing.
+[2025-09-18 20:38:33] Processing state file: ArunachalPradesh.xlsx
+[2025-09-18 20:38:33] Detected state: Arunachal Pradesh
+[2025-09-18 20:38:33] Extracted 24 records from ArunachalPradesh.xlsx
+[2025-09-18 20:38:33] ✅ Combined data from 1 state files. Total records: 24
+[2025-09-18 20:38:33] 📊 Vehicle category standardization and renaming complete.
+[2025-09-18 20:38:34] ✅ Master dataset updated and saved. Total records: 226479
+[2025-09-18 20:38:34] Cleaning up processed Excel files...
+[2025-09-18 20:38:34]  - Deleted ArunachalPradesh.xlsx
+[2025-09-18 20:38:34] 🤖 Feeding data to Advanced EV models...
+[2025-09-18 20:38:46] Predicting for each category...
+[2025-09-18 20:38:47] ✅ Data push predictions completed successfully.
+[2025-09-18 20:38:47] ✅ Data push pipeline completed successfully!
+[2025-09-18 20:59:48] 🚀 Starting data push pipeline...
+[2025-09-18 20:59:48] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-18 20:59:48] No new Excel data files found to process.
+[2025-09-18 20:59:49] 🤖 Feeding data to Advanced EV models...
+[2025-09-18 20:59:51] Predicting for each category...
+[2025-09-18 20:59:52] ✅ Data push predictions completed successfully.
+[2025-09-18 20:59:52] ✅ Data push pipeline completed successfully!
+[2025-09-18 21:04:53] 🚀 Starting data push pipeline...
+[2025-09-18 21:04:53] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-09-18 21:04:53] No new Excel data files found to process.
+[2025-09-18 21:04:53] 🤖 Feeding data to Advanced EV models...
+[2025-09-18 21:04:58] Predicting for each category...
+[2025-09-18 21:04:59] ✅ Data push predictions completed successfully.
+[2025-09-18 21:04:59] ✅ Data push pipeline completed successfully!

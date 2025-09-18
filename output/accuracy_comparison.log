@@ -56,3 +56,60 @@
 🎉 Accuracy comparison completed!
 [2025-09-15 19:32:13] 📁 Check the log file: C:\Users\shubh\OneDrive\Desktop\QML\output\accuracy_comparison.log
 [2025-09-15 19:32:13] 📊 Check the results: C:\Users\shubh\OneDrive\Desktop\QML\output\accuracy_comparison_results.csv
+[2025-09-17 20:38:23] 🎯 Starting EV Demand Forecasting Accuracy Comparison
+[2025-09-17 20:38:23] ============================================================
+[2025-09-17 20:38:23] 📊 Measuring accuracy with EV_Dataset.csv...
+[2025-09-17 20:38:23] Loaded EV_Dataset.csv with 45872 records
+[2025-09-17 20:38:23] ✅ Model loaded successfully: <class 'dict'>
+[2025-09-17 20:38:23] 📊 Model is a dictionary structure - using category-specific models
+[2025-09-17 20:38:43] ✅ Dictionary model predictions successful
+[2025-09-17 20:38:43] ✅ EV_Dataset.csv accuracy measurement completed
+[2025-09-17 20:38:43]    Overall MAE: 6.19
+[2025-09-17 20:38:43]    Overall R²: -0.9720
+[2025-09-17 20:38:43]    Processing Time: 19374.99ms
+[2025-09-17 20:38:43] 📊 Measuring accuracy with Data Push Pipeline (Excel files)...
+[2025-09-17 20:38:43] Loaded preprocessed data with 45872 records
+[2025-09-17 20:38:43] ✅ Model loaded successfully: <class 'dict'>
+[2025-09-17 20:38:43] 📊 Model is a dictionary structure - using category-specific models
+[2025-09-17 20:39:02] ✅ Dictionary model predictions successful
+[2025-09-17 20:39:02] ✅ Data Push Pipeline accuracy measurement completed
+[2025-09-17 20:39:02]    Overall MAE: 6.19
+[2025-09-17 20:39:02]    Overall R²: -0.9720
+[2025-09-17 20:39:02]    Processing Time: 19302.06ms
+[2025-09-17 20:39:02] 🔍 Comparing accuracy between both approaches...
+[2025-09-17 20:39:02] ============================================================
+[2025-09-17 20:39:02] 📊 ACCURACY COMPARISON RESULTS
+[2025-09-17 20:39:02] ============================================================
+[2025-09-17 20:39:02] 🎯 OVERALL METRICS:
+[2025-09-17 20:39:02]    EV_Dataset.csv:     MAE=6.19, R²=-0.9720, Time=19374.99ms
+[2025-09-17 20:39:02]    Data Push Pipeline: MAE=6.19, R²=-0.9720, Time=19302.06ms
+[2025-09-17 20:39:02] 🤝 Both approaches have similar MAE
+[2025-09-17 20:39:02] 🤝 Both approaches have similar R²
+[2025-09-17 20:39:02] 
+🚗 CATEGORY-WISE COMPARISON:
+[2025-09-17 20:39:02]    2-Wheelers:
+[2025-09-17 20:39:02]      EV_Dataset: MAE=186.11, R²=-0.5631
+[2025-09-17 20:39:02]      Data Push:  MAE=186.11, R²=-0.5631
+[2025-09-17 20:39:02]      🤝 Similar MAE
+[2025-09-17 20:39:02]    3-Wheelers:
+[2025-09-17 20:39:02]      EV_Dataset: MAE=245.37, R²=-1.1924
+[2025-09-17 20:39:02]      Data Push:  MAE=245.37, R²=-1.1924
+[2025-09-17 20:39:02]      🤝 Similar MAE
+[2025-09-17 20:39:02]    4-Wheelers:
+[2025-09-17 20:39:02]      EV_Dataset: MAE=27.48, R²=-0.2418
+[2025-09-17 20:39:02]      Data Push:  MAE=27.48, R²=-0.2418
+[2025-09-17 20:39:02]      🤝 Similar MAE
+[2025-09-17 20:39:02]    Bus:
+[2025-09-17 20:39:02]      EV_Dataset: MAE=13.18, R²=-0.0915
+[2025-09-17 20:39:02]      Data Push:  MAE=13.18, R²=-0.0915
+[2025-09-17 20:39:02]      🤝 Similar MAE
+[2025-09-17 20:39:02]    Others:
+[2025-09-17 20:39:02]      EV_Dataset: MAE=8.99, R²=-0.4180
+[2025-09-17 20:39:02]      Data Push:  MAE=8.99, R²=-0.4180
+[2025-09-17 20:39:02]      🤝 Similar MAE
+[2025-09-17 20:39:02] 
+📁 Detailed comparison saved to: C:\Users\shubh\OneDrive\Desktop\QML\output\accuracy_comparison_results.csv
+[2025-09-17 20:39:02] 
+🎉 Accuracy comparison completed!
+[2025-09-17 20:39:02] 📁 Check the log file: C:\Users\shubh\OneDrive\Desktop\QML\output\accuracy_comparison.log
+[2025-09-17 20:39:02] 📊 Check the results: C:\Users\shubh\OneDrive\Desktop\QML\output\accuracy_comparison_results.csv
