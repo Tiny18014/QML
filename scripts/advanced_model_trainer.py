@@ -153,7 +153,7 @@ def prepare_data_for_training(df, feature_subset=None):
         feature_columns = list(set(feature_subset + ['State', 'Vehicle_Category']))
         feature_columns = [f for f in feature_columns if f in df.columns]
     else:
-        feature_columns = [col for col in df.columns if col not in ['Date', 'EV_Sales_Quantity']]
+        feature_columns = [col for col in df.columns if col not in ['Date', 'EV_Sales_Quantity', 'Month_Name']] # <- ADD 'Month_Name'
     
     if 'Vehicle_Class' in feature_columns:
         feature_columns.remove('Vehicle_Class')
@@ -409,7 +409,9 @@ def prepare_features_for_prediction(df, feature_names, scaler):
     Prepares a dataframe for prediction using a pre-fitted scaler.
     It only TRANSFORMS the data, it does not re-fit the scaler.
     """
-    # Select the same features the model was trained on
+    if 'Month_Name' in df.columns:
+        df = df.drop(columns=['Month_Name'])
+        
     feature_columns = [f for f in feature_names if f in df.columns]
     
     # Ensure categorical columns are present and set the type
