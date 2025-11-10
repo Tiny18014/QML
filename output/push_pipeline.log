@@ -932,3 +932,20 @@
 [2025-11-10 18:00:40]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
 [2025-11-10 18:00:40]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 [2025-11-10 18:00:40] UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+[2025-11-11 00:04:17] 🚀 Starting data push pipeline...
+[2025-11-11 00:04:17] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-11-11 00:04:17] No new Excel data files found to process.
+[2025-11-11 00:04:17] 🤖 Feeding data to Advanced EV models...
+[2025-11-11 00:04:24] Predicting for each category...
+[2025-11-11 00:04:24] ❌ Advanced model datapush failed: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- Month_Name
+
+[2025-11-11 00:04:24] ❌ Advanced model prediction failed.
+[2025-11-11 00:18:44] 🚀 Starting data push pipeline...
+[2025-11-11 00:18:44] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-11-11 00:18:44] No new Excel data files found to process.
+[2025-11-11 00:18:44] 🤖 Feeding data to Advanced EV models...
+[2025-11-11 00:18:51] Predicting for each category...
+[2025-11-11 00:18:52] ✅ Data push predictions completed successfully.
+[2025-11-11 00:18:52] ✅ Data push pipeline completed successfully!
