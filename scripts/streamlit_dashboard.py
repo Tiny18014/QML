@@ -96,16 +96,24 @@ st.markdown("""
 class InsightsDashboard:
     """Handles the logic for the Strategic Insights tab."""
     def __init__(self):
+        # Initialize prediction DataFrames
         if 'classical_preds' not in st.session_state:
             st.session_state.classical_preds = pd.DataFrame()
         if 'qml_preds' not in st.session_state:
             st.session_state.qml_preds = pd.DataFrame()
         if 'insights_generated' not in st.session_state:
             st.session_state.insights_generated = False
+        
+        # Initialize report text cache (NEW)
+        if 'classical_report_text' not in st.session_state:
+            st.session_state.classical_report_text = None
+        if 'qml_report_text' not in st.session_state:
+            st.session_state.qml_report_text = None
 
     def run_analysis(self):
         """
         Performs the full forecasting pipeline for both classical and QML models.
+        Resets the report cache.
         """
         try:
             with st.spinner("Loading and preparing data for 2025..."):
@@ -117,30 +125,19 @@ class InsightsDashboard:
             with st.spinner("Running QML model to generate 2025 forecast..."):
                 st.session_state.qml_preds = run_qml_predictions(df_2025)
                 
+            # Reset report text to None to force a new LLM call on the next rerun
+            st.session_state.classical_report_text = None
+            st.session_state.qml_report_text = None
+                
             st.session_state.insights_generated = True
-            st.success("Forecasts and insights generated successfully!")
+            st.success("Forecasts and insights generated successfully! Generating initial reports...")
         
         except Exception as e:
             st.error(f"An error occurred during analysis: {e}")
             import traceback
             st.exception(traceback.format_exc())
 
-    def display_executive_summary(self):
-        st.markdown("<h3 class='section-header'>Executive Summary</h3>", unsafe_allow_html=True)
-        
-        tab1, tab2 = st.tabs(["Classical Model Insights", "Quantum-Hybrid Model Insights"])
-
-        with tab1:
-            if not st.session_state.classical_preds.empty:
-                generate_agent_report(st.session_state.classical_preds, "Classical")
-            else:
-                st.warning("Classical model predictions are not available. Click 'Generate Forecast' to run.")
-        
-        with tab2:
-            if not st.session_state.qml_preds.empty:
-                generate_agent_report(st.session_state.qml_preds, "Quantum-Hybrid")
-            else:
-                st.warning("Quantum-Hybrid model predictions are not available. Click 'Generate Forecast' to run.")
+    # NOTE: display_executive_summary is no longer used, logic moved to main() for simplicity
 
     def display_forecast_visualizations(self):
         st.markdown("<h3 class='section-header'>Forecast Visualizations (2025)</h3>", unsafe_allow_html=True)
@@ -428,9 +425,8 @@ def main():
     st.sidebar.markdown("### Live Simulation Controls")
     auto_refresh = st.sidebar.checkbox("Auto Refresh Live Data", value=True)
     refresh_interval = st.sidebar.slider("Refresh Interval (s)", 1, 10, 2)
-    st.sidebar.markdown("**Status:** <span class='status-running'>🟢 Live</span>", unsafe_allow_html=True)
-
-    # --- MAIN CONTENT: ALL SECTIONS STACKED ---
+    # Use st.empty() to update the status text without rerunning the main content needlessly
+    status_placeholder = st.sidebar.empty()
     
     # =================================================================
     # SECTION 1: STRATEGIC INSIGHTS (Agent Reports & Forecast Visuals)
@@ -442,17 +438,39 @@ def main():
     if st.session_state.get('insights_generated', False):
         col_classical, col_quantum = st.columns(2)
         
+        # --- Classical Report Logic (Check Cache First) ---
         with col_classical:
             st.markdown("### 🤖 Classical Model Insights")
             if not st.session_state.classical_preds.empty:
-                generate_agent_report(st.session_state.classical_preds, "Classical")
+                
+                if st.session_state.classical_report_text:
+                    # Display cached report
+                    st.markdown(st.session_state.classical_report_text, unsafe_allow_html=True)
+                else:
+                    # Generate and cache report (only happens once per "Generate Forecast" click)
+                    with st.spinner("Generating Classical Agent Report (One-time LLM Call)..."):
+                        # NOTE: generate_agent_report MUST be modified to return the report text string.
+                        report_text = generate_agent_report(st.session_state.classical_preds, "Classical")
+                        st.session_state.classical_report_text = report_text
+                        st.markdown(report_text, unsafe_allow_html=True)
             else:
                 st.warning("Classical predictions unavailable. Run the forecast.")
                 
+        # --- Quantum-Hybrid Report Logic (Check Cache First) ---
         with col_quantum:
             st.markdown("### ✨ Quantum-Hybrid Model Insights")
             if not st.session_state.qml_preds.empty:
-                generate_agent_report(st.session_state.qml_preds, "Quantum-Hybrid")
+                
+                if st.session_state.qml_report_text:
+                    # Display cached report
+                    st.markdown(st.session_state.qml_report_text, unsafe_allow_html=True)
+                else:
+                    # Generate and cache report (only happens once per "Generate Forecast" click)
+                    with st.spinner("Generating Quantum-Hybrid Agent Report (One-time LLM Call)..."):
+                        # NOTE: generate_agent_report MUST be modified to return the report text string.
+                        report_text = generate_agent_report(st.session_state.qml_preds, "Quantum-Hybrid")
+                        st.session_state.qml_report_text = report_text
+                        st.markdown(report_text, unsafe_allow_html=True)
             else:
                 st.warning("Quantum-Hybrid predictions unavailable. Run the forecast.")
     else:
@@ -554,8 +572,17 @@ def main():
         
     # --- Auto-refresh logic for live data ---
     if not predictions_df.empty and auto_refresh:
+        # Update sidebar status
+        status_placeholder.markdown("**Status:** <span class='status-running'>🟢 Live</span>", unsafe_allow_html=True)
         time.sleep(refresh_interval)
         st.rerun()
+    elif auto_refresh:
+        # Update sidebar status if waiting for data
+        status_placeholder.markdown("**Status:** <span class='status-stopped'>🔴 Waiting for Data</span>", unsafe_allow_html=True)
+    else:
+        # Update sidebar status if refresh is disabled
+        status_placeholder.markdown("**Status:** <span class='status-stopped'>⚫ Disabled</span>", unsafe_allow_html=True)
+
 
 if __name__ == "__main__":
     main()
