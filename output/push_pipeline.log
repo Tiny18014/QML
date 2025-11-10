@@ -700,3 +700,235 @@
 [2025-11-09 21:32:25] Predicting for each category...
 [2025-11-09 21:32:26] ✅ Data push predictions completed successfully.
 [2025-11-09 21:32:26] ✅ Data push pipeline completed successfully!
+[2025-11-10 17:44:33] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:44:33] Starting pipeline in 'train' mode...
+[2025-11-10 17:44:33] 🚀 Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:44:36] ❌ Training pipeline failed!
+[2025-11-10 17:44:36]   Return Code: 1
+[2025-11-10 17:44:36] --- STDOUT ---
+[2025-11-10 17:44:36] --- STDERR ---
+[2025-11-10 17:44:36] Traceback (most recent call last):
+[2025-11-10 17:44:36]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 39, in <module>
+[2025-11-10 17:44:36]     print("\U0001f680 Advanced EV Demand Forecasting Model Trainer")
+[2025-11-10 17:44:36]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:44:36]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:44:36]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:44:36] UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680' in position 0: character maps to <undefined>
+[2025-11-10 17:45:56] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:45:56] Starting pipeline in 'train' mode...
+[2025-11-10 17:45:56] 🚀 Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:45:58] ❌ Training pipeline failed!
+[2025-11-10 17:45:58]   Return Code: 1
+[2025-11-10 17:45:58] --- STDOUT ---
+[2025-11-10 17:45:58] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 17:45:58] ============================================================
+[2025-11-10 17:45:58] --- STDERR ---
+[2025-11-10 17:45:58] Traceback (most recent call last):
+[2025-11-10 17:45:58]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 17:45:58]     main()
+[2025-11-10 17:45:58]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 358, in main
+[2025-11-10 17:45:58]     print("\U0001f4c8 Loading data...")
+[2025-11-10 17:45:58]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:45:58]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:45:58]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:45:58] UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4c8' in position 0: character maps to <undefined>
+[2025-11-10 17:46:11] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:46:11] Starting pipeline in 'train' mode...
+[2025-11-10 17:46:11] 🚀 Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:46:14] ❌ Training pipeline failed!
+[2025-11-10 17:46:14]   Return Code: 1
+[2025-11-10 17:46:14] --- STDOUT ---
+[2025-11-10 17:46:14] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 17:46:14] ============================================================
+[2025-11-10 17:46:14] --- STDERR ---
+[2025-11-10 17:46:14] Traceback (most recent call last):
+[2025-11-10 17:46:14]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 17:46:14]     main()
+[2025-11-10 17:46:14]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 358, in main
+[2025-11-10 17:46:14]     print("\U0001f4c8 Loading data...")
+[2025-11-10 17:46:14]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:46:14]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:46:14]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:46:14] UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4c8' in position 0: character maps to <undefined>
+[2025-11-10 17:47:11] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:47:11] Starting pipeline in 'train' mode...
+[2025-11-10 17:47:11] 🚀 Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:47:13] ❌ Training pipeline failed!
+[2025-11-10 17:47:13]   Return Code: 1
+[2025-11-10 17:47:13] --- STDOUT ---
+[2025-11-10 17:47:13] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 17:47:13] ============================================================
+[2025-11-10 17:47:13] --- STDERR ---
+[2025-11-10 17:47:13] Traceback (most recent call last):
+[2025-11-10 17:47:13]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 17:47:13]     main()
+[2025-11-10 17:47:13]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 358, in main
+[2025-11-10 17:47:13]     print("\U0001f4c8 Loading data...")
+[2025-11-10 17:47:13]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:47:13]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:47:13]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:47:13] UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4c8' in position 0: character maps to <undefined>
+[2025-11-10 17:47:28] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:47:28] Starting pipeline in 'train' mode...
+[2025-11-10 17:47:28] 🚀 Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:47:31] ❌ Training pipeline failed!
+[2025-11-10 17:47:31]   Return Code: 1
+[2025-11-10 17:47:31] --- STDOUT ---
+[2025-11-10 17:47:31] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 17:47:31] ============================================================
+[2025-11-10 17:47:31] --- STDERR ---
+[2025-11-10 17:47:31] Traceback (most recent call last):
+[2025-11-10 17:47:31]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 17:47:31]     main()
+[2025-11-10 17:47:31]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 358, in main
+[2025-11-10 17:47:31]     print("\U0001f4c8 Loading data...")
+[2025-11-10 17:47:31]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:47:31]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:47:31]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:47:31] UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4c8' in position 0: character maps to <undefined>
+[2025-11-10 17:48:50] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:48:50] Starting pipeline in 'train' mode...
+[2025-11-10 17:48:50] 🚀 Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:48:54] ❌ Training pipeline failed!
+[2025-11-10 17:48:54]   Return Code: 1
+[2025-11-10 17:48:54] --- STDOUT ---
+[2025-11-10 17:48:54] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 17:48:54] ============================================================
+[2025-11-10 17:48:54]  Loading data...
+[2025-11-10 17:48:54] 
+[2025-11-10 17:48:54] Found 5 categories to train: ['2-Wheelers' '3-Wheelers' '4-Wheelers' 'Bus' 'Others']
+[2025-11-10 17:48:54] 
+[2025-11-10 17:48:54] ============================================================
+[2025-11-10 17:48:54]  Training model for category: 2-Wheelers
+[2025-11-10 17:48:54] Loading data...
+[2025-11-10 17:48:54] --- STDERR ---
+[2025-11-10 17:48:54] Traceback (most recent call last):
+[2025-11-10 17:48:54]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 17:48:54]     main()
+[2025-11-10 17:48:54]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 382, in main
+[2025-11-10 17:48:54]     df_advanced = create_advanced_features(df_category)
+[2025-11-10 17:48:54]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:48:54]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 138, in create_advanced_features
+[2025-11-10 17:48:54]     print(f"\u2705 Created {len(df.columns)} features")
+[2025-11-10 17:48:54]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:48:54]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:48:54]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:48:54] UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+[2025-11-10 17:50:22] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:50:22] Starting pipeline in 'train' mode...
+[2025-11-10 17:50:22] 🚀 Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:50:26] ❌ Training pipeline failed!
+[2025-11-10 17:50:26]   Return Code: 1
+[2025-11-10 17:50:26] --- STDOUT ---
+[2025-11-10 17:50:26] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 17:50:26] ============================================================
+[2025-11-10 17:50:26]  Loading data...
+[2025-11-10 17:50:26] 
+[2025-11-10 17:50:26] Found 5 categories to train: ['2-Wheelers' '3-Wheelers' '4-Wheelers' 'Bus' 'Others']
+[2025-11-10 17:50:26] 
+[2025-11-10 17:50:26] ============================================================
+[2025-11-10 17:50:26]  Training model for category: 2-Wheelers
+[2025-11-10 17:50:26] Loading data...
+[2025-11-10 17:50:26] --- STDERR ---
+[2025-11-10 17:50:26] Traceback (most recent call last):
+[2025-11-10 17:50:26]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 17:50:26]     main()
+[2025-11-10 17:50:26]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 382, in main
+[2025-11-10 17:50:26]     df_advanced = create_advanced_features(df_category)
+[2025-11-10 17:50:26]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:50:26]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 138, in create_advanced_features
+[2025-11-10 17:50:26]     print(f"\u2705 Created {len(df.columns)} features")
+[2025-11-10 17:50:26]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:50:26]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:50:26]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:50:26] UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+[2025-11-10 17:55:27] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:55:27] Starting pipeline in 'train' mode...
+[2025-11-10 17:55:27]  Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:55:31]  Training pipeline failed!
+[2025-11-10 17:55:31]   Return Code: 1
+[2025-11-10 17:55:31] --- STDOUT ---
+[2025-11-10 17:55:31] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 17:55:31] ============================================================
+[2025-11-10 17:55:31]  Loading data...
+[2025-11-10 17:55:31] 
+[2025-11-10 17:55:31] Found 5 categories to train: ['2-Wheelers' '3-Wheelers' '4-Wheelers' 'Bus' 'Others']
+[2025-11-10 17:55:31] 
+[2025-11-10 17:55:31] ============================================================
+[2025-11-10 17:55:31]  Training model for category: 2-Wheelers
+[2025-11-10 17:55:31] Loading data...
+[2025-11-10 17:55:31]  Created 62 features
+[2025-11-10 17:55:31]  Preparing data...
+[2025-11-10 17:55:31] --- STDERR ---
+[2025-11-10 17:55:31] Traceback (most recent call last):
+[2025-11-10 17:55:31]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 17:55:31]     main()
+[2025-11-10 17:55:31]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 389, in main
+[2025-11-10 17:55:31]     X_train, y_train, feature_names, scaler = prepare_data_for_training(train_df, feature_subset=top_features)
+[2025-11-10 17:55:31]                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:55:31]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 183, in prepare_data_for_training
+[2025-11-10 17:55:31]     print("\U0001f3cb\ufe0f Fitting a new scaler.")
+[2025-11-10 17:55:31]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:55:31]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:55:31]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:55:31] UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+[2025-11-10 17:57:44] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 17:57:44] Starting pipeline in 'train' mode...
+[2025-11-10 17:57:44]  Starting Champion-Challenger Training Pipeline...
+[2025-11-10 17:57:48]  Training pipeline failed!
+[2025-11-10 17:57:48]   Return Code: 1
+[2025-11-10 17:57:48] --- STDOUT ---
+[2025-11-10 17:57:48] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 17:57:48] ============================================================
+[2025-11-10 17:57:48]  Loading data...
+[2025-11-10 17:57:48] 
+[2025-11-10 17:57:48] Found 5 categories to train: ['2-Wheelers' '3-Wheelers' '4-Wheelers' 'Bus' 'Others']
+[2025-11-10 17:57:48] 
+[2025-11-10 17:57:48] ============================================================
+[2025-11-10 17:57:48]  Training model for category: 2-Wheelers
+[2025-11-10 17:57:48] Loading data...
+[2025-11-10 17:57:48]  Created 62 features
+[2025-11-10 17:57:48]  Preparing data...
+[2025-11-10 17:57:48] --- STDERR ---
+[2025-11-10 17:57:48] Traceback (most recent call last):
+[2025-11-10 17:57:48]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 17:57:48]     main()
+[2025-11-10 17:57:48]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 389, in main
+[2025-11-10 17:57:48]     X_train, y_train, feature_names, scaler = prepare_data_for_training(train_df, feature_subset=top_features)
+[2025-11-10 17:57:48]                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:57:48]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 183, in prepare_data_for_training
+[2025-11-10 17:57:48]     print("\U0001f3cb\ufe0f Fitting a new scaler.")
+[2025-11-10 17:57:48]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 17:57:48]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 17:57:48]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 17:57:48] UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+[2025-11-10 18:00:36] Working directory set to: C:\Users\shubh\OneDrive\Desktop\QML
+[2025-11-10 18:00:36] Starting pipeline in 'train' mode...
+[2025-11-10 18:00:36]  Starting Champion-Challenger Training Pipeline...
+[2025-11-10 18:00:40]  Training pipeline failed!
+[2025-11-10 18:00:40]   Return Code: 1
+[2025-11-10 18:00:40] --- STDOUT ---
+[2025-11-10 18:00:40] Advanced EV Demand Forecasting Model Trainer
+[2025-11-10 18:00:40] ============================================================
+[2025-11-10 18:00:40]  Loading data...
+[2025-11-10 18:00:40] 
+[2025-11-10 18:00:40] Found 5 categories to train: ['2-Wheelers' '3-Wheelers' '4-Wheelers' 'Bus' 'Others']
+[2025-11-10 18:00:40] 
+[2025-11-10 18:00:40] ============================================================
+[2025-11-10 18:00:40]  Training model for category: 2-Wheelers
+[2025-11-10 18:00:40] Loading data...
+[2025-11-10 18:00:40]  Created 62 features
+[2025-11-10 18:00:40]  Preparing data...
+[2025-11-10 18:00:40] --- STDERR ---
+[2025-11-10 18:00:40] Traceback (most recent call last):
+[2025-11-10 18:00:40]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 448, in <module>
+[2025-11-10 18:00:40]     main()
+[2025-11-10 18:00:40]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 389, in main
+[2025-11-10 18:00:40]     X_train, y_train, feature_names, scaler = prepare_data_for_training(train_df, feature_subset=top_features)
+[2025-11-10 18:00:40]                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 18:00:40]   File "C:\Users\shubh\OneDrive\Desktop\QML\scripts\advanced_model_trainer.py", line 183, in prepare_data_for_training
+[2025-11-10 18:00:40]     print("\U0001f3cb\ufe0f Fitting a new scaler.")
+[2025-11-10 18:00:40]   File "C:\Users\shubh\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+[2025-11-10 18:00:40]     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+[2025-11-10 18:00:40]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-11-10 18:00:40] UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>

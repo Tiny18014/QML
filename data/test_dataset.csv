@@ -1,0 +1,927 @@
+Date,State,Vehicle_Category,EV_Sales_Quantity,Month_Name,Year
+2025-02-15,West Bengal,Others,1,FEB,2025.0
+2025-02-15,Nagaland,2-Wheelers,1,FEB,2025.0
+2025-02-15,Nagaland,4-Wheelers,4,FEB,2025.0
+2025-02-15,Odisha,2-Wheelers,1,FEB,2025.0
+2025-02-15,Odisha,3-Wheelers,38,FEB,2025.0
+2025-02-15,Odisha,4-Wheelers,4,FEB,2025.0
+2025-02-15,Puducherry,2-Wheelers,274,FEB,2025.0
+2025-02-15,Odisha,Others,0,FEB,2025.0
+2025-02-15,Puducherry,3-Wheelers,10,FEB,2025.0
+2025-02-15,Puducherry,4-Wheelers,4,FEB,2025.0
+2025-02-15,Puducherry,Others,0,FEB,2025.0
+2025-02-15,Punjab,3-Wheelers,209,FEB,2025.0
+2025-02-15,Mizoram,4-Wheelers,0,FEB,2025.0
+2025-02-15,Odisha,Bus,0,FEB,2025.0
+2025-02-15,Mizoram,2-Wheelers,17,FEB,2025.0
+2025-02-15,Madhya Pradesh,4-Wheelers,2,FEB,2025.0
+2025-02-15,Meghalaya,4-Wheelers,9,FEB,2025.0
+2025-02-15,Meghalaya,3-Wheelers,0,FEB,2025.0
+2025-02-15,Meghalaya,2-Wheelers,3,FEB,2025.0
+2025-02-15,Manipur,4-Wheelers,10,FEB,2025.0
+2025-02-15,Manipur,3-Wheelers,0,FEB,2025.0
+2025-02-15,Manipur,2-Wheelers,0,FEB,2025.0
+2025-02-15,Maharashtra,Others,7,FEB,2025.0
+2025-02-15,Maharashtra,Bus,0,FEB,2025.0
+2025-02-15,Maharashtra,4-Wheelers,123,FEB,2025.0
+2025-02-15,Maharashtra,3-Wheelers,108,FEB,2025.0
+2025-02-15,Maharashtra,2-Wheelers,0,FEB,2025.0
+2025-02-15,Madhya Pradesh,Others,7,FEB,2025.0
+2025-02-15,Madhya Pradesh,Bus,0,FEB,2025.0
+2025-02-15,Punjab,4-Wheelers,13,FEB,2025.0
+2025-02-15,Meghalaya,Others,0,FEB,2025.0
+2025-02-15,Punjab,Bus,0,FEB,2025.0
+2025-02-15,West Bengal,Bus,0,FEB,2025.0
+2025-02-15,Rajasthan,2-Wheelers,0,FEB,2025.0
+2025-02-15,Madhya Pradesh,3-Wheelers,258,FEB,2025.0
+2025-02-15,West Bengal,4-Wheelers,147,FEB,2025.0
+2025-02-15,West Bengal,3-Wheelers,490,FEB,2025.0
+2025-02-15,West Bengal,2-Wheelers,0,FEB,2025.0
+2025-02-15,Uttarakhand,Others,1,FEB,2025.0
+2025-02-15,Uttarakhand,Bus,7,FEB,2025.0
+2025-02-15,Uttarakhand,4-Wheelers,0,FEB,2025.0
+2025-02-15,Uttarakhand,3-Wheelers,114,FEB,2025.0
+2025-02-15,Uttarakhand,2-Wheelers,291,FEB,2025.0
+2025-02-15,Uttar Pradesh,Others,13,FEB,2025.0
+2025-02-15,Uttar Pradesh,Bus,14,FEB,2025.0
+2025-02-15,Uttar Pradesh,4-Wheelers,26,FEB,2025.0
+2025-02-15,Uttar Pradesh,3-Wheelers,0,FEB,2025.0
+2025-02-15,Uttar Pradesh,2-Wheelers,0,FEB,2025.0
+2025-02-15,UT of DNH and DD,Others,0,FEB,2025.0
+2025-02-15,UT of DNH and DD,4-Wheelers,0,FEB,2025.0
+2025-02-15,UT of DNH and DD,2-Wheelers,8,FEB,2025.0
+2025-02-15,Rajasthan,3-Wheelers,227,FEB,2025.0
+2025-02-15,Rajasthan,4-Wheelers,17,FEB,2025.0
+2025-02-15,Rajasthan,Bus,3,FEB,2025.0
+2025-02-15,Rajasthan,Others,21,FEB,2025.0
+2025-02-15,Sikkim,2-Wheelers,0,FEB,2025.0
+2025-02-15,Sikkim,4-Wheelers,2,FEB,2025.0
+2025-02-15,Punjab,Others,0,FEB,2025.0
+2025-02-15,Tamil Nadu,3-Wheelers,123,FEB,2025.0
+2025-02-15,Tamil Nadu,Bus,0,FEB,2025.0
+2025-02-15,Tamil Nadu,Others,18,FEB,2025.0
+2025-02-15,Tripura,2-Wheelers,23,FEB,2025.0
+2025-02-15,Tripura,3-Wheelers,52,FEB,2025.0
+2025-02-15,Tripura,4-Wheelers,0,FEB,2025.0
+2025-02-15,Tripura,Others,0,FEB,2025.0
+2025-02-15,Tamil Nadu,4-Wheelers,13,FEB,2025.0
+2025-02-15,Lakshadweep,3-Wheelers,0,FEB,2025.0
+2025-02-15,Jammu and Kashmir,2-Wheelers,84,FEB,2025.0
+2025-02-15,Ladakh,4-Wheelers,0,FEB,2025.0
+2025-02-15,Goa,3-Wheelers,1,FEB,2025.0
+2025-02-15,Goa,2-Wheelers,342,FEB,2025.0
+2025-02-15,Delhi,Others,18,FEB,2025.0
+2025-02-15,Delhi,Bus,57,FEB,2025.0
+2025-02-15,Delhi,4-Wheelers,103,FEB,2025.0
+2025-02-15,Chhattisgarh,Others,5,FEB,2025.0
+2025-02-15,Chhattisgarh,4-Wheelers,0,FEB,2025.0
+2025-02-15,Chhattisgarh,3-Wheelers,185,FEB,2025.0
+2025-02-15,Chandigarh,Others,1,FEB,2025.0
+2025-02-15,Chandigarh,4-Wheelers,1,FEB,2025.0
+2025-02-15,Chandigarh,3-Wheelers,24,FEB,2025.0
+2025-02-15,Chandigarh,2-Wheelers,81,FEB,2025.0
+2025-02-15,Bihar,Others,1,FEB,2025.0
+2025-02-15,Bihar,4-Wheelers,0,FEB,2025.0
+2025-02-15,Goa,4-Wheelers,0,FEB,2025.0
+2025-02-15,Assam,Others,1,FEB,2025.0
+2025-02-15,Assam,3-Wheelers,777,FEB,2025.0
+2025-02-15,Assam,2-Wheelers,132,FEB,2025.0
+2025-02-15,Arunachal Pradesh,Bus,0,FEB,2025.0
+2025-02-15,Arunachal Pradesh,4-Wheelers,12,FEB,2025.0
+2025-02-15,Arunachal Pradesh,3-Wheelers,0,FEB,2025.0
+2025-02-15,Arunachal Pradesh,2-Wheelers,3,FEB,2025.0
+2025-02-15,Andhra Pradesh,Others,0,FEB,2025.0
+2025-02-15,Andhra Pradesh,Bus,0,FEB,2025.0
+2025-02-15,Andhra Pradesh,4-Wheelers,4,FEB,2025.0
+2025-02-15,Andhra Pradesh,3-Wheelers,16,FEB,2025.0
+2025-02-15,Andhra Pradesh,2-Wheelers,0,FEB,2025.0
+2025-02-15,Andaman & Nicobar Island,Bus,2,FEB,2025.0
+2025-02-15,Andaman & Nicobar Island,4-Wheelers,0,FEB,2025.0
+2025-02-15,Andaman & Nicobar Island,2-Wheelers,0,FEB,2025.0
+2025-02-15,Assam,4-Wheelers,0,FEB,2025.0
+2025-02-15,Goa,Bus,0,FEB,2025.0
+2025-02-15,Lakshadweep,2-Wheelers,0,FEB,2025.0
+2025-02-15,Gujarat,2-Wheelers,0,FEB,2025.0
+2025-02-15,Kerala,Others,13,FEB,2025.0
+2025-02-15,Kerala,Bus,0,FEB,2025.0
+2025-02-15,Kerala,4-Wheelers,12,FEB,2025.0
+2025-02-15,Kerala,3-Wheelers,28,FEB,2025.0
+2025-02-15,Kerala,2-Wheelers,0,FEB,2025.0
+2025-02-15,Karnataka,Others,9,FEB,2025.0
+2025-02-15,Karnataka,Bus,0,FEB,2025.0
+2025-02-15,Karnataka,4-Wheelers,178,FEB,2025.0
+2025-02-15,Goa,Others,1,FEB,2025.0
+2025-02-15,Karnataka,2-Wheelers,148,FEB,2025.0
+2025-02-15,Jharkhand,Others,0,FEB,2025.0
+2025-02-15,Jharkhand,4-Wheelers,3,FEB,2025.0
+2025-02-15,Jharkhand,3-Wheelers,183,FEB,2025.0
+2025-02-15,Jharkhand,2-Wheelers,570,FEB,2025.0
+2025-02-15,Jammu and Kashmir,Others,0,FEB,2025.0
+2025-02-15,Karnataka,3-Wheelers,218,FEB,2025.0
+2025-02-15,Jammu and Kashmir,3-Wheelers,51,FEB,2025.0
+2025-02-15,Jammu and Kashmir,4-Wheelers,9,FEB,2025.0
+2025-02-15,Gujarat,3-Wheelers,8,FEB,2025.0
+2025-02-15,Gujarat,4-Wheelers,9,FEB,2025.0
+2025-02-15,Gujarat,Bus,0,FEB,2025.0
+2025-02-15,Haryana,2-Wheelers,635,FEB,2025.0
+2025-02-15,Haryana,3-Wheelers,278,FEB,2025.0
+2025-02-15,Gujarat,Others,3,FEB,2025.0
+2025-02-15,Haryana,Bus,1,FEB,2025.0
+2025-02-15,Haryana,Others,8,FEB,2025.0
+2025-02-15,Himachal Pradesh,2-Wheelers,55,FEB,2025.0
+2025-02-15,Himachal Pradesh,3-Wheelers,4,FEB,2025.0
+2025-02-15,Himachal Pradesh,4-Wheelers,6,FEB,2025.0
+2025-02-15,Himachal Pradesh,Others,0,FEB,2025.0
+2025-02-15,Haryana,4-Wheelers,112,FEB,2025.0
+2025-03-15,Odisha,4-Wheelers,0,MAR,2025.0
+2025-03-15,Nagaland,2-Wheelers,2,MAR,2025.0
+2025-03-15,Nagaland,4-Wheelers,6,MAR,2025.0
+2025-03-15,Odisha,2-Wheelers,8,MAR,2025.0
+2025-03-15,Odisha,3-Wheelers,79,MAR,2025.0
+2025-03-15,Odisha,Bus,20,MAR,2025.0
+2025-03-15,Punjab,4-Wheelers,16,MAR,2025.0
+2025-03-15,Puducherry,2-Wheelers,296,MAR,2025.0
+2025-03-15,Puducherry,3-Wheelers,5,MAR,2025.0
+2025-03-15,Puducherry,4-Wheelers,12,MAR,2025.0
+2025-03-15,Puducherry,Others,2,MAR,2025.0
+2025-03-15,Punjab,3-Wheelers,182,MAR,2025.0
+2025-03-15,Odisha,Others,0,MAR,2025.0
+2025-03-15,Mizoram,4-Wheelers,0,MAR,2025.0
+2025-03-15,Madhya Pradesh,4-Wheelers,26,MAR,2025.0
+2025-03-15,Meghalaya,Others,0,MAR,2025.0
+2025-03-15,Punjab,Bus,0,MAR,2025.0
+2025-03-15,Madhya Pradesh,Bus,0,MAR,2025.0
+2025-03-15,Madhya Pradesh,Others,9,MAR,2025.0
+2025-03-15,Maharashtra,2-Wheelers,0,MAR,2025.0
+2025-03-15,Maharashtra,3-Wheelers,365,MAR,2025.0
+2025-03-15,Maharashtra,4-Wheelers,72,MAR,2025.0
+2025-03-15,Mizoram,2-Wheelers,35,MAR,2025.0
+2025-03-15,Maharashtra,Bus,0,MAR,2025.0
+2025-03-15,Manipur,2-Wheelers,6,MAR,2025.0
+2025-03-15,Manipur,3-Wheelers,0,MAR,2025.0
+2025-03-15,Manipur,4-Wheelers,7,MAR,2025.0
+2025-03-15,Meghalaya,2-Wheelers,12,MAR,2025.0
+2025-03-15,Meghalaya,3-Wheelers,0,MAR,2025.0
+2025-03-15,Meghalaya,4-Wheelers,8,MAR,2025.0
+2025-03-15,Maharashtra,Others,0,MAR,2025.0
+2025-03-15,Punjab,Others,0,MAR,2025.0
+2025-03-15,UT of DNH and DD,2-Wheelers,16,MAR,2025.0
+2025-03-15,Rajasthan,3-Wheelers,359,MAR,2025.0
+2025-03-15,Madhya Pradesh,3-Wheelers,652,MAR,2025.0
+2025-03-15,West Bengal,Others,7,MAR,2025.0
+2025-03-15,West Bengal,4-Wheelers,95,MAR,2025.0
+2025-03-15,West Bengal,3-Wheelers,588,MAR,2025.0
+2025-03-15,West Bengal,2-Wheelers,0,MAR,2025.0
+2025-03-15,Uttarakhand,Others,1,MAR,2025.0
+2025-03-15,Uttarakhand,Bus,0,MAR,2025.0
+2025-03-15,Uttarakhand,4-Wheelers,0,MAR,2025.0
+2025-03-15,Uttarakhand,3-Wheelers,199,MAR,2025.0
+2025-03-15,Uttarakhand,2-Wheelers,413,MAR,2025.0
+2025-03-15,Uttar Pradesh,Others,14,MAR,2025.0
+2025-03-15,Uttar Pradesh,Bus,0,MAR,2025.0
+2025-03-15,Uttar Pradesh,4-Wheelers,7,MAR,2025.0
+2025-03-15,Uttar Pradesh,3-Wheelers,1,MAR,2025.0
+2025-03-15,Rajasthan,2-Wheelers,1,MAR,2025.0
+2025-03-15,Uttar Pradesh,2-Wheelers,0,MAR,2025.0
+2025-03-15,UT of DNH and DD,4-Wheelers,1,MAR,2025.0
+2025-03-15,Tripura,Others,3,MAR,2025.0
+2025-03-15,Tripura,4-Wheelers,0,MAR,2025.0
+2025-03-15,Tripura,3-Wheelers,92,MAR,2025.0
+2025-03-15,Tripura,2-Wheelers,41,MAR,2025.0
+2025-03-15,Tamil Nadu,Others,24,MAR,2025.0
+2025-03-15,Tamil Nadu,Bus,3,MAR,2025.0
+2025-03-15,Tamil Nadu,4-Wheelers,55,MAR,2025.0
+2025-03-15,Tamil Nadu,3-Wheelers,172,MAR,2025.0
+2025-03-15,Sikkim,4-Wheelers,4,MAR,2025.0
+2025-03-15,Sikkim,2-Wheelers,0,MAR,2025.0
+2025-03-15,Rajasthan,Others,12,MAR,2025.0
+2025-03-15,Rajasthan,Bus,4,MAR,2025.0
+2025-03-15,Rajasthan,4-Wheelers,18,MAR,2025.0
+2025-03-15,UT of DNH and DD,Others,1,MAR,2025.0
+2025-03-15,Lakshadweep,3-Wheelers,0,MAR,2025.0
+2025-03-15,West Bengal,Bus,0,MAR,2025.0
+2025-03-15,Ladakh,4-Wheelers,1,MAR,2025.0
+2025-03-15,Goa,4-Wheelers,12,MAR,2025.0
+2025-03-15,Goa,3-Wheelers,0,MAR,2025.0
+2025-03-15,Goa,2-Wheelers,610,MAR,2025.0
+2025-03-15,Delhi,Others,15,MAR,2025.0
+2025-03-15,Delhi,Bus,0,MAR,2025.0
+2025-03-15,Delhi,4-Wheelers,4,MAR,2025.0
+2025-03-15,Chhattisgarh,Others,5,MAR,2025.0
+2025-03-15,Chhattisgarh,4-Wheelers,12,MAR,2025.0
+2025-03-15,Chhattisgarh,3-Wheelers,246,MAR,2025.0
+2025-03-15,Chandigarh,Others,0,MAR,2025.0
+2025-03-15,Chandigarh,4-Wheelers,1,MAR,2025.0
+2025-03-15,Chandigarh,3-Wheelers,22,MAR,2025.0
+2025-03-15,Chandigarh,2-Wheelers,139,MAR,2025.0
+2025-03-15,Bihar,Others,3,MAR,2025.0
+2025-03-15,Bihar,4-Wheelers,0,MAR,2025.0
+2025-03-15,Assam,Others,1,MAR,2025.0
+2025-03-15,Assam,4-Wheelers,0,MAR,2025.0
+2025-03-15,Assam,2-Wheelers,289,MAR,2025.0
+2025-03-15,Arunachal Pradesh,Bus,0,MAR,2025.0
+2025-03-15,Arunachal Pradesh,4-Wheelers,13,MAR,2025.0
+2025-03-15,Arunachal Pradesh,3-Wheelers,0,MAR,2025.0
+2025-03-15,Arunachal Pradesh,2-Wheelers,1,MAR,2025.0
+2025-03-15,Andhra Pradesh,Others,0,MAR,2025.0
+2025-03-15,Andhra Pradesh,Bus,0,MAR,2025.0
+2025-03-15,Andhra Pradesh,4-Wheelers,4,MAR,2025.0
+2025-03-15,Andhra Pradesh,3-Wheelers,83,MAR,2025.0
+2025-03-15,Andhra Pradesh,2-Wheelers,0,MAR,2025.0
+2025-03-15,Andaman & Nicobar Island,Bus,0,MAR,2025.0
+2025-03-15,Andaman & Nicobar Island,4-Wheelers,2,MAR,2025.0
+2025-03-15,Goa,Bus,0,MAR,2025.0
+2025-03-15,Goa,Others,1,MAR,2025.0
+2025-03-15,Andaman & Nicobar Island,2-Wheelers,0,MAR,2025.0
+2025-03-15,Gujarat,3-Wheelers,86,MAR,2025.0
+2025-03-15,Gujarat,2-Wheelers,0,MAR,2025.0
+2025-03-15,Kerala,Others,20,MAR,2025.0
+2025-03-15,Kerala,Bus,0,MAR,2025.0
+2025-03-15,Kerala,4-Wheelers,19,MAR,2025.0
+2025-03-15,Kerala,3-Wheelers,155,MAR,2025.0
+2025-03-15,Kerala,2-Wheelers,0,MAR,2025.0
+2025-03-15,Karnataka,Others,16,MAR,2025.0
+2025-03-15,Karnataka,Bus,0,MAR,2025.0
+2025-03-15,Karnataka,4-Wheelers,174,MAR,2025.0
+2025-03-15,Karnataka,3-Wheelers,179,MAR,2025.0
+2025-03-15,Karnataka,2-Wheelers,483,MAR,2025.0
+2025-03-15,Jharkhand,Others,1,MAR,2025.0
+2025-03-15,Jharkhand,4-Wheelers,0,MAR,2025.0
+2025-03-15,Jharkhand,3-Wheelers,273,MAR,2025.0
+2025-03-15,Jharkhand,2-Wheelers,892,MAR,2025.0
+2025-03-15,Lakshadweep,2-Wheelers,0,MAR,2025.0
+2025-03-15,Jammu and Kashmir,4-Wheelers,1,MAR,2025.0
+2025-03-15,Gujarat,4-Wheelers,7,MAR,2025.0
+2025-03-15,Gujarat,Bus,0,MAR,2025.0
+2025-03-15,Gujarat,Others,8,MAR,2025.0
+2025-03-15,Haryana,2-Wheelers,784,MAR,2025.0
+2025-03-15,Jammu and Kashmir,Others,1,MAR,2025.0
+2025-03-15,Haryana,4-Wheelers,138,MAR,2025.0
+2025-03-15,Haryana,Bus,0,MAR,2025.0
+2025-03-15,Haryana,3-Wheelers,301,MAR,2025.0
+2025-03-15,Himachal Pradesh,2-Wheelers,80,MAR,2025.0
+2025-03-15,Himachal Pradesh,3-Wheelers,2,MAR,2025.0
+2025-03-15,Himachal Pradesh,4-Wheelers,7,MAR,2025.0
+2025-03-15,Himachal Pradesh,Others,0,MAR,2025.0
+2025-03-15,Jammu and Kashmir,2-Wheelers,155,MAR,2025.0
+2025-03-15,Jammu and Kashmir,3-Wheelers,146,MAR,2025.0
+2025-03-15,Haryana,Others,9,MAR,2025.0
+2025-04-15,Nagaland,4-Wheelers,4,APR,2025.0
+2025-04-15,Odisha,2-Wheelers,1,APR,2025.0
+2025-04-15,Odisha,3-Wheelers,116,APR,2025.0
+2025-04-15,Odisha,4-Wheelers,0,APR,2025.0
+2025-04-15,Odisha,Bus,0,APR,2025.0
+2025-04-15,Punjab,4-Wheelers,4,APR,2025.0
+2025-04-15,Puducherry,2-Wheelers,247,APR,2025.0
+2025-04-15,Puducherry,3-Wheelers,10,APR,2025.0
+2025-04-15,Puducherry,4-Wheelers,12,APR,2025.0
+2025-04-15,Puducherry,Others,0,APR,2025.0
+2025-04-15,Punjab,3-Wheelers,144,APR,2025.0
+2025-04-15,Nagaland,2-Wheelers,1,APR,2025.0
+2025-04-15,Odisha,Others,0,APR,2025.0
+2025-04-15,Mizoram,4-Wheelers,0,APR,2025.0
+2025-04-15,Manipur,3-Wheelers,2,APR,2025.0
+2025-04-15,Meghalaya,Others,3,APR,2025.0
+2025-04-15,Madhya Pradesh,4-Wheelers,4,APR,2025.0
+2025-04-15,Madhya Pradesh,Bus,11,APR,2025.0
+2025-04-15,Madhya Pradesh,Others,7,APR,2025.0
+2025-04-15,Maharashtra,2-Wheelers,0,APR,2025.0
+2025-04-15,Maharashtra,3-Wheelers,340,APR,2025.0
+2025-04-15,Maharashtra,4-Wheelers,118,APR,2025.0
+2025-04-15,Mizoram,2-Wheelers,33,APR,2025.0
+2025-04-15,Maharashtra,Bus,3,APR,2025.0
+2025-04-15,Manipur,2-Wheelers,19,APR,2025.0
+2025-04-15,Punjab,Bus,0,APR,2025.0
+2025-04-15,Manipur,4-Wheelers,8,APR,2025.0
+2025-04-15,Meghalaya,2-Wheelers,3,APR,2025.0
+2025-04-15,Meghalaya,3-Wheelers,0,APR,2025.0
+2025-04-15,Meghalaya,4-Wheelers,9,APR,2025.0
+2025-04-15,Maharashtra,Others,0,APR,2025.0
+2025-04-15,Punjab,Others,2,APR,2025.0
+2025-04-15,Tamil Nadu,3-Wheelers,532,APR,2025.0
+2025-04-15,Rajasthan,3-Wheelers,382,APR,2025.0
+2025-04-15,West Bengal,Others,6,APR,2025.0
+2025-04-15,Madhya Pradesh,3-Wheelers,766,APR,2025.0
+2025-04-15,West Bengal,Bus,0,APR,2025.0
+2025-04-15,West Bengal,4-Wheelers,51,APR,2025.0
+2025-04-15,West Bengal,3-Wheelers,567,APR,2025.0
+2025-04-15,West Bengal,2-Wheelers,1,APR,2025.0
+2025-04-15,Uttarakhand,Others,1,APR,2025.0
+2025-04-15,Uttarakhand,Bus,0,APR,2025.0
+2025-04-15,Uttarakhand,4-Wheelers,6,APR,2025.0
+2025-04-15,Uttarakhand,3-Wheelers,243,APR,2025.0
+2025-04-15,Uttarakhand,2-Wheelers,538,APR,2025.0
+2025-04-15,Uttar Pradesh,Others,11,APR,2025.0
+2025-04-15,Uttar Pradesh,Bus,0,APR,2025.0
+2025-04-15,Uttar Pradesh,4-Wheelers,23,APR,2025.0
+2025-04-15,Rajasthan,2-Wheelers,24,APR,2025.0
+2025-04-15,Uttar Pradesh,3-Wheelers,0,APR,2025.0
+2025-04-15,UT of DNH and DD,Others,0,APR,2025.0
+2025-04-15,UT of DNH and DD,4-Wheelers,7,APR,2025.0
+2025-04-15,Tripura,Others,0,APR,2025.0
+2025-04-15,Tripura,4-Wheelers,0,APR,2025.0
+2025-04-15,Tripura,3-Wheelers,371,APR,2025.0
+2025-04-15,Tripura,2-Wheelers,27,APR,2025.0
+2025-04-15,Tamil Nadu,Others,38,APR,2025.0
+2025-04-15,Tamil Nadu,Bus,0,APR,2025.0
+2025-04-15,Tamil Nadu,4-Wheelers,64,APR,2025.0
+2025-04-15,Sikkim,4-Wheelers,3,APR,2025.0
+2025-04-15,Sikkim,2-Wheelers,1,APR,2025.0
+2025-04-15,Rajasthan,Others,20,APR,2025.0
+2025-04-15,Rajasthan,Bus,2,APR,2025.0
+2025-04-15,Rajasthan,4-Wheelers,9,APR,2025.0
+2025-04-15,Uttar Pradesh,2-Wheelers,0,APR,2025.0
+2025-04-15,UT of DNH and DD,2-Wheelers,13,APR,2025.0
+2025-04-15,Lakshadweep,3-Wheelers,0,APR,2025.0
+2025-04-15,Ladakh,4-Wheelers,0,APR,2025.0
+2025-04-15,Goa,3-Wheelers,0,APR,2025.0
+2025-04-15,Goa,2-Wheelers,317,APR,2025.0
+2025-04-15,Delhi,Others,22,APR,2025.0
+2025-04-15,Delhi,Bus,228,APR,2025.0
+2025-04-15,Delhi,4-Wheelers,1,APR,2025.0
+2025-04-15,Chhattisgarh,Others,2,APR,2025.0
+2025-04-15,Chhattisgarh,4-Wheelers,2,APR,2025.0
+2025-04-15,Chhattisgarh,3-Wheelers,274,APR,2025.0
+2025-04-15,Chandigarh,Others,0,APR,2025.0
+2025-04-15,Chandigarh,4-Wheelers,1,APR,2025.0
+2025-04-15,Chandigarh,3-Wheelers,22,APR,2025.0
+2025-04-15,Chandigarh,2-Wheelers,118,APR,2025.0
+2025-04-15,Bihar,4-Wheelers,1,APR,2025.0
+2025-04-15,Assam,Others,2,APR,2025.0
+2025-04-15,Assam,4-Wheelers,0,APR,2025.0
+2025-04-15,Assam,2-Wheelers,243,APR,2025.0
+2025-04-15,Arunachal Pradesh,Bus,0,APR,2025.0
+2025-04-15,Arunachal Pradesh,4-Wheelers,13,APR,2025.0
+2025-04-15,Arunachal Pradesh,3-Wheelers,0,APR,2025.0
+2025-04-15,Arunachal Pradesh,2-Wheelers,5,APR,2025.0
+2025-04-15,Andhra Pradesh,Others,0,APR,2025.0
+2025-04-15,Andhra Pradesh,Bus,0,APR,2025.0
+2025-04-15,Andhra Pradesh,4-Wheelers,3,APR,2025.0
+2025-04-15,Andhra Pradesh,3-Wheelers,205,APR,2025.0
+2025-04-15,Andhra Pradesh,2-Wheelers,0,APR,2025.0
+2025-04-15,Andaman & Nicobar Island,Bus,0,APR,2025.0
+2025-04-15,Andaman & Nicobar Island,4-Wheelers,0,APR,2025.0
+2025-04-15,Andaman & Nicobar Island,2-Wheelers,0,APR,2025.0
+2025-04-15,Lakshadweep,2-Wheelers,2,APR,2025.0
+2025-04-15,Goa,4-Wheelers,4,APR,2025.0
+2025-04-15,Goa,Bus,2,APR,2025.0
+2025-04-15,Bihar,Others,7,APR,2025.0
+2025-04-15,Gujarat,2-Wheelers,0,APR,2025.0
+2025-04-15,Goa,Others,0,APR,2025.0
+2025-04-15,Kerala,Bus,0,APR,2025.0
+2025-04-15,Kerala,4-Wheelers,14,APR,2025.0
+2025-04-15,Kerala,3-Wheelers,305,APR,2025.0
+2025-04-15,Kerala,2-Wheelers,0,APR,2025.0
+2025-04-15,Karnataka,Others,13,APR,2025.0
+2025-04-15,Karnataka,Bus,2,APR,2025.0
+2025-04-15,Karnataka,4-Wheelers,116,APR,2025.0
+2025-04-15,Karnataka,3-Wheelers,409,APR,2025.0
+2025-04-15,Karnataka,2-Wheelers,10,APR,2025.0
+2025-04-15,Jharkhand,Others,0,APR,2025.0
+2025-04-15,Jharkhand,4-Wheelers,4,APR,2025.0
+2025-04-15,Jharkhand,3-Wheelers,323,APR,2025.0
+2025-04-15,Jharkhand,2-Wheelers,625,APR,2025.0
+2025-04-15,Jammu and Kashmir,Others,2,APR,2025.0
+2025-04-15,Kerala,Others,19,APR,2025.0
+2025-04-15,Jammu and Kashmir,3-Wheelers,184,APR,2025.0
+2025-04-15,Jammu and Kashmir,4-Wheelers,2,APR,2025.0
+2025-04-15,Gujarat,4-Wheelers,5,APR,2025.0
+2025-04-15,Gujarat,Bus,0,APR,2025.0
+2025-04-15,Gujarat,Others,25,APR,2025.0
+2025-04-15,Haryana,3-Wheelers,353,APR,2025.0
+2025-04-15,Haryana,4-Wheelers,103,APR,2025.0
+2025-04-15,Haryana,Bus,0,APR,2025.0
+2025-04-15,Gujarat,3-Wheelers,44,APR,2025.0
+2025-04-15,Himachal Pradesh,2-Wheelers,50,APR,2025.0
+2025-04-15,Himachal Pradesh,3-Wheelers,0,APR,2025.0
+2025-04-15,Himachal Pradesh,4-Wheelers,1,APR,2025.0
+2025-04-15,Himachal Pradesh,Others,0,APR,2025.0
+2025-04-15,Jammu and Kashmir,2-Wheelers,175,APR,2025.0
+2025-04-15,Haryana,Others,11,APR,2025.0
+2025-05-15,Nagaland,4-Wheelers,4,MAY,2025.0
+2025-05-15,Odisha,2-Wheelers,5,MAY,2025.0
+2025-05-15,Odisha,3-Wheelers,122,MAY,2025.0
+2025-05-15,Odisha,4-Wheelers,3,MAY,2025.0
+2025-05-15,Punjab,4-Wheelers,23,MAY,2025.0
+2025-05-15,Odisha,Bus,0,MAY,2025.0
+2025-05-15,Puducherry,3-Wheelers,19,MAY,2025.0
+2025-05-15,Puducherry,2-Wheelers,243,MAY,2025.0
+2025-05-15,Puducherry,4-Wheelers,0,MAY,2025.0
+2025-05-15,Puducherry,Others,1,MAY,2025.0
+2025-05-15,Punjab,3-Wheelers,224,MAY,2025.0
+2025-05-15,Nagaland,2-Wheelers,1,MAY,2025.0
+2025-05-15,Odisha,Others,11,MAY,2025.0
+2025-05-15,Mizoram,4-Wheelers,0,MAY,2025.0
+2025-05-15,Manipur,2-Wheelers,4,MAY,2025.0
+2025-05-15,Meghalaya,Others,0,MAY,2025.0
+2025-05-15,Meghalaya,4-Wheelers,11,MAY,2025.0
+2025-05-15,Meghalaya,3-Wheelers,1,MAY,2025.0
+2025-05-15,Meghalaya,2-Wheelers,8,MAY,2025.0
+2025-05-15,Manipur,4-Wheelers,8,MAY,2025.0
+2025-05-15,Manipur,3-Wheelers,1,MAY,2025.0
+2025-05-15,Maharashtra,Others,0,MAY,2025.0
+2025-05-15,Maharashtra,Bus,0,MAY,2025.0
+2025-05-15,Maharashtra,4-Wheelers,156,MAY,2025.0
+2025-05-15,Maharashtra,3-Wheelers,445,MAY,2025.0
+2025-05-15,Maharashtra,2-Wheelers,0,MAY,2025.0
+2025-05-15,Madhya Pradesh,Others,7,MAY,2025.0
+2025-05-15,Madhya Pradesh,Bus,7,MAY,2025.0
+2025-05-15,West Bengal,Others,7,MAY,2025.0
+2025-05-15,Mizoram,2-Wheelers,8,MAY,2025.0
+2025-05-15,Punjab,Others,1,MAY,2025.0
+2025-05-15,Madhya Pradesh,4-Wheelers,2,MAY,2025.0
+2025-05-15,Rajasthan,3-Wheelers,469,MAY,2025.0
+2025-05-15,West Bengal,Bus,0,MAY,2025.0
+2025-05-15,West Bengal,4-Wheelers,37,MAY,2025.0
+2025-05-15,West Bengal,3-Wheelers,600,MAY,2025.0
+2025-05-15,West Bengal,2-Wheelers,0,MAY,2025.0
+2025-05-15,Uttarakhand,Others,1,MAY,2025.0
+2025-05-15,Uttarakhand,Bus,0,MAY,2025.0
+2025-05-15,Uttarakhand,4-Wheelers,5,MAY,2025.0
+2025-05-15,Uttarakhand,3-Wheelers,321,MAY,2025.0
+2025-05-15,Uttarakhand,2-Wheelers,664,MAY,2025.0
+2025-05-15,Uttar Pradesh,Others,11,MAY,2025.0
+2025-05-15,Uttar Pradesh,Bus,1,MAY,2025.0
+2025-05-15,Uttar Pradesh,4-Wheelers,4,MAY,2025.0
+2025-05-15,Uttar Pradesh,3-Wheelers,0,MAY,2025.0
+2025-05-15,Uttar Pradesh,2-Wheelers,0,MAY,2025.0
+2025-05-15,Rajasthan,2-Wheelers,0,MAY,2025.0
+2025-05-15,UT of DNH and DD,Others,0,MAY,2025.0
+2025-05-15,UT of DNH and DD,2-Wheelers,10,MAY,2025.0
+2025-05-15,Tripura,Others,0,MAY,2025.0
+2025-05-15,Tripura,4-Wheelers,1,MAY,2025.0
+2025-05-15,Tripura,3-Wheelers,419,MAY,2025.0
+2025-05-15,Tripura,2-Wheelers,45,MAY,2025.0
+2025-05-15,Tamil Nadu,Others,39,MAY,2025.0
+2025-05-15,Tamil Nadu,Bus,50,MAY,2025.0
+2025-05-15,Tamil Nadu,4-Wheelers,28,MAY,2025.0
+2025-05-15,Tamil Nadu,3-Wheelers,381,MAY,2025.0
+2025-05-15,Sikkim,4-Wheelers,1,MAY,2025.0
+2025-05-15,Sikkim,2-Wheelers,0,MAY,2025.0
+2025-05-15,Rajasthan,Others,37,MAY,2025.0
+2025-05-15,Rajasthan,Bus,0,MAY,2025.0
+2025-05-15,Rajasthan,4-Wheelers,11,MAY,2025.0
+2025-05-15,UT of DNH and DD,4-Wheelers,0,MAY,2025.0
+2025-05-15,Madhya Pradesh,3-Wheelers,0,MAY,2025.0
+2025-05-15,Punjab,Bus,0,MAY,2025.0
+2025-05-15,Lakshadweep,2-Wheelers,2,MAY,2025.0
+2025-05-15,Goa,4-Wheelers,2,MAY,2025.0
+2025-05-15,Goa,3-Wheelers,1,MAY,2025.0
+2025-05-15,Goa,2-Wheelers,352,MAY,2025.0
+2025-05-15,Delhi,Others,22,MAY,2025.0
+2025-05-15,Delhi,Bus,153,MAY,2025.0
+2025-05-15,Delhi,4-Wheelers,65,MAY,2025.0
+2025-05-15,Chhattisgarh,Others,5,MAY,2025.0
+2025-05-15,Chhattisgarh,4-Wheelers,4,MAY,2025.0
+2025-05-15,Chhattisgarh,3-Wheelers,374,MAY,2025.0
+2025-05-15,Chandigarh,Others,0,MAY,2025.0
+2025-05-15,Chandigarh,4-Wheelers,0,MAY,2025.0
+2025-05-15,Chandigarh,3-Wheelers,33,MAY,2025.0
+2025-05-15,Chandigarh,2-Wheelers,98,MAY,2025.0
+2025-05-15,Bihar,Others,3,MAY,2025.0
+2025-05-15,Goa,Bus,0,MAY,2025.0
+2025-05-15,Bihar,4-Wheelers,1,MAY,2025.0
+2025-05-15,Assam,4-Wheelers,0,MAY,2025.0
+2025-05-15,Assam,2-Wheelers,287,MAY,2025.0
+2025-05-15,Arunachal Pradesh,Bus,10,MAY,2025.0
+2025-05-15,Arunachal Pradesh,4-Wheelers,13,MAY,2025.0
+2025-05-15,Arunachal Pradesh,3-Wheelers,0,MAY,2025.0
+2025-05-15,Arunachal Pradesh,2-Wheelers,3,MAY,2025.0
+2025-05-15,Andhra Pradesh,Others,0,MAY,2025.0
+2025-05-15,Andhra Pradesh,Bus,0,MAY,2025.0
+2025-05-15,Andhra Pradesh,4-Wheelers,2,MAY,2025.0
+2025-05-15,Andhra Pradesh,3-Wheelers,179,MAY,2025.0
+2025-05-15,Andhra Pradesh,2-Wheelers,0,MAY,2025.0
+2025-05-15,Andaman & Nicobar Island,Bus,0,MAY,2025.0
+2025-05-15,Andaman & Nicobar Island,4-Wheelers,1,MAY,2025.0
+2025-05-15,Andaman & Nicobar Island,2-Wheelers,0,MAY,2025.0
+2025-05-15,Assam,Others,0,MAY,2025.0
+2025-05-15,Goa,Others,4,MAY,2025.0
+2025-05-15,Lakshadweep,3-Wheelers,0,MAY,2025.0
+2025-05-15,Gujarat,3-Wheelers,71,MAY,2025.0
+2025-05-15,Gujarat,2-Wheelers,1,MAY,2025.0
+2025-05-15,Ladakh,4-Wheelers,0,MAY,2025.0
+2025-05-15,Kerala,Others,29,MAY,2025.0
+2025-05-15,Kerala,Bus,0,MAY,2025.0
+2025-05-15,Kerala,4-Wheelers,44,MAY,2025.0
+2025-05-15,Kerala,3-Wheelers,432,MAY,2025.0
+2025-05-15,Kerala,2-Wheelers,0,MAY,2025.0
+2025-05-15,Karnataka,Others,34,MAY,2025.0
+2025-05-15,Karnataka,Bus,0,MAY,2025.0
+2025-05-15,Karnataka,3-Wheelers,596,MAY,2025.0
+2025-05-15,Karnataka,2-Wheelers,551,MAY,2025.0
+2025-05-15,Jharkhand,Others,2,MAY,2025.0
+2025-05-15,Jharkhand,4-Wheelers,4,MAY,2025.0
+2025-05-15,Jharkhand,3-Wheelers,426,MAY,2025.0
+2025-05-15,Jharkhand,2-Wheelers,876,MAY,2025.0
+2025-05-15,Karnataka,4-Wheelers,89,MAY,2025.0
+2025-05-15,Jammu and Kashmir,4-Wheelers,3,MAY,2025.0
+2025-05-15,Jammu and Kashmir,Others,0,MAY,2025.0
+2025-05-15,Gujarat,Bus,1,MAY,2025.0
+2025-05-15,Gujarat,Others,5,MAY,2025.0
+2025-05-15,Haryana,3-Wheelers,494,MAY,2025.0
+2025-05-15,Haryana,4-Wheelers,111,MAY,2025.0
+2025-05-15,Haryana,Others,43,MAY,2025.0
+2025-05-15,Haryana,Bus,0,MAY,2025.0
+2025-05-15,Himachal Pradesh,3-Wheelers,3,MAY,2025.0
+2025-05-15,Gujarat,4-Wheelers,6,MAY,2025.0
+2025-05-15,Himachal Pradesh,4-Wheelers,0,MAY,2025.0
+2025-05-15,Himachal Pradesh,Others,0,MAY,2025.0
+2025-05-15,Jammu and Kashmir,2-Wheelers,219,MAY,2025.0
+2025-05-15,Jammu and Kashmir,3-Wheelers,286,MAY,2025.0
+2025-05-15,Himachal Pradesh,2-Wheelers,80,MAY,2025.0
+2025-06-15,Odisha,Bus,0,JUN,2025.0
+2025-06-15,Odisha,2-Wheelers,2,JUN,2025.0
+2025-06-15,Odisha,3-Wheelers,149,JUN,2025.0
+2025-06-15,Odisha,4-Wheelers,3,JUN,2025.0
+2025-06-15,Odisha,Others,0,JUN,2025.0
+2025-06-15,Punjab,Bus,0,JUN,2025.0
+2025-06-15,Puducherry,3-Wheelers,59,JUN,2025.0
+2025-06-15,Puducherry,4-Wheelers,1,JUN,2025.0
+2025-06-15,Puducherry,Others,0,JUN,2025.0
+2025-06-15,Punjab,3-Wheelers,271,JUN,2025.0
+2025-06-15,Punjab,4-Wheelers,5,JUN,2025.0
+2025-06-15,Nagaland,4-Wheelers,6,JUN,2025.0
+2025-06-15,Puducherry,2-Wheelers,272,JUN,2025.0
+2025-06-15,Nagaland,2-Wheelers,3,JUN,2025.0
+2025-06-15,Madhya Pradesh,Others,16,JUN,2025.0
+2025-06-15,Mizoram,2-Wheelers,13,JUN,2025.0
+2025-06-15,Meghalaya,Others,2,JUN,2025.0
+2025-06-15,Meghalaya,4-Wheelers,15,JUN,2025.0
+2025-06-15,Meghalaya,3-Wheelers,1,JUN,2025.0
+2025-06-15,Meghalaya,2-Wheelers,15,JUN,2025.0
+2025-06-15,Manipur,4-Wheelers,5,JUN,2025.0
+2025-06-15,Manipur,3-Wheelers,57,JUN,2025.0
+2025-06-15,Manipur,2-Wheelers,28,JUN,2025.0
+2025-06-15,Maharashtra,Others,0,JUN,2025.0
+2025-06-15,Maharashtra,Bus,0,JUN,2025.0
+2025-06-15,Maharashtra,4-Wheelers,97,JUN,2025.0
+2025-06-15,Maharashtra,3-Wheelers,695,JUN,2025.0
+2025-06-15,Maharashtra,2-Wheelers,0,JUN,2025.0
+2025-06-15,Punjab,Others,2,JUN,2025.0
+2025-06-15,Mizoram,4-Wheelers,0,JUN,2025.0
+2025-06-15,Rajasthan,2-Wheelers,1,JUN,2025.0
+2025-06-15,UT of DNH and DD,4-Wheelers,0,JUN,2025.0
+2025-06-15,Rajasthan,4-Wheelers,4,JUN,2025.0
+2025-06-15,Madhya Pradesh,Bus,0,JUN,2025.0
+2025-06-15,West Bengal,Others,2,JUN,2025.0
+2025-06-15,West Bengal,Bus,0,JUN,2025.0
+2025-06-15,West Bengal,4-Wheelers,55,JUN,2025.0
+2025-06-15,West Bengal,3-Wheelers,585,JUN,2025.0
+2025-06-15,West Bengal,2-Wheelers,0,JUN,2025.0
+2025-06-15,Uttarakhand,Others,3,JUN,2025.0
+2025-06-15,Uttarakhand,Bus,0,JUN,2025.0
+2025-06-15,Uttarakhand,4-Wheelers,20,JUN,2025.0
+2025-06-15,Uttarakhand,3-Wheelers,328,JUN,2025.0
+2025-06-15,Uttarakhand,2-Wheelers,789,JUN,2025.0
+2025-06-15,Uttar Pradesh,Others,31,JUN,2025.0
+2025-06-15,Uttar Pradesh,Bus,6,JUN,2025.0
+2025-06-15,Uttar Pradesh,4-Wheelers,12,JUN,2025.0
+2025-06-15,Rajasthan,3-Wheelers,485,JUN,2025.0
+2025-06-15,Uttar Pradesh,3-Wheelers,0,JUN,2025.0
+2025-06-15,UT of DNH and DD,Others,0,JUN,2025.0
+2025-06-15,UT of DNH and DD,2-Wheelers,7,JUN,2025.0
+2025-06-15,Tripura,Others,0,JUN,2025.0
+2025-06-15,Tripura,4-Wheelers,2,JUN,2025.0
+2025-06-15,Tripura,3-Wheelers,442,JUN,2025.0
+2025-06-15,Tripura,2-Wheelers,69,JUN,2025.0
+2025-06-15,Tamil Nadu,Others,31,JUN,2025.0
+2025-06-15,Tamil Nadu,Bus,120,JUN,2025.0
+2025-06-15,Tamil Nadu,4-Wheelers,33,JUN,2025.0
+2025-06-15,Tamil Nadu,3-Wheelers,456,JUN,2025.0
+2025-06-15,Sikkim,4-Wheelers,3,JUN,2025.0
+2025-06-15,Sikkim,2-Wheelers,0,JUN,2025.0
+2025-06-15,Rajasthan,Others,24,JUN,2025.0
+2025-06-15,Rajasthan,Bus,0,JUN,2025.0
+2025-06-15,Uttar Pradesh,2-Wheelers,16,JUN,2025.0
+2025-06-15,Madhya Pradesh,4-Wheelers,8,JUN,2025.0
+2025-06-15,Madhya Pradesh,3-Wheelers,0,JUN,2025.0
+2025-06-15,Lakshadweep,3-Wheelers,0,JUN,2025.0
+2025-06-15,Goa,4-Wheelers,3,JUN,2025.0
+2025-06-15,Goa,3-Wheelers,2,JUN,2025.0
+2025-06-15,Goa,2-Wheelers,525,JUN,2025.0
+2025-06-15,Delhi,Others,25,JUN,2025.0
+2025-06-15,Delhi,Bus,126,JUN,2025.0
+2025-06-15,Delhi,4-Wheelers,62,JUN,2025.0
+2025-06-15,Chhattisgarh,Others,8,JUN,2025.0
+2025-06-15,Chhattisgarh,4-Wheelers,7,JUN,2025.0
+2025-06-15,Chhattisgarh,3-Wheelers,468,JUN,2025.0
+2025-06-15,Chandigarh,Others,0,JUN,2025.0
+2025-06-15,Chandigarh,4-Wheelers,1,JUN,2025.0
+2025-06-15,Chandigarh,3-Wheelers,34,JUN,2025.0
+2025-06-15,Chandigarh,2-Wheelers,96,JUN,2025.0
+2025-06-15,Bihar,4-Wheelers,0,JUN,2025.0
+2025-06-15,Assam,Others,0,JUN,2025.0
+2025-06-15,Assam,4-Wheelers,0,JUN,2025.0
+2025-06-15,Assam,2-Wheelers,266,JUN,2025.0
+2025-06-15,Arunachal Pradesh,Bus,0,JUN,2025.0
+2025-06-15,Arunachal Pradesh,4-Wheelers,16,JUN,2025.0
+2025-06-15,Arunachal Pradesh,3-Wheelers,0,JUN,2025.0
+2025-06-15,Arunachal Pradesh,2-Wheelers,1,JUN,2025.0
+2025-06-15,Andhra Pradesh,Others,0,JUN,2025.0
+2025-06-15,Andhra Pradesh,Bus,9,JUN,2025.0
+2025-06-15,Andhra Pradesh,4-Wheelers,2,JUN,2025.0
+2025-06-15,Andhra Pradesh,3-Wheelers,248,JUN,2025.0
+2025-06-15,Andhra Pradesh,2-Wheelers,0,JUN,2025.0
+2025-06-15,Andaman & Nicobar Island,Bus,0,JUN,2025.0
+2025-06-15,Andaman & Nicobar Island,4-Wheelers,0,JUN,2025.0
+2025-06-15,Andaman & Nicobar Island,2-Wheelers,0,JUN,2025.0
+2025-06-15,Goa,Bus,0,JUN,2025.0
+2025-06-15,Goa,Others,0,JUN,2025.0
+2025-06-15,Bihar,Others,3,JUN,2025.0
+2025-06-15,Gujarat,3-Wheelers,214,JUN,2025.0
+2025-06-15,Gujarat,2-Wheelers,0,JUN,2025.0
+2025-06-15,Ladakh,4-Wheelers,0,JUN,2025.0
+2025-06-15,Kerala,Others,18,JUN,2025.0
+2025-06-15,Kerala,Bus,0,JUN,2025.0
+2025-06-15,Kerala,4-Wheelers,5,JUN,2025.0
+2025-06-15,Kerala,3-Wheelers,418,JUN,2025.0
+2025-06-15,Kerala,2-Wheelers,0,JUN,2025.0
+2025-06-15,Karnataka,Others,30,JUN,2025.0
+2025-06-15,Karnataka,Bus,0,JUN,2025.0
+2025-06-15,Karnataka,4-Wheelers,117,JUN,2025.0
+2025-06-15,Karnataka,3-Wheelers,750,JUN,2025.0
+2025-06-15,Karnataka,2-Wheelers,711,JUN,2025.0
+2025-06-15,Jharkhand,Others,1,JUN,2025.0
+2025-06-15,Jharkhand,4-Wheelers,4,JUN,2025.0
+2025-06-15,Jharkhand,3-Wheelers,499,JUN,2025.0
+2025-06-15,Lakshadweep,2-Wheelers,1,JUN,2025.0
+2025-06-15,Gujarat,4-Wheelers,3,JUN,2025.0
+2025-06-15,Jammu and Kashmir,Others,0,JUN,2025.0
+2025-06-15,Gujarat,Bus,0,JUN,2025.0
+2025-06-15,Gujarat,Others,9,JUN,2025.0
+2025-06-15,Haryana,3-Wheelers,503,JUN,2025.0
+2025-06-15,Haryana,Bus,0,JUN,2025.0
+2025-06-15,Haryana,Others,17,JUN,2025.0
+2025-06-15,Haryana,4-Wheelers,112,JUN,2025.0
+2025-06-15,Himachal Pradesh,3-Wheelers,5,JUN,2025.0
+2025-06-15,Himachal Pradesh,4-Wheelers,2,JUN,2025.0
+2025-06-15,Himachal Pradesh,Others,3,JUN,2025.0
+2025-06-15,Jammu and Kashmir,2-Wheelers,287,JUN,2025.0
+2025-06-15,Jammu and Kashmir,3-Wheelers,280,JUN,2025.0
+2025-06-15,Jammu and Kashmir,4-Wheelers,1,JUN,2025.0
+2025-06-15,Himachal Pradesh,2-Wheelers,97,JUN,2025.0
+2025-07-15,Odisha,Others,20,JUL,2025.0
+2025-07-15,Odisha,2-Wheelers,3,JUL,2025.0
+2025-07-15,Odisha,3-Wheelers,197,JUL,2025.0
+2025-07-15,Odisha,4-Wheelers,3,JUL,2025.0
+2025-07-15,Odisha,Bus,0,JUL,2025.0
+2025-07-15,Puducherry,2-Wheelers,347,JUL,2025.0
+2025-07-15,West Bengal,Others,8,JUL,2025.0
+2025-07-15,Puducherry,4-Wheelers,3,JUL,2025.0
+2025-07-15,Puducherry,Others,0,JUL,2025.0
+2025-07-15,Punjab,3-Wheelers,487,JUL,2025.0
+2025-07-15,Punjab,4-Wheelers,2,JUL,2025.0
+2025-07-15,Punjab,Bus,0,JUL,2025.0
+2025-07-15,Nagaland,4-Wheelers,6,JUL,2025.0
+2025-07-15,Puducherry,3-Wheelers,78,JUL,2025.0
+2025-07-15,Nagaland,2-Wheelers,0,JUL,2025.0
+2025-07-15,Manipur,3-Wheelers,31,JUL,2025.0
+2025-07-15,Mizoram,2-Wheelers,10,JUL,2025.0
+2025-07-15,Meghalaya,Others,0,JUL,2025.0
+2025-07-15,Meghalaya,4-Wheelers,15,JUL,2025.0
+2025-07-15,Meghalaya,3-Wheelers,5,JUL,2025.0
+2025-07-15,Meghalaya,2-Wheelers,16,JUL,2025.0
+2025-07-15,Manipur,4-Wheelers,10,JUL,2025.0
+2025-07-15,Manipur,2-Wheelers,20,JUL,2025.0
+2025-07-15,Maharashtra,Others,0,JUL,2025.0
+2025-07-15,Maharashtra,Bus,0,JUL,2025.0
+2025-07-15,Maharashtra,4-Wheelers,136,JUL,2025.0
+2025-07-15,Maharashtra,3-Wheelers,760,JUL,2025.0
+2025-07-15,Maharashtra,2-Wheelers,0,JUL,2025.0
+2025-07-15,Madhya Pradesh,Others,10,JUL,2025.0
+2025-07-15,Madhya Pradesh,Bus,3,JUL,2025.0
+2025-07-15,Mizoram,4-Wheelers,0,JUL,2025.0
+2025-07-15,Punjab,Others,8,JUL,2025.0
+2025-07-15,West Bengal,Bus,2,JUL,2025.0
+2025-07-15,Rajasthan,3-Wheelers,615,JUL,2025.0
+2025-07-15,Madhya Pradesh,4-Wheelers,10,JUL,2025.0
+2025-07-15,West Bengal,4-Wheelers,75,JUL,2025.0
+2025-07-15,West Bengal,3-Wheelers,936,JUL,2025.0
+2025-07-15,West Bengal,2-Wheelers,0,JUL,2025.0
+2025-07-15,Uttarakhand,Others,1,JUL,2025.0
+2025-07-15,Uttarakhand,Bus,0,JUL,2025.0
+2025-07-15,Uttarakhand,4-Wheelers,7,JUL,2025.0
+2025-07-15,Uttarakhand,3-Wheelers,471,JUL,2025.0
+2025-07-15,Uttarakhand,2-Wheelers,734,JUL,2025.0
+2025-07-15,Uttar Pradesh,Others,110,JUL,2025.0
+2025-07-15,Uttar Pradesh,Bus,6,JUL,2025.0
+2025-07-15,Uttar Pradesh,4-Wheelers,47,JUL,2025.0
+2025-07-15,Uttar Pradesh,3-Wheelers,0,JUL,2025.0
+2025-07-15,Uttar Pradesh,2-Wheelers,0,JUL,2025.0
+2025-07-15,Rajasthan,2-Wheelers,0,JUL,2025.0
+2025-07-15,UT of DNH and DD,Others,0,JUL,2025.0
+2025-07-15,UT of DNH and DD,2-Wheelers,13,JUL,2025.0
+2025-07-15,Tripura,Others,0,JUL,2025.0
+2025-07-15,Tripura,4-Wheelers,0,JUL,2025.0
+2025-07-15,Tripura,3-Wheelers,470,JUL,2025.0
+2025-07-15,Tripura,2-Wheelers,39,JUL,2025.0
+2025-07-15,Tamil Nadu,Others,74,JUL,2025.0
+2025-07-15,Tamil Nadu,Bus,6,JUL,2025.0
+2025-07-15,Tamil Nadu,4-Wheelers,41,JUL,2025.0
+2025-07-15,Tamil Nadu,3-Wheelers,432,JUL,2025.0
+2025-07-15,Sikkim,4-Wheelers,0,JUL,2025.0
+2025-07-15,Sikkim,2-Wheelers,0,JUL,2025.0
+2025-07-15,Rajasthan,Others,21,JUL,2025.0
+2025-07-15,Rajasthan,Bus,0,JUL,2025.0
+2025-07-15,Rajasthan,4-Wheelers,8,JUL,2025.0
+2025-07-15,UT of DNH and DD,4-Wheelers,0,JUL,2025.0
+2025-07-15,Madhya Pradesh,3-Wheelers,1,JUL,2025.0
+2025-07-15,Gujarat,3-Wheelers,130,JUL,2025.0
+2025-07-15,Lakshadweep,2-Wheelers,0,JUL,2025.0
+2025-07-15,Goa,3-Wheelers,0,JUL,2025.0
+2025-07-15,Goa,2-Wheelers,324,JUL,2025.0
+2025-07-15,Delhi,Others,39,JUL,2025.0
+2025-07-15,Delhi,Bus,199,JUL,2025.0
+2025-07-15,Delhi,4-Wheelers,5,JUL,2025.0
+2025-07-15,Chhattisgarh,Others,10,JUL,2025.0
+2025-07-15,Chhattisgarh,4-Wheelers,4,JUL,2025.0
+2025-07-15,Chhattisgarh,3-Wheelers,505,JUL,2025.0
+2025-07-15,Chandigarh,Others,0,JUL,2025.0
+2025-07-15,Chandigarh,4-Wheelers,4,JUL,2025.0
+2025-07-15,Chandigarh,3-Wheelers,33,JUL,2025.0
+2025-07-15,Chandigarh,2-Wheelers,196,JUL,2025.0
+2025-07-15,Bihar,4-Wheelers,0,JUL,2025.0
+2025-07-15,Assam,Others,2,JUL,2025.0
+2025-07-15,Assam,4-Wheelers,0,JUL,2025.0
+2025-07-15,Assam,2-Wheelers,297,JUL,2025.0
+2025-07-15,Arunachal Pradesh,Bus,0,JUL,2025.0
+2025-07-15,Arunachal Pradesh,4-Wheelers,14,JUL,2025.0
+2025-07-15,Arunachal Pradesh,3-Wheelers,0,JUL,2025.0
+2025-07-15,Arunachal Pradesh,2-Wheelers,8,JUL,2025.0
+2025-07-15,Andhra Pradesh,Others,0,JUL,2025.0
+2025-07-15,Andhra Pradesh,Bus,5,JUL,2025.0
+2025-07-15,Andhra Pradesh,4-Wheelers,4,JUL,2025.0
+2025-07-15,Andhra Pradesh,3-Wheelers,269,JUL,2025.0
+2025-07-15,Andhra Pradesh,2-Wheelers,0,JUL,2025.0
+2025-07-15,Andaman & Nicobar Island,Bus,0,JUL,2025.0
+2025-07-15,Andaman & Nicobar Island,4-Wheelers,3,JUL,2025.0
+2025-07-15,Andaman & Nicobar Island,2-Wheelers,10,JUL,2025.0
+2025-07-15,Lakshadweep,3-Wheelers,0,JUL,2025.0
+2025-07-15,Goa,4-Wheelers,1,JUL,2025.0
+2025-07-15,Goa,Bus,0,JUL,2025.0
+2025-07-15,Bihar,Others,4,JUL,2025.0
+2025-07-15,Gujarat,2-Wheelers,0,JUL,2025.0
+2025-07-15,Goa,Others,0,JUL,2025.0
+2025-07-15,Kerala,Others,37,JUL,2025.0
+2025-07-15,Kerala,Bus,0,JUL,2025.0
+2025-07-15,Kerala,4-Wheelers,14,JUL,2025.0
+2025-07-15,Kerala,3-Wheelers,470,JUL,2025.0
+2025-07-15,Kerala,2-Wheelers,0,JUL,2025.0
+2025-07-15,Karnataka,Others,72,JUL,2025.0
+2025-07-15,Karnataka,Bus,0,JUL,2025.0
+2025-07-15,Karnataka,4-Wheelers,82,JUL,2025.0
+2025-07-15,Karnataka,2-Wheelers,75,JUL,2025.0
+2025-07-15,Jharkhand,Others,2,JUL,2025.0
+2025-07-15,Jharkhand,4-Wheelers,2,JUL,2025.0
+2025-07-15,Jharkhand,3-Wheelers,627,JUL,2025.0
+2025-07-15,Jharkhand,2-Wheelers,905,JUL,2025.0
+2025-07-15,Jammu and Kashmir,Others,1,JUL,2025.0
+2025-07-15,Karnataka,3-Wheelers,627,JUL,2025.0
+2025-07-15,Ladakh,4-Wheelers,0,JUL,2025.0
+2025-07-15,Jammu and Kashmir,4-Wheelers,0,JUL,2025.0
+2025-07-15,Gujarat,Bus,2,JUL,2025.0
+2025-07-15,Gujarat,Others,11,JUL,2025.0
+2025-07-15,Haryana,3-Wheelers,579,JUL,2025.0
+2025-07-15,Haryana,4-Wheelers,78,JUL,2025.0
+2025-07-15,Haryana,Bus,5,JUL,2025.0
+2025-07-15,Haryana,Others,21,JUL,2025.0
+2025-07-15,Gujarat,4-Wheelers,6,JUL,2025.0
+2025-07-15,Himachal Pradesh,3-Wheelers,4,JUL,2025.0
+2025-07-15,Himachal Pradesh,4-Wheelers,4,JUL,2025.0
+2025-07-15,Himachal Pradesh,Others,1,JUL,2025.0
+2025-07-15,Jammu and Kashmir,2-Wheelers,280,JUL,2025.0
+2025-07-15,Jammu and Kashmir,3-Wheelers,367,JUL,2025.0
+2025-07-15,Himachal Pradesh,2-Wheelers,73,JUL,2025.0
+2025-08-15,Nagaland,2-Wheelers,0,AUG,2025.0
+2025-08-15,Nagaland,4-Wheelers,5,AUG,2025.0
+2025-08-15,Odisha,2-Wheelers,0,AUG,2025.0
+2025-08-15,Odisha,3-Wheelers,173,AUG,2025.0
+2025-08-15,Odisha,4-Wheelers,3,AUG,2025.0
+2025-08-15,Odisha,Bus,0,AUG,2025.0
+2025-08-15,Puducherry,3-Wheelers,24,AUG,2025.0
+2025-08-15,Puducherry,2-Wheelers,251,AUG,2025.0
+2025-08-15,Puducherry,4-Wheelers,0,AUG,2025.0
+2025-08-15,Puducherry,Others,0,AUG,2025.0
+2025-08-15,Punjab,3-Wheelers,412,AUG,2025.0
+2025-08-15,Mizoram,4-Wheelers,0,AUG,2025.0
+2025-08-15,Odisha,Others,0,AUG,2025.0
+2025-08-15,Mizoram,2-Wheelers,10,AUG,2025.0
+2025-08-15,Madhya Pradesh,4-Wheelers,4,AUG,2025.0
+2025-08-15,Meghalaya,4-Wheelers,11,AUG,2025.0
+2025-08-15,Meghalaya,3-Wheelers,6,AUG,2025.0
+2025-08-15,Meghalaya,2-Wheelers,24,AUG,2025.0
+2025-08-15,Manipur,4-Wheelers,8,AUG,2025.0
+2025-08-15,Manipur,3-Wheelers,86,AUG,2025.0
+2025-08-15,Manipur,2-Wheelers,23,AUG,2025.0
+2025-08-15,Maharashtra,Others,0,AUG,2025.0
+2025-08-15,Maharashtra,Bus,2,AUG,2025.0
+2025-08-15,Maharashtra,4-Wheelers,155,AUG,2025.0
+2025-08-15,Maharashtra,3-Wheelers,659,AUG,2025.0
+2025-08-15,Maharashtra,2-Wheelers,0,AUG,2025.0
+2025-08-15,Madhya Pradesh,Others,113,AUG,2025.0
+2025-08-15,Madhya Pradesh,Bus,3,AUG,2025.0
+2025-08-15,Punjab,4-Wheelers,5,AUG,2025.0
+2025-08-15,Meghalaya,Others,0,AUG,2025.0
+2025-08-15,Punjab,Bus,1,AUG,2025.0
+2025-08-15,West Bengal,4-Wheelers,85,AUG,2025.0
+2025-08-15,Rajasthan,2-Wheelers,0,AUG,2025.0
+2025-08-15,Madhya Pradesh,3-Wheelers,2,AUG,2025.0
+2025-08-15,West Bengal,3-Wheelers,830,AUG,2025.0
+2025-08-15,West Bengal,2-Wheelers,0,AUG,2025.0
+2025-08-15,Uttarakhand,Others,0,AUG,2025.0
+2025-08-15,Uttarakhand,Bus,0,AUG,2025.0
+2025-08-15,Uttarakhand,4-Wheelers,6,AUG,2025.0
+2025-08-15,Uttarakhand,3-Wheelers,465,AUG,2025.0
+2025-08-15,Uttarakhand,2-Wheelers,716,AUG,2025.0
+2025-08-15,Uttar Pradesh,Others,63,AUG,2025.0
+2025-08-15,Uttar Pradesh,Bus,0,AUG,2025.0
+2025-08-15,Uttar Pradesh,4-Wheelers,14,AUG,2025.0
+2025-08-15,Uttar Pradesh,3-Wheelers,0,AUG,2025.0
+2025-08-15,Uttar Pradesh,2-Wheelers,0,AUG,2025.0
+2025-08-15,UT of DNH and DD,Others,0,AUG,2025.0
+2025-08-15,Punjab,Others,1,AUG,2025.0
+2025-08-15,UT of DNH and DD,4-Wheelers,0,AUG,2025.0
+2025-08-15,Tripura,Others,0,AUG,2025.0
+2025-08-15,Tripura,4-Wheelers,0,AUG,2025.0
+2025-08-15,Tripura,3-Wheelers,428,AUG,2025.0
+2025-08-15,Tripura,2-Wheelers,35,AUG,2025.0
+2025-08-15,Tamil Nadu,Others,77,AUG,2025.0
+2025-08-15,Tamil Nadu,Bus,21,AUG,2025.0
+2025-08-15,Tamil Nadu,4-Wheelers,34,AUG,2025.0
+2025-08-15,Tamil Nadu,3-Wheelers,544,AUG,2025.0
+2025-08-15,Sikkim,4-Wheelers,0,AUG,2025.0
+2025-08-15,Sikkim,2-Wheelers,0,AUG,2025.0
+2025-08-15,Rajasthan,Others,40,AUG,2025.0
+2025-08-15,Rajasthan,Bus,0,AUG,2025.0
+2025-08-15,Rajasthan,4-Wheelers,20,AUG,2025.0
+2025-08-15,Rajasthan,3-Wheelers,620,AUG,2025.0
+2025-08-15,UT of DNH and DD,2-Wheelers,5,AUG,2025.0
+2025-08-15,Lakshadweep,3-Wheelers,0,AUG,2025.0
+2025-08-15,Gujarat,3-Wheelers,95,AUG,2025.0
+2025-08-15,Ladakh,4-Wheelers,1,AUG,2025.0
+2025-08-15,Goa,2-Wheelers,372,AUG,2025.0
+2025-08-15,Delhi,Others,66,AUG,2025.0
+2025-08-15,Delhi,Bus,196,AUG,2025.0
+2025-08-15,Delhi,4-Wheelers,61,AUG,2025.0
+2025-08-15,Chhattisgarh,Others,3,AUG,2025.0
+2025-08-15,Chhattisgarh,4-Wheelers,1,AUG,2025.0
+2025-08-15,Chhattisgarh,3-Wheelers,535,AUG,2025.0
+2025-08-15,Chandigarh,Others,1,AUG,2025.0
+2025-08-15,Chandigarh,4-Wheelers,0,AUG,2025.0
+2025-08-15,Chandigarh,3-Wheelers,32,AUG,2025.0
+2025-08-15,Chandigarh,2-Wheelers,100,AUG,2025.0
+2025-08-15,Bihar,Others,2,AUG,2025.0
+2025-08-15,Bihar,4-Wheelers,2,AUG,2025.0
+2025-08-15,Assam,Others,2,AUG,2025.0
+2025-08-15,Assam,4-Wheelers,0,AUG,2025.0
+2025-08-15,Assam,2-Wheelers,318,AUG,2025.0
+2025-08-15,Arunachal Pradesh,Bus,0,AUG,2025.0
+2025-08-15,Arunachal Pradesh,4-Wheelers,14,AUG,2025.0
+2025-08-15,Arunachal Pradesh,3-Wheelers,0,AUG,2025.0
+2025-08-15,Arunachal Pradesh,2-Wheelers,4,AUG,2025.0
+2025-08-15,Andhra Pradesh,Others,1,AUG,2025.0
+2025-08-15,Andhra Pradesh,Bus,6,AUG,2025.0
+2025-08-15,Andhra Pradesh,4-Wheelers,0,AUG,2025.0
+2025-08-15,Andhra Pradesh,3-Wheelers,266,AUG,2025.0
+2025-08-15,Andhra Pradesh,2-Wheelers,0,AUG,2025.0
+2025-08-15,Andaman & Nicobar Island,Bus,0,AUG,2025.0
+2025-08-15,Andaman & Nicobar Island,4-Wheelers,7,AUG,2025.0
+2025-08-15,Andaman & Nicobar Island,2-Wheelers,5,AUG,2025.0
+2025-08-15,West Bengal,Bus,0,AUG,2025.0
+2025-08-15,Goa,3-Wheelers,0,AUG,2025.0
+2025-08-15,Goa,4-Wheelers,2,AUG,2025.0
+2025-08-15,Goa,Bus,0,AUG,2025.0
+2025-08-15,Goa,Others,3,AUG,2025.0
+2025-08-15,Kerala,Others,51,AUG,2025.0
+2025-08-15,Kerala,Bus,5,AUG,2025.0
+2025-08-15,Kerala,4-Wheelers,9,AUG,2025.0
+2025-08-15,Kerala,3-Wheelers,501,AUG,2025.0
+2025-08-15,Kerala,2-Wheelers,10,AUG,2025.0
+2025-08-15,Karnataka,Others,56,AUG,2025.0
+2025-08-15,Karnataka,Bus,0,AUG,2025.0
+2025-08-15,Karnataka,4-Wheelers,154,AUG,2025.0
+2025-08-15,Karnataka,3-Wheelers,703,AUG,2025.0
+2025-08-15,Karnataka,2-Wheelers,435,AUG,2025.0
+2025-08-15,Jharkhand,Others,1,AUG,2025.0
+2025-08-15,Jharkhand,4-Wheelers,2,AUG,2025.0
+2025-08-15,Jharkhand,3-Wheelers,648,AUG,2025.0
+2025-08-15,Jharkhand,2-Wheelers,995,AUG,2025.0
+2025-08-15,Lakshadweep,2-Wheelers,0,AUG,2025.0
+2025-08-15,Jammu and Kashmir,Others,1,AUG,2025.0
+2025-08-15,Jammu and Kashmir,3-Wheelers,295,AUG,2025.0
+2025-08-15,Jammu and Kashmir,2-Wheelers,199,AUG,2025.0
+2025-08-15,Himachal Pradesh,Others,0,AUG,2025.0
+2025-08-15,Himachal Pradesh,4-Wheelers,5,AUG,2025.0
+2025-08-15,Himachal Pradesh,3-Wheelers,3,AUG,2025.0
+2025-08-15,Himachal Pradesh,2-Wheelers,74,AUG,2025.0
+2025-08-15,Haryana,Others,50,AUG,2025.0
+2025-08-15,Haryana,Bus,2,AUG,2025.0
+2025-08-15,Haryana,4-Wheelers,63,AUG,2025.0
+2025-08-15,Haryana,3-Wheelers,654,AUG,2025.0
+2025-08-15,Gujarat,Others,5,AUG,2025.0
+2025-08-15,Gujarat,Bus,2,AUG,2025.0
+2025-08-15,Gujarat,4-Wheelers,1,AUG,2025.0
+2025-08-15,Gujarat,2-Wheelers,0,AUG,2025.0
+2025-08-15,Jammu and Kashmir,4-Wheelers,1,AUG,2025.0
+2025-08-15,West Bengal,Others,9,AUG,2025.0

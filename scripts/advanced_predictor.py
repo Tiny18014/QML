@@ -1,48 +1,50 @@
-#!/usr/bin/env python3
-"""
-Advanced EV Demand Forecasting Predictor
-Uses the high-performance model for accurate predictions
-"""
-
 import pandas as pd
 import numpy as np
 import pickle
 from pathlib import Path
+from datetime import datetime
+from sklearn.metrics import mean_absolute_error, r2_score
 import warnings
+import holidays # <-- Necessary import for is_holiday feature
+from sklearn.preprocessing import RobustScaler 
+
 warnings.filterwarnings('ignore')
 
-# Define paths
-ROOT_DIR = Path(__file__).parent.parent.resolve()
-MODEL_PATH = ROOT_DIR / "models" / "advanced_ev_model.pkl"
-SCALER_PATH = ROOT_DIR / "models" / "feature_scaler.pkl"
-FEATURE_NAMES_PATH = ROOT_DIR / "models" / "feature_names.pkl"
+# --- CONFIGURATION ---
+ROOT_DIR = Path(".") # Current directory for execution
+MODELS_DIR = ROOT_DIR / "models"
+DATA_PATH = ROOT_DIR / "data" / "EV_Dataset.csv"
+SPLIT_DATE = datetime(2025, 1, 1) # Date where evaluation data (Test Set) begins
 
-def load_advanced_model():
-    """Load the advanced model and related components."""
+# --- MODEL LOADING ---
+
+def load_model_components(category_name):
+    """Load the dedicated model bundle for a specific category."""
+    category_filename = category_name.replace(" ", "_").replace("/", "_")
+    model_path = MODELS_DIR / f"advanced_model_{category_filename}.pkl"
+    
     try:
-        # Load model bundle
-        with open(MODEL_PATH, 'rb') as f:
+        with open(model_path, 'rb') as f:
             model_data = pickle.load(f)
         
-        # Load scaler
-        with open(SCALER_PATH, 'rb') as f:
-            scaler = pickle.load(f)
+        model = model_data.get('primary_model')
+        scaler = model_data.get('scaler')
+        feature_names = model_data.get('feature_names')
         
-        # Load feature names
-        with open(FEATURE_NAMES_PATH, 'rb') as f:
-            feature_names = pickle.load(f)
+        if not all([model, scaler, feature_names]):
+             raise ValueError("Model file is missing one or more required components.")
         
-        print(f"✅ Advanced model loaded successfully")
-        print(f"   Primary model: {type(model_data['primary_model'])}")
-        print(f"   Ensemble models: {len(model_data['ensemble_models'])}")
-        print(f"   Features: {len(feature_names)}")
-        print(f"   Test R²: {model_data['test_scores']['optimized']['R2']:.4f}")
+        print(f"✅ Loaded model for '{category_name}'. Features: {len(feature_names)}")
+        return model, scaler, feature_names
         
-        return model_data, scaler, feature_names
-        
-    except Exception as e:
-        print(f"❌ Failed to load advanced model: {e}")
+    except FileNotFoundError:
+        print(f"❌ Model file not found at {model_path}. Skipping evaluation for this category.")
         return None, None, None
+    except Exception as e:
+        print(f"❌ Failed to load model for '{category_name}': {e}. Skipping.")
+        return None, None, None
+
+# --- FEATURE ENGINEERING (INCLUDES FIXES) ---
 
 def create_advanced_features(df):
     """Create the same advanced features used during training."""
@@ -52,12 +54,19 @@ def create_advanced_features(df):
     # Handle column name differences
     if 'Vehicle_Class' in df.columns and 'Vehicle_Category' not in df.columns:
         df['Vehicle_Category'] = df['Vehicle_Class']
-        print("✅ Mapped Vehicle_Class to Vehicle_Category for compatibility")
     
+    # Sort data for correct lag/rolling calculation across all data points
     df = df.sort_values(['State', 'Vehicle_Category', 'Date'])
     
+    # === CRITICAL FIXES APPLIED HERE (time_index and is_holiday) ===
+    df['time_index'] = (df['Date'] - df['Date'].min()).dt.days
+    df['year'] = df['Date'].dt.year # Needed for is_holiday and other features
+    years_in_data = df['year'].unique()
+    in_holidays = holidays.country_holidays('IN', years=years_in_data)
+    df['is_holiday'] = df['Date'].isin(in_holidays).astype(int)
+    # =============================================================
+
     # Basic temporal features
-    df['year'] = df['Date'].dt.year
     df['month'] = df['Date'].dt.month
     df['day'] = df['Date'].dt.day
     df['quarter'] = df['Date'].dt.quarter
@@ -79,46 +88,49 @@ def create_advanced_features(df):
     df['day_of_year_cos'] = np.cos(2 * np.pi * df['day_of_year']/365)
     
     # Advanced lag features
-    for lag in [1, 2, 3, 7, 14, 30]:
+    # 🟢 ADDED 60 and 90 day lags
+    for lag in [1, 2, 3, 7, 14, 30, 60, 90]:
         df[f'lag_{lag}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].shift(lag)
     
     # Rolling statistics
-    for window in [7, 14, 30]:
-        df[f'rolling_mean_{window}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=window, min_periods=1).mean().values
-        df[f'rolling_std_{window}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=window, min_periods=1).std().values
-        df[f'rolling_min_{window}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=window, min_periods=1).min().values
-        df[f'rolling_max_{window}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=window, min_periods=1).max().values
-        df[f'rolling_median_{window}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=window, min_periods=1).median().values
-    
+    # 🟢 ADDED 60 and 90 day windows
+    for window in [7, 14, 30, 60, 90]:
+        grouped_rolling = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=window, min_periods=1)
+        df[f'rolling_mean_{window}'] = grouped_rolling.mean().reset_index(level=[0, 1], drop=True)
+        df[f'rolling_std_{window}'] = grouped_rolling.std().reset_index(level=[0, 1], drop=True)
+        df[f'rolling_min_{window}'] = grouped_rolling.min().reset_index(level=[0, 1], drop=True)
+        df[f'rolling_max_{window}'] = grouped_rolling.max().reset_index(level=[0, 1], drop=True)
+        df[f'rolling_median_{window}'] = grouped_rolling.median().reset_index(level=[0, 1], drop=True)
+
     # Exponential moving averages
-    for span in [7, 14, 30]:
-        df[f'ema_{span}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].ewm(span=span).mean().values
-    
+    # 🟢 ADDED 60 and 90 day spans
+    for span in [7, 14, 30, 60, 90]:
+        df[f'ema_{span}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].ewm(span=span).mean().reset_index(level=[0, 1], drop=True)
     # Seasonal decomposition features
-    df['seasonal_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).mean().values
-    df['seasonal_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).mean().values
+    # 🟢 ADDED 60 day seasonal mean
+    df['seasonal_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).mean().reset_index(level=[0, 1], drop=True)
+    df['seasonal_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).mean().reset_index(level=[0, 1], drop=True)
+    df['seasonal_60'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=60, min_periods=1).mean().reset_index(level=[0, 1], drop=True)
     
     # Trend features (simplified)
-    df['trend_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).mean().diff().values
-    df['trend_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).mean().diff().values
+    # 🟢 ADDED 60 day trend diff
+    df['trend_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).mean().diff().reset_index(level=[0, 1], drop=True)
+    df['trend_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).mean().diff().reset_index(level=[0, 1], drop=True)
+    df['trend_60'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=60, min_periods=1).mean().diff().reset_index(level=[0, 1], drop=True)
     
     # Volatility features
-    df['volatility_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).std().values
-    df['volatility_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).std().values
-    
+    # 🟢 ADDED 60 day volatility
+    df['volatility_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).std().reset_index(level=[0, 1], drop=True)
+    df['volatility_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).std().reset_index(level=[0, 1], drop=True)
+    df['volatility_60'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=60, min_periods=1).std().reset_index(level=[0, 1], drop=True)
     # Cross-category features
-    category_means = df.groupby(['State', 'Date'])['EV_Sales_Quantity'].mean().reset_index()
-    category_means = category_means.rename(columns={'EV_Sales_Quantity': 'state_daily_mean'})
+    category_means = df.groupby(['State', 'Date'])['EV_Sales_Quantity'].mean().reset_index().rename(columns={'EV_Sales_Quantity': 'state_daily_mean'})
     df = df.merge(category_means, on=['State', 'Date'], how='left')
     
-    # State-level features
-    state_means = df.groupby('State')['EV_Sales_Quantity'].mean().reset_index()
-    state_means = state_means.rename(columns={'EV_Sales_Quantity': 'state_overall_mean'})
+    state_means = df.groupby('State')['EV_Sales_Quantity'].mean().reset_index().rename(columns={'EV_Sales_Quantity': 'state_overall_mean'})
     df = df.merge(state_means, on='State', how='left')
     
-    # Category-level features
-    category_overall_means = df.groupby('Vehicle_Category')['EV_Sales_Quantity'].mean().reset_index()
-    category_overall_means = category_overall_means.rename(columns={'EV_Sales_Quantity': 'category_overall_mean'})
+    category_overall_means = df.groupby('Vehicle_Category')['EV_Sales_Quantity'].mean().reset_index().rename(columns={'EV_Sales_Quantity': 'category_overall_mean'})
     df = df.merge(category_overall_means, on='Vehicle_Category', how='left')
     
     # Interaction features
@@ -130,117 +142,127 @@ def create_advanced_features(df):
     numeric_columns = df.select_dtypes(include=[np.number]).columns
     df[numeric_columns] = df[numeric_columns].fillna(0)
     
-    # Ensure we have proper feature variation
-    print(f"✅ Created {len(df.columns)} features for prediction")
-    print(f"   Sample feature values - State codes: {df['State'].nunique()}, Category codes: {df['Vehicle_Category'].nunique()}")
-    print(f"   Temporal features: month={df['month'].nunique()}, day_of_week={df['day_of_week'].nunique()}")
-    
     return df
+
+# --- FEATURE PREPARATION (INCLUDES FIX FOR STRING COLUMNS) ---
 
 def prepare_features_for_prediction(df, feature_names, scaler):
     """Prepare features for prediction using the same preprocessing as training."""
-    # Handle column name differences
+    
+    # Ensure categorical columns are correctly handled for encoding consistency
     if 'Vehicle_Class' in df.columns and 'Vehicle_Category' not in df.columns:
         df['Vehicle_Category'] = df['Vehicle_Class']
+
+    df_encoded = df.copy()
     
-    # Convert categorical variables to strings first to avoid category conflicts
-    df['State'] = df['State'].astype(str)
-    df['Vehicle_Category'] = df['Vehicle_Category'].astype(str)
+    # 1. Convert core categorical features to category codes
+    df_encoded['State'] = pd.Categorical(df_encoded['State']).codes
+    df_encoded['Vehicle_Category'] = pd.Categorical(df_encoded['Vehicle_Category']).codes
     
-    # Create state and category codes for internal use
-    df['state_code'] = pd.Categorical(df['State']).codes
-    df['category_code'] = pd.Categorical(df['Vehicle_Category']).codes
-    
-    # Replace State and Vehicle_Category with their codes for the model
-    df['State'] = df['state_code']
-    df['Vehicle_Category'] = df['category_code']
-    
+    # 2. CRITICAL FIX: Loop through expected features and encode any remaining 'object' (string) types.
+    # This specifically catches columns like 'Month_Name' or 'Year' (if string) which caused the error.
+    for col in feature_names:
+        if col in df_encoded.columns and df_encoded[col].dtype == 'object':
+            df_encoded[col] = pd.Categorical(df_encoded[col]).codes
+            
     # Select only the features that the model expects
-    available_features = [col for col in feature_names if col in df.columns]
-    missing_features = [col for col in feature_names if col not in df.columns]
+    X = df_encoded[feature_names].copy()
     
-    if missing_features:
-        print(f"⚠️ Missing features: {missing_features}")
-        # Fill missing features with 0
-        for feature in missing_features:
-            df[feature] = 0
-    
-    # Create feature matrix
-    X = df[feature_names].copy()
-    
-    # Ensure all features are numerical
-    for col in X.columns:
-        if X[col].dtype == 'object':
-            # Convert string columns to numerical using category codes
-            X[col] = pd.Categorical(X[col]).codes
-    
-    # Fill any remaining NaN values
+    # Fill any remaining NaN values before scaling
     X = X.fillna(0)
     
-    # Scale features using existing scaler
+    # Scale features using existing scaler (TRANSFORM ONLY)
     X_scaled = scaler.transform(X)
     
     return X_scaled
 
-def predict_with_advanced_model(df, model_data, scaler, feature_names):
-    """Make predictions using the advanced model."""
-    try:
-        # Create advanced features
-        df_advanced = create_advanced_features(df)
-        
-        # Prepare features for prediction
-        X_scaled = prepare_features_for_prediction(df_advanced, feature_names, scaler)
-        
-        # Make predictions with primary model
-        primary_model = model_data['primary_model']
-        predictions = primary_model.predict(X_scaled)
-        
-        # Ensure predictions are non-negative
-        predictions = np.maximum(predictions, 0)
-        
-        print(f"✅ Advanced model predictions completed")
-        print(f"   Input samples: {len(df)}")
-        print(f"   Features used: {X_scaled.shape[1]}")
-        print(f"   Predictions range: {predictions.min():.2f} to {predictions.max():.2f}")
-        
-        return predictions
-        
-    except Exception as e:
-        print(f"❌ Advanced model prediction failed: {e}")
-        return None
+# --- MAIN EVALUATION FUNCTION ---
 
-def main():
-    """Test the advanced model with sample data."""
-    print("🚀 Advanced EV Demand Forecasting Predictor")
-    print("=" * 50)
+def evaluate_models():
+    """Loops through all categories, loads the dedicated model, and evaluates its performance on 2025 data."""
     
-    # Load the advanced model
-    model_data, scaler, feature_names = load_advanced_model()
+    print("🚀 Starting Dedicated Model Evaluation on EV_Dataset.csv")
+    print("=" * 60)
     
-    if model_data is None:
-        print("❌ Could not load advanced model")
+    df_full = pd.read_csv(DATA_PATH)
+    df_full['Date'] = pd.to_datetime(df_full['Date'])
+    
+    # Clean/fill Vehicle_Category if necessary
+    if 'Vehicle_Class' in df_full.columns and 'Vehicle_Category' not in df_full.columns:
+        df_full.rename(columns={'Vehicle_Class': 'Vehicle_Category'}, inplace=True)
+    df_full['Vehicle_Category'] = df_full['Vehicle_Category'].fillna('Unknown')
+    
+    unique_categories = df_full['Vehicle_Category'].unique()
+    
+    # Split data: everything up to SPLIT_DATE for history, everything after for test
+    df_history = df_full[df_full['Date'] < SPLIT_DATE].copy()
+    df_test_data = df_full[df_full['Date'] >= SPLIT_DATE].copy()
+
+    if df_test_data.empty:
+        print(f"⚠️ Test data is empty. No records found on or after {SPLIT_DATE}. Evaluation stopped.")
         return
+
+    evaluation_results = {}
     
-    # Create sample data for testing
-    print("\n🧪 Testing with sample data...")
+    for category in unique_categories:
+        print("\n" + "-" * 50)
+        print(f"🧪 Evaluating Model for Category: {category}")
+
+        # 1. Load Model Components
+        model, scaler, feature_names = load_model_components(category)
+        if model is None:
+            continue
+
+        # 2. Prepare Data for Evaluation
+        df_category_history = df_history[df_history['Vehicle_Category'] == category]
+        df_category_test = df_test_data[df_test_data['Vehicle_Category'] == category]
+        
+        # Combine the end of the history data with the test data (last 30 days for lag features)
+        df_combined = pd.concat([df_category_history.tail(30), df_category_test], ignore_index=True)
+        
+        # 3. Create Features
+        df_advanced = create_advanced_features(df_combined)
+        
+        # 4. Filter to Test Set and Separate Target
+        df_eval = df_advanced[df_advanced['Date'] >= SPLIT_DATE].copy()
+        
+        if 'EV_Sales_Quantity' not in df_eval.columns or df_eval['EV_Sales_Quantity'].isnull().all():
+            print(f"⚠️ Skipping '{category}': Test set is missing target variable 'EV_Sales_Quantity'.")
+            continue
+            
+        y_test = df_eval['EV_Sales_Quantity']
+
+        # 5. Prepare Features and Predict
+        try:
+            X_test_scaled = prepare_features_for_prediction(df_eval, feature_names, scaler)
+            y_pred = model.predict(X_test_scaled)
+            y_pred = np.maximum(y_pred, 0)
+        except Exception as e:
+            print(f"❌ Prediction failed for '{category}': {e}")
+            continue
+
+        # 6. Calculate Metrics
+        mae = mean_absolute_error(y_test, y_pred)
+        r2 = r2_score(y_test, y_pred)
+        
+        evaluation_results[category] = {'MAE': mae, 'R2': r2}
+        
+        print(f"  -> Evaluation Complete:")
+        print(f"  -> Samples: {len(y_test)}")
+        print(f"  -> MAE: {mae:.4f}")
+        print(f"  -> R²: {r2:.4f}")
+
+    print("\n" + "=" * 60)
+    print("📊 FINAL EVALUATION SUMMARY")
+    print("=" * 60)
     
-    # Sample data structure
-    sample_data = pd.DataFrame({
-        'Date': pd.date_range('2024-01-01', periods=10, freq='D'),
-        'State': ['Maharashtra'] * 10,
-        'Vehicle_Category': ['2-Wheelers'] * 10,
-        'EV_Sales_Quantity': [100, 120, 110, 130, 125, 140, 135, 150, 145, 160]
-    })
-    
-    # Make predictions
-    predictions = predict_with_advanced_model(sample_data, model_data, scaler, feature_names)
-    
-    if predictions is not None:
-        print(f"\n📊 Sample Predictions:")
-        for i, (date, actual, pred) in enumerate(zip(sample_data['Date'], sample_data['EV_Sales_Quantity'], predictions)):
-            print(f"   {date.strftime('%Y-%m-%d')}: Actual={actual}, Predicted={pred:.1f}")
-    
-    print("\n✅ Advanced predictor ready for integration!")
+    summary_df = pd.DataFrame.from_dict(evaluation_results, orient='index')
+    if not summary_df.empty:
+        print(summary_df.sort_values('MAE').to_markdown(floatfmt=".4f"))
+        summary_df.to_csv('model_evaluation_summary_final.csv')
+        print("\n💾 Detailed summary saved to model_evaluation_summary_final.csv")
+    else:
+        print("No successful model evaluations were completed.")
 
 if __name__ == "__main__":
-    main()
+    evaluate_models()
