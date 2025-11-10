@@ -76,12 +76,13 @@ def create_advanced_features(df):
     df['day_of_year_cos'] = np.cos(2 * np.pi * df['day_of_year']/365)
     
     # Advanced lag features
-    for lag in [1, 2, 3, 7, 14, 30]:
+    # 🟢 ADDED 60 and 90 day lags
+    for lag in [1, 2, 3, 7, 14, 30, 60, 90]:
         df[f'lag_{lag}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].shift(lag)
     
-    # *** FIX 2: More robust assignment for rolling calculations ***
     # Rolling statistics
-    for window in [7, 14, 30]:
+    # 🟢 ADDED 60 and 90 day windows
+    for window in [7, 14, 30, 60, 90]:
         grouped_rolling = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=window, min_periods=1)
         df[f'rolling_mean_{window}'] = grouped_rolling.mean().reset_index(level=[0, 1], drop=True)
         df[f'rolling_std_{window}'] = grouped_rolling.std().reset_index(level=[0, 1], drop=True)
@@ -90,22 +91,27 @@ def create_advanced_features(df):
         df[f'rolling_median_{window}'] = grouped_rolling.median().reset_index(level=[0, 1], drop=True)
     
     # Exponential moving averages
-    for span in [7, 14, 30]:
+    # 🟢 ADDED 60 and 90 day spans
+    for span in [7, 14, 30, 60, 90]:
         df[f'ema_{span}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].ewm(span=span).mean().reset_index(level=[0, 1], drop=True)
     
-    # (The rest of the function remains the same...)
     # Seasonal decomposition features
+    # 🟢 ADDED 60 day seasonal mean
     df['seasonal_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).mean().reset_index(level=[0, 1], drop=True)
     df['seasonal_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).mean().reset_index(level=[0, 1], drop=True)
+    df['seasonal_60'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=60, min_periods=1).mean().reset_index(level=[0, 1], drop=True)
     
     # Trend features (simplified)
+    # 🟢 ADDED 60 day trend diff
     df['trend_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).mean().diff().reset_index(level=[0, 1], drop=True)
     df['trend_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).mean().diff().reset_index(level=[0, 1], drop=True)
+    df['trend_60'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=60, min_periods=1).mean().diff().reset_index(level=[0, 1], drop=True)
     
     # Volatility features
+    # 🟢 ADDED 60 day volatility
     df['volatility_7'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=7, min_periods=1).std().reset_index(level=[0, 1], drop=True)
     df['volatility_30'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=30, min_periods=1).std().reset_index(level=[0, 1], drop=True)
-
+    df['volatility_60'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=60, min_periods=1).std().reset_index(level=[0, 1], drop=True)
     # Cross-category features
     category_means = df.groupby(['State', 'Date'])['EV_Sales_Quantity'].mean().reset_index()
     category_means = category_means.rename(columns={'EV_Sales_Quantity': 'state_daily_mean'})
@@ -280,15 +286,15 @@ def create_optimized_model(X_train, y_train, X_val, y_val):
     
     def objective(trial):
         params = {
-            'objective': 'regression', 'metric': 'mae', 'n_estimators': 2000,
+            'objective': 'regression', 'metric': 'mae', 'n_estimators': 3000, # Increased estimators
             'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.1),
-            'num_leaves': trial.suggest_int('num_leaves', 20, 60),
-            'max_depth': trial.suggest_int('max_depth', 4, 8),
-            'min_child_samples': trial.suggest_int('min_child_samples', 20, 100),
-            'subsample': trial.suggest_float('subsample', 0.7, 1.0),
-            'colsample_bytree': trial.suggest_float('colsample_bytree', 0.7, 1.0),
-            'reg_alpha': trial.suggest_float('reg_alpha', 0.1, 20.0, log=True),
-            'reg_lambda': trial.suggest_float('reg_lambda', 0.1, 20.0, log=True),
+            'num_leaves': trial.suggest_int('num_leaves', 20, 128), # Widened max leaves
+            'max_depth': trial.suggest_int('max_depth', 4, 12), # Widened max depth
+            'min_child_samples': trial.suggest_int('min_child_samples', 10, 120),
+            'subsample': trial.suggest_float('subsample', 0.6, 1.0), # Widened subsample
+            'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0),
+            'reg_alpha': trial.suggest_float('reg_alpha', 0.001, 50.0, log=True), # Widened regularization
+            'reg_lambda': trial.suggest_float('reg_lambda', 0.001, 50.0, log=True), # Widened regularization
             'random_state': 42, 'n_jobs': -1, 'verbose': -1
         }
         model = lgb.LGBMRegressor(**params)
@@ -296,13 +302,14 @@ def create_optimized_model(X_train, y_train, X_val, y_val):
         y_pred = model.predict(X_val)
         return mean_absolute_error(y_val, y_pred)
     
+    # Increase the number of trials to 100
     study = optuna.create_study(direction='minimize')
-    study.optimize(objective, n_trials=50)
+    study.optimize(objective, n_trials=100) 
     
     print(f"Best trial: {study.best_trial.value}")
     print(f"Best params: {study.best_params}")
     
-    final_model = lgb.LGBMRegressor(objective='regression', metric='mae', n_estimators=2000, **study.best_params)
+    final_model = lgb.LGBMRegressor(objective='regression', metric='mae', n_estimators=3000, **study.best_params)
     final_model.fit(X_train, y_train, eval_set=[(X_val, y_val)], callbacks=[lgb.early_stopping(50, verbose=False)])
     
     return final_model, study.best_params
@@ -340,11 +347,8 @@ def main():
     categories = df_full['Vehicle_Category'].unique()
     print(f"\nFound {len(categories)} categories to train: {categories}")
 
-    top_features = [
-        'state_daily_mean', 'time_index', 'rolling_max_7', 'rolling_max_14',
-        'rolling_mean_30', 'day_of_year', 'lag_1', 'day', 'month_sin', 'rolling_mean_7'
-    ]
-
+    # 🛑 REMOVED: The 'top_features' list is intentionally removed so the model uses ALL features.
+    
     for category in categories:
         print("\n" + "="*60)
         print(f"🚗 Training model for category: {category}")
@@ -361,9 +365,11 @@ def main():
         val_end = int(len(df_advanced) * 0.85)
         train_df, val_df, test_df = df_advanced.iloc[:train_end], df_advanced.iloc[train_end:val_end], df_advanced.iloc[val_end:]
 
-        X_train, y_train, feature_names, scaler = prepare_data_for_training(train_df, feature_subset=top_features)
-        X_val, y_val, _, _ = prepare_data_for_training(val_df, feature_subset=top_features)
-        X_test, y_test, _, _ = prepare_data_for_training(test_df, feature_subset=top_features)
+        # ✅ CORRECTION: Removed 'feature_subset=top_features' from all calls.
+        # This triggers the inner 'else' block in prepare_data_for_training to select all features.
+        X_train, y_train, feature_names, scaler = prepare_data_for_training(train_df, feature_subset=None)
+        X_val, y_val, _, _ = prepare_data_for_training(val_df, feature_subset=None)
+        X_test, y_test, _, _ = prepare_data_for_training(test_df, feature_subset=None)
 
         optimized_model, best_params = create_optimized_model(X_train, y_train, X_val, y_val)
 
@@ -379,6 +385,10 @@ def main():
         old_mae = load_model_metrics(model_path)
         print(f"  Comparison: New Model MAE ({mae_optimized:.4f}) vs. Old Model MAE ({old_mae:.4f})")
         
+        # ⚠️ CRITICAL NOTE: If your old models were saved with 3 features and had an
+        # artificially low MAE, the comparison below might prevent saving the new model.
+        # You may need to manually delete the 'models/' directory first to ensure
+        # the new, correct models are saved.
         if mae_optimized < old_mae:
             print(f"  🎉 New model for '{category}' is better! Saving...")
             model_data = {
@@ -393,7 +403,7 @@ def main():
 
     print("\n" + "="*60)
     print("🎉 All models trained and validated successfully! 🎉")
-    
+
 def prepare_features_for_prediction(df, feature_names, scaler):
     """
     Prepares a dataframe for prediction using a pre-fitted scaler.
