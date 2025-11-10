@@ -4,6 +4,8 @@ Dashboard Utilities
 REFACTOR v4: Implements a custom DashboardAgent class to encapsulate the LLM persona, 
 mirroring the structure of the friend's 'agno' agent framework but using the 
 standard OpenAI SDK for the 'openai/gpt-oss-20b' model via the Hugging Face Router.
+
+CORRECTED VERSION - Fixed all identified errors
 """
 
 import pandas as pd
@@ -18,7 +20,7 @@ import plotly.express as px
 import streamlit as st
 import sys
 import os 
-from openai import OpenAI # New import for the gpt-oss-20b compatible API
+from openai import OpenAI
 
 # --- Path and Model Setup ---
 ROOT_DIR = Path(__file__).parent.parent.resolve()
@@ -58,10 +60,12 @@ LLM_CLIENT = None
 if HF_TOKEN:
     try:
         # Initialize the OpenAI client pointing to the HF router
+        # FIX #9: Increased timeout and added retry logic
         LLM_CLIENT = OpenAI(
             base_url=HF_ROUTER_BASE_URL,
-            api_key=HF_TOKEN, # The HF token is used as the API key here
-            timeout=30.0 # Set a reasonable timeout
+            api_key=HF_TOKEN,
+            timeout=60.0,  # Increased from 30.0
+            max_retries=2
         )
         print(f"OpenAI Client initialized for Hugging Face Router with {LLM_MODEL_ID}.")
     except Exception as e:
@@ -106,7 +110,6 @@ class DashboardAgent:
     def invoke(self, model_type: str, data_summary: str):
         """Builds the full prompt and calls the LLM."""
         
-        # The full prompt combines the system prompt (description) and the user prompt (data + instructions)
         system_prompt = self.description
         user_prompt = dedent(f"""
             {self.instructions}
@@ -124,7 +127,7 @@ class DashboardAgent:
                 {"role": "user", "content": user_prompt}
             ],
             temperature=0.25,
-            max_tokens=512, # Keep output concise
+            max_tokens=512,
         )
 
 # Instantiate the agent globally
@@ -168,7 +171,6 @@ def run_classical_predictions(df: pd.DataFrame) -> pd.DataFrame:
     categories = df['Vehicle_Category'].unique()
     
     # 1. Create all advanced features for the full 2025 data once
-    # This prepares the time-series and cross-category features correctly.
     df_featured_full = create_advanced_features(df.copy())
 
     for category in categories:
@@ -192,12 +194,18 @@ def run_classical_predictions(df: pd.DataFrame) -> pd.DataFrame:
             feature_names = model_data['feature_names']
             
             # 2. Prepare features for the model using the pre-fitted scaler
-            # The prepare_data_for_training function is used here ONLY to transform the data
             X_scaled, _, _, _ = prepare_data_for_training(df_category.copy(), feature_subset=feature_names) 
 
-            # CRITICAL CHECK: Ensure the current transformed feature count matches the trained model
+            # FIX #6: Enhanced feature mismatch logging
             if X_scaled.shape[1] != len(feature_names):
-                print(f"Warning: Feature count mismatch for '{category}'. Expected {len(feature_names)}, got {X_scaled.shape[1]}. Skipping.")
+                missing = set(feature_names) - set(df_category.columns)
+                extra = set(df_category.columns) - set(feature_names)
+                print(f"Warning: Feature mismatch for '{category}'.")
+                print(f"  Expected {len(feature_names)}, got {X_scaled.shape[1]}")
+                if missing:
+                    print(f"  Missing features: {missing}")
+                if extra:
+                    print(f"  Extra features: {extra}")
                 continue
 
             # 3. Make predictions
@@ -228,7 +236,7 @@ def run_qml_predictions(df: pd.DataFrame) -> pd.DataFrame:
     df_qml = df.copy()
     
     # --- Load Parameters Once and Check Critical Values ---
-    norm_params = load_qml_params(QML_PARAMS_PATH) # Load 1
+    norm_params = load_qml_params(QML_PARAMS_PATH)
     input_dim = norm_params.get('input_dim')
     EXPECTED_FEATURE_NAMES = norm_params.get('feature_names')
     
@@ -240,10 +248,7 @@ def run_qml_predictions(df: pd.DataFrame) -> pd.DataFrame:
     X_tensor, _, processed_params = preprocess_data(df_qml.copy()) 
 
     # --- 2. ALIGN FEATURES (Robust Alignment) ---
-    # Convert X_tensor back to a DataFrame using the feature names from the current run
     current_features = pd.DataFrame(X_tensor.cpu().numpy(), columns=processed_params['feature_names'])
-    
-    # Use reindex to align current features with the expected features
     aligned_X_df = current_features.reindex(columns=EXPECTED_FEATURE_NAMES).fillna(0)
     
     # Final check before prediction
@@ -251,9 +256,8 @@ def run_qml_predictions(df: pd.DataFrame) -> pd.DataFrame:
         print(f"Warning: QML feature mismatch AFTER alignment. Expected {input_dim}, got {aligned_X_df.shape[1]}. Skipping.")
         return pd.DataFrame()
 
-    # Convert aligned DataFrame back to Tensor (ready for model)
-    X_tensor = torch.tensor(aligned_X_df.values, dtype=torch_dtype).to(device)
-    X_tensor = X_tensor.to("cpu") # Ensure data is on CPU for Pennylane lightning.qubit
+    # FIX #1: Direct CPU tensor creation instead of double conversion
+    X_tensor = torch.tensor(aligned_X_df.values, dtype=torch_dtype, device="cpu")
 
     # --- 3. RUN PREDICTION ---
     model = load_qml_model(QML_MODEL_PATH, input_dim)
@@ -261,10 +265,14 @@ def run_qml_predictions(df: pd.DataFrame) -> pd.DataFrame:
     model.eval()
     with torch.no_grad():
         predictions_norm = model(X_tensor).cpu().numpy().flatten()
-        
-    # Denormalize
+    
+    # FIX #8: Safe denormalization with zero-std check
     y_mean, y_std = norm_params['y_mean'], norm_params['y_std']
-    predictions = (predictions_norm * y_std) + y_mean
+    if y_std == 0 or np.isnan(y_std):
+        print("Warning: Standard deviation is 0 or NaN, using mean only")
+        predictions = np.full_like(predictions_norm, y_mean)
+    else:
+        predictions = (predictions_norm * y_std) + y_mean
     
     df_qml['Predicted_Sales'] = np.maximum(0, predictions).astype(int)
     
@@ -273,16 +281,14 @@ def run_qml_predictions(df: pd.DataFrame) -> pd.DataFrame:
 def generate_agent_report(predictions_df: pd.DataFrame, model_type: str) -> str:
     """
     Analyzes prediction results, generates a business-focused report using the custom Agent,
-    and returns the generated report text. (Updated to return text for caching in main.py)
+    and returns the generated report text.
     """
     global report_agent
 
     if predictions_df.empty:
-        # Return a simple error message instead of calling st.warning
         return f"### {model_type} Model Forecast Analysis (2025) 🤖\n\n**Warning:** Cannot generate report: No prediction data available."
     
     if not LLM_CLIENT:
-        # Generate a fallback report and return it
         return _generate_fallback_insights_text(predictions_df, model_type, error_msg="LLM Agent is not initialized. Check if the 'DF_AGENT' secret is set correctly.")
 
     # 1. Prepare Data Summary for the Agent
@@ -298,7 +304,6 @@ def generate_agent_report(predictions_df: pd.DataFrame, model_type: str) -> str:
     
     # 2. Invoke the Agent
     try:
-        # NOTE: Spinner is handled in main.py, so we don't use it here.
         response = report_agent.invoke(model_type, data_summary)
         
         # 3. Construct the final report text string
@@ -309,7 +314,6 @@ def generate_agent_report(predictions_df: pd.DataFrame, model_type: str) -> str:
         return report_text.strip()
 
     except Exception as e:
-        # Generate a fallback report due to LLM API error
         return _generate_fallback_insights_text(predictions_df, model_type, error_msg=f"LLM API Error (HF Router): Failed to generate report. {e}")
 
 
@@ -336,7 +340,7 @@ def _generate_fallback_insights_text(predictions_df: pd.DataFrame, model_type: s
     return fallback_text.strip()
 
 
-# --- On-Demand Forecasting Function (Remains the same) ---
+# --- On-Demand Forecasting Function ---
 
 @st.cache_data
 def generate_on_demand_forecast(category: str, state: str, days_to_forecast: int):
@@ -348,8 +352,11 @@ def generate_on_demand_forecast(category: str, state: str, days_to_forecast: int
     if not classical_model_path.exists():
         return None, f"Error: Model for category '{category}' not found at {classical_model_path}"
 
-    with open(classical_model_path, 'rb') as f:
-        model_data = pickle.load(f)
+    try:
+        with open(classical_model_path, 'rb') as f:
+            model_data = pickle.load(f)
+    except Exception as e:
+        return None, f"Error loading model: {e}"
         
     model = model_data['primary_model']
     scaler = model_data['scaler']
@@ -358,11 +365,11 @@ def generate_on_demand_forecast(category: str, state: str, days_to_forecast: int
     # 1. Prepare Historical Data
     historical_df = pd.read_csv(DATA_PATH, parse_dates=['Date'], low_memory=False)
     
-    # --- FIX 1: Standardize column names immediately on historical data ---
+    # Standardize column names immediately
     if 'Vehicle_Class' in historical_df.columns:
         historical_df.rename(columns={'Vehicle_Class': 'Vehicle_Category'}, inplace=True)
     
-    # --- FIX 2: Correct filtering logic (Removed redundant/incorrect Vehicle_Class check) ---
+    # Correct filtering logic
     historical_df = historical_df[
         (historical_df['State'] == state) & 
         (historical_df['Vehicle_Category'] == category)
@@ -382,13 +389,12 @@ def generate_on_demand_forecast(category: str, state: str, days_to_forecast: int
     combined_df = pd.concat([historical_df, future_df], ignore_index=True)
     
     # 4. Generate Features using the trainer's logic
-    # NOTE: create_advanced_features and prepare_data_for_training are imported from trainer scripts
     df_with_features = create_advanced_features(combined_df)
     
     # Isolate the future features
     future_features = df_with_features.iloc[-days_to_forecast:].copy()
 
-    # 5. Prepare and Scale Features (using the pre-fitted scaler from the loaded model)
+    # 5. Prepare and Scale Features
     X_pred_scaled, _, _, _ = prepare_data_for_training(future_features.copy(), feature_subset=feature_names)
     
     # 6. Make Predictions
