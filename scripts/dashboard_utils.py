@@ -47,6 +47,7 @@ warnings.filterwarnings('ignore')
 # --- AGENT CONFIGURATION & INITIALIZATION ---
 
 # Token used by your friend's setup - NOW USING DF_AGENT
+# NOTE: This token should be set in .streamlit/secrets.toml but NOT committed to Git.
 HF_TOKEN = st.secrets.get("DF_AGENT")
 
 # Dedicated router URL for gpt-oss models on Hugging Face infrastructure
@@ -269,19 +270,20 @@ def run_qml_predictions(df: pd.DataFrame) -> pd.DataFrame:
     
     return df_qml[['Date', 'State', 'Vehicle_Category', 'Predicted_Sales']]
 
-def generate_agent_report(predictions_df: pd.DataFrame, model_type: str):
-    """Analyzes prediction results and generates a business-focused report using the custom Agent."""
+def generate_agent_report(predictions_df: pd.DataFrame, model_type: str) -> str:
+    """
+    Analyzes prediction results, generates a business-focused report using the custom Agent,
+    and returns the generated report text. (Updated to return text for caching in main.py)
+    """
     global report_agent
 
     if predictions_df.empty:
-        st.warning(f"Cannot generate report for {model_type} model: No prediction data.")
-        return
+        # Return a simple error message instead of calling st.warning
+        return f"### {model_type} Model Forecast Analysis (2025) 🤖\n\n**Warning:** Cannot generate report: No prediction data available."
     
     if not LLM_CLIENT:
-        # Changed message to reflect DF_AGENT
-        st.error("LLM Agent is not initialized. Check if the 'DF_AGENT' secret is set correctly.")
-        _display_fallback_insights(predictions_df, model_type)
-        return
+        # Generate a fallback report and return it
+        return _generate_fallback_insights_text(predictions_df, model_type, error_msg="LLM Agent is not initialized. Check if the 'DF_AGENT' secret is set correctly.")
 
     # 1. Prepare Data Summary for the Agent
     total_sales = predictions_df['Predicted_Sales'].sum()
@@ -296,32 +298,42 @@ def generate_agent_report(predictions_df: pd.DataFrame, model_type: str):
     
     # 2. Invoke the Agent
     try:
-        with st.spinner(f"Generating expert report using {LLM_MODEL_ID} (Agent Mode)..."):
-            response = report_agent.invoke(model_type, data_summary)
+        # NOTE: Spinner is handled in main.py, so we don't use it here.
+        response = report_agent.invoke(model_type, data_summary)
         
-        st.markdown(f"### {model_type} Model Forecast Analysis (2025) 🤖")
-        # Extract content from the OpenAI SDK response object
-        st.markdown(response.choices[0].message.content)
+        # 3. Construct the final report text string
+        report_text = dedent(f"""
+            ### {model_type} Model Forecast Analysis (2025) 🤖
+            {response.choices[0].message.content}
+        """)
+        return report_text.strip()
 
     except Exception as e:
-        st.error(f"LLM API Error (HF Router): Failed to generate report. {e}")
-        _display_fallback_insights(predictions_df, model_type)
+        # Generate a fallback report due to LLM API error
+        return _generate_fallback_insights_text(predictions_df, model_type, error_msg=f"LLM API Error (HF Router): Failed to generate report. {e}")
 
 
-def _display_fallback_insights(predictions_df: pd.DataFrame, model_type: str):
-    """Simple fallback function to keep the UI from breaking."""
-    
+def _generate_fallback_insights_text(predictions_df: pd.DataFrame, model_type: str, error_msg: str):
+    """
+    Generates and returns simple fallback markdown text when the LLM call fails.
+    """
     if predictions_df.empty:
-        return
+        return f"### {model_type} Model Forecast Analysis (2025)\n\n**Error:** {error_msg}"
 
     total_sales = predictions_df['Predicted_Sales'].sum()
     sales_by_state = predictions_df.groupby('State')['Predicted_Sales'].sum().sort_values(ascending=False).head(5)
     sales_by_category = predictions_df.groupby('Vehicle_Category')['Predicted_Sales'].sum().sort_values(ascending=False).head(5)
-
-    st.markdown(f"### Generic {model_type} Forecast Analysis (2025) - Fallback")
-    st.markdown(f"* **Total Projected Sales:** The model forecasts **{total_sales:,}** units.")
-    st.markdown(f"* **Key Markets:** The top three markets are **{', '.join(list(sales_by_state.index)[:3])}**.")
-    st.markdown(f"* **Dominant Segments:** Demand is highest in the **{', '.join(list(sales_by_category.index)[:2])}** categories.")
+    
+    fallback_text = dedent(f"""
+        ### Generic {model_type} Forecast Analysis (2025) - Fallback ⚠️
+        
+        **Agent Error:** *{error_msg}*
+        
+        - **Total Projected Sales:** The model forecasts **{total_sales:,}** units.
+        - **Key Markets:** The top three markets are **{', '.join(list(sales_by_state.index)[:3])}**.
+        - **Dominant Segments:** Demand is highest in the **{', '.join(list(sales_by_category.index)[:2])}** categories.
+    """)
+    return fallback_text.strip()
 
 
 # --- On-Demand Forecasting Function (Remains the same) ---
