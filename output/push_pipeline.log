@@ -674,3 +674,29 @@
 [2025-09-18 21:04:58] Predicting for each category...
 [2025-09-18 21:04:59] ✅ Data push predictions completed successfully.
 [2025-09-18 21:04:59] ✅ Data push pipeline completed successfully!
+[2025-11-09 21:32:11] 🚀 Starting data push pipeline...
+[2025-11-09 21:32:11] Loading master dataset from C:\Users\shubh\OneDrive\Desktop\QML\data\EV_Dataset.csv
+[2025-11-09 21:32:11] Found 3 new Excel files for processing.
+[2025-11-09 21:32:11] Processing state file: reportTable (23).xlsx
+[2025-11-09 21:32:11] Detected state: Lakshadweep
+[2025-11-09 21:32:11] Renamed/updated file to: Lakshadweep.xlsx
+[2025-11-09 21:32:11] Extracted 8 records from Lakshadweep.xlsx
+[2025-11-09 21:32:11] Processing state file: reportTable.xlsx
+[2025-11-09 21:32:11] Detected state: Ladakh
+[2025-11-09 21:32:11] Renamed/updated file to: Ladakh.xlsx
+[2025-11-09 21:32:11] Extracted 8 records from Ladakh.xlsx
+[2025-11-09 21:32:11] Processing state file: TN.xlsx
+[2025-11-09 21:32:11] Detected state: Tamil Nadu
+[2025-11-09 21:32:11] Renamed/updated file to: TamilNadu.xlsx
+[2025-11-09 21:32:11] Extracted 56 records from TamilNadu.xlsx
+[2025-11-09 21:32:11] ✅ Combined data from 3 state files. Total records: 72
+[2025-11-09 21:32:11] 📊 Vehicle category standardization and renaming complete.
+[2025-11-09 21:32:12] ✅ Master dataset updated and saved. Total records: 226527
+[2025-11-09 21:32:12] Cleaning up processed Excel files...
+[2025-11-09 21:32:12]  - Could not delete reportTable (23).xlsx: [WinError 2] The system cannot find the file specified: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\reportTable (23).xlsx'
+[2025-11-09 21:32:12]  - Could not delete reportTable.xlsx: [WinError 2] The system cannot find the file specified: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\reportTable.xlsx'
+[2025-11-09 21:32:12]  - Could not delete TN.xlsx: [WinError 2] The system cannot find the file specified: 'C:\\Users\\shubh\\OneDrive\\Desktop\\QML\\data\\TN.xlsx'
+[2025-11-09 21:32:12] 🤖 Feeding data to Advanced EV models...
+[2025-11-09 21:32:25] Predicting for each category...
+[2025-11-09 21:32:26] ✅ Data push predictions completed successfully.
+[2025-11-09 21:32:26] ✅ Data push pipeline completed successfully!

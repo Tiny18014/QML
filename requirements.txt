@@ -23,3 +23,8 @@ holidays
 
 #Other dependencies (from pipreqs scan)
 joblib==1.4.2
+
+#QML Libraries
+pennylane
+torch
+pennylane-lightning
