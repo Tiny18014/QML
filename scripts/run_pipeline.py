@@ -531,6 +531,8 @@ def preprocess_data_simplified():
 
         combined_df = pd.concat([master_df, new_data_df], ignore_index=True)
         combined_df['Date'] = pd.to_datetime(combined_df['Date'])
+        if 'Month_Name' in combined_df.columns:
+            combined_df = combined_df.drop(columns=['Month_Name'])
         
         # *** THE FIX: Use the correct column name 'Vehicle_Category' ***
         combined_df = combined_df.drop_duplicates(subset=['Date', 'State', 'Vehicle_Category'], keep='last')
