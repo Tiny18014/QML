@@ -7,3 +7,4 @@ plotly
 xgboost
 huggingface_hub
 openpyxl
+openai
