@@ -463,7 +463,7 @@ def standardize_vehicle_categories(df):
         return df
 
     vehicle_mapping = {
-        'TWO WHEELER(NT)': '2-Wheelers', 'TWO WHEELER(T)': '2-Wheelers',
+        'TWO WHEELER(NT)': '2-Wheelers', 'TWO WHEELER(NT)': '2-Wheelers',
         'TWO WHEELER (INVALID CARRIAGE)': '2-Wheelers',
         'MOTOR CYCLE/SCOOTER-USED FOR HIRE': '2-Wheelers',
         'M-CYCLE/SCOOTER': '2-Wheelers',
@@ -531,8 +531,6 @@ def preprocess_data_simplified():
 
         combined_df = pd.concat([master_df, new_data_df], ignore_index=True)
         combined_df['Date'] = pd.to_datetime(combined_df['Date'])
-        if 'Month_Name' in combined_df.columns:
-            combined_df = combined_df.drop(columns=['Month_Name'])
         
         # *** THE FIX: Use the correct column name 'Vehicle_Category' ***
         combined_df = combined_df.drop_duplicates(subset=['Date', 'State', 'Vehicle_Category'], keep='last')
@@ -756,50 +754,65 @@ def check_requirements():
 # In scripts/run_pipeline.py, replace this function
 
 def run_simulation(delay=1.0, max_records=None, db_conn=None):
-    """Run the live simulation with a provided or new database connection."""
-    print(f"🚀 Starting live simulation with {delay}s delay...")
+    """
+    Run the live simulation script as a separate subprocess.
+    """
+    print(f"🚀 Starting live simulation process...")
     
-    conn_was_provided = db_conn is not None
-    conn = db_conn
-
-    # *** THE FIX: If no connection is provided, create one ***
-    if not conn_was_provided:
-        print("No DB connection provided, creating a new one for this session...")
-        conn = initialize_database()
-
-    if conn is None:
-        print("❌ Simulation failed: Could not establish a database connection.")
+    SIMULATION_SCRIPT_PATH = SCRIPTS_DIR / "live_simulation.py"
+    
+    if not SIMULATION_SCRIPT_PATH.exists():
+        print(f"❌ Simulation script not found: {SIMULATION_SCRIPT_PATH}")
         return
 
-    if not any(MODELS_DIR.glob("advanced_model_*.pkl")):
-        print("❌ No advanced models found. Please train them first.")
-        if not conn_was_provided: conn.close()
-        return
-
-    print("🤖 Using category-specific Advanced Models for simulation...")
+    # Build the command
+    cmd = [sys.executable, str(SIMULATION_SCRIPT_PATH)]
     
-    sys.path.insert(0, str(SCRIPTS_DIR))
-    from live_simulation import LiveEVDataSimulator
-    
-    simulator = LiveEVDataSimulator(
-        data_path=str(DATASET_PATH),
-        models_dir=str(MODELS_DIR),
-        db_connection=conn
-    )
-    
+    # Run it
     try:
-        simulator.start_simulation(delay_seconds=delay, max_records=max_records)
-    except KeyboardInterrupt:
-        print("\n⏹️  Simulation stopped by user.")
+        # We use subprocess.Popen to run it in parallel without blocking
+        # This allows the dashboard to run in the same terminal session if needed (for 'run_both')
+        process = subprocess.Popen(cmd)
+        print(f"✅ Simulation started (PID: {process.pid})")
+        
+        # If we are NOT running both (i.e., just simulation), we should wait for it
+        if db_conn is None: 
+            process.wait()
+            
+        return process
+        
     except Exception as e:
-        print(f"❌ Simulation error: {e}")
+        print(f"❌ Failed to start simulation: {e}")
+        return None
+
+def run_both():
+    """Run both simulation and dashboard."""
+    print("🎯 Starting both simulation and dashboard...")
+    
+    # 1. Start Simulation (Non-blocking)
+    sim_process = run_simulation(delay=1.0, max_records=None, db_conn="placeholder")
+    
+    if not sim_process:
+        print("❌ Could not start simulation. Aborting dashboard launch.")
+        return
+
+    print("⏳ Giving simulation 3 seconds to warm up...")
+    time.sleep(3)
+    
+    # 2. Start Dashboard (Blocking - this keeps the script alive)
+    try:
+        run_dashboard()
+    except KeyboardInterrupt:
+        print("\nStopping...")
     finally:
-        # Only close the connection if this function created it
-        if not conn_was_provided and conn:
-            conn.close()
-            print("Simulation-specific database connection closed.")
-        if str(SCRIPTS_DIR) in sys.path:
-            sys.path.remove(str(SCRIPTS_DIR))
+        # 3. Cleanup: Kill simulation when dashboard stops
+        print("🛑 Stopping simulation...")
+        sim_process.terminate()
+        try:
+            sim_process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            sim_process.kill()
+        print("✅ Shutdown complete.")
 
 def run_dashboard():
     """Run the Streamlit dashboard."""
@@ -836,26 +849,6 @@ def initialize_database():
     except Exception as e:
         print(f"Database initialization failed: {e}")
         return None
-
-def run_both():
-    """Run both simulation and dashboard in separate threads with a shared DB connection."""
-    print("🎯 Starting both simulation and dashboard...")
-    
-    conn = initialize_database()
-    if conn is None:
-        return
-
-    sim_thread = threading.Thread(target=run_simulation, args=(1.0, None, conn), daemon=True)
-    sim_thread.start()
-    
-    print("⏳ Giving simulation time to initialize...")
-    time.sleep(2)
-    
-    run_dashboard()
-
-    # When the dashboard is closed, the main thread will end, and we can close the connection
-    print("Dashboard closed. Closing database connection.")
-    conn.close()
 
 def train_model():
     """Train the model by running the demand_forecast.py script."""

@@ -75,6 +75,26 @@ def create_advanced_features(df):
     df['day_of_year_sin'] = np.sin(2 * np.pi * df['day_of_year']/365)
     df['day_of_year_cos'] = np.cos(2 * np.pi * df['day_of_year']/365)
     
+
+    # 🟢 ADDED: Zero-Inflated Features (Crucial for Bus/3-Wheelers)
+    # 🟢 ADDED: Zero-Inflated Features (Crucial for Bus/3-Wheelers)
+    # Calculate days since last non-zero sale for this State
+    df['is_sale'] = (df['EV_Sales_Quantity'] > 0).astype(int)
+    
+    # Create a grouping key
+    g = df.groupby(['State', 'Vehicle_Category'])
+    
+    # 🛑 CHANGE THIS LINE (Change .apply to .transform)
+    df['last_sale_idx'] = df.groupby(['State', 'Vehicle_Category'])['is_sale'].transform(
+        lambda x: x.cumsum().shift().fillna(0)
+    )
+    
+    # Rolling count of non-zero sales in past 30 days
+    # (This part below is fine, keep as is)
+    df['sales_frequency_30d'] = g['is_sale'].rolling(window=30).sum().reset_index(level=[0,1], drop=True)
+    
+    # Drop temp column
+    df = df.drop(columns=['is_sale', 'last_sale_idx'])
     # Advanced lag features
     # 🟢 ADDED 60 and 90 day lags
     for lag in [1, 2, 3, 7, 14, 30, 60, 90]:
@@ -280,39 +300,70 @@ def train_models(X_train, y_train, X_val, y_val, feature_names):
     
     return trained_models, scores, best_models
 
-def create_optimized_model(X_train, y_train, X_val, y_val):
-    """Create an optimized model using Optuna."""
-    print("🔬 Creating optimized model with Optuna...")
+def create_optimized_model(X_train, y_train, X_val, y_val, category_name="Unknown"):
+    """Create an optimized model with category-specific objectives."""
+    print(f"🔬 Creating optimized model for {category_name}...")
     
+    # 1. Define objective based on category
+    # Buses and 3-Wheelers follow a Poisson/Tweedie distribution (rare events)
+    if category_name in ['Bus', '3-Wheelers']:
+        obj_type = 'tweedie'
+        metric_type = 'rmse' # MAE is bad for sparse data, RMSE is better here
+        tweedie_variance_power = 1.5 # 1.5 is the sweet spot for compound Poisson-Gamma
+    else:
+        obj_type = 'regression'
+        metric_type = 'mae'
+        tweedie_variance_power = 1.0 # Ignored for regression
+
     def objective(trial):
         params = {
-            'objective': 'regression', 'metric': 'mae', 'n_estimators': 3000, # Increased estimators
+            'objective': obj_type,
+            'metric': metric_type,
+            'n_estimators': 3000,
             'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.1),
-            'num_leaves': trial.suggest_int('num_leaves', 20, 128), # Widened max leaves
-            'max_depth': trial.suggest_int('max_depth', 4, 12), # Widened max depth
+            'num_leaves': trial.suggest_int('num_leaves', 20, 128),
+            'max_depth': trial.suggest_int('max_depth', 4, 12),
             'min_child_samples': trial.suggest_int('min_child_samples', 10, 120),
-            'subsample': trial.suggest_float('subsample', 0.6, 1.0), # Widened subsample
+            'subsample': trial.suggest_float('subsample', 0.6, 1.0),
             'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0),
-            'reg_alpha': trial.suggest_float('reg_alpha', 0.001, 50.0, log=True), # Widened regularization
-            'reg_lambda': trial.suggest_float('reg_lambda', 0.001, 50.0, log=True), # Widened regularization
-            'random_state': 42, 'n_jobs': -1, 'verbose': -1
+            'reg_alpha': trial.suggest_float('reg_alpha', 0.001, 50.0, log=True),
+            'reg_lambda': trial.suggest_float('reg_lambda', 0.001, 50.0, log=True),
+            'random_state': 42, 
+            'n_jobs': -1, 
+            'verbose': -1
         }
+        
+        # Add tweedie param if applicable
+        if obj_type == 'tweedie':
+            params['tweedie_variance_power'] = tweedie_variance_power
+
         model = lgb.LGBMRegressor(**params)
-        model.fit(X_train, y_train, eval_set=[(X_val, y_val)], callbacks=[lgb.early_stopping(50, verbose=False)])
+        model.fit(X_train, y_train, eval_set=[(X_val, y_val)], 
+                 callbacks=[lgb.early_stopping(50, verbose=False)])
+        
         y_pred = model.predict(X_val)
+        
+        # Optimization metric
+        if obj_type == 'tweedie':
+            return np.sqrt(mean_squared_error(y_val, y_pred))
         return mean_absolute_error(y_val, y_pred)
     
-    # Increase the number of trials to 100
     study = optuna.create_study(direction='minimize')
-    study.optimize(objective, n_trials=100) 
+    study.optimize(objective, n_trials=50) # Reduced to 50 for speed
+
+    # Re-build final model with best params
+    final_params = study.best_params
+    final_params['objective'] = obj_type
+    final_params['metric'] = metric_type
+    final_params['n_estimators'] = 3000
+    if obj_type == 'tweedie':
+        final_params['tweedie_variance_power'] = tweedie_variance_power
+
+    final_model = lgb.LGBMRegressor(**final_params)
+    final_model.fit(X_train, y_train, eval_set=[(X_val, y_val)], 
+                   callbacks=[lgb.early_stopping(50, verbose=False)])
     
-    print(f"Best trial: {study.best_trial.value}")
-    print(f"Best params: {study.best_params}")
-    
-    final_model = lgb.LGBMRegressor(objective='regression', metric='mae', n_estimators=3000, **study.best_params)
-    final_model.fit(X_train, y_train, eval_set=[(X_val, y_val)], callbacks=[lgb.early_stopping(50, verbose=False)])
-    
-    return final_model, study.best_params
+    return final_model, final_params
 
 def load_model_metrics(path):
     """Loads metrics from an existing model file."""
@@ -347,8 +398,6 @@ def main():
     categories = df_full['Vehicle_Category'].unique()
     print(f"\nFound {len(categories)} categories to train: {categories}")
 
-    # 🛑 REMOVED: The 'top_features' list is intentionally removed so the model uses ALL features.
-    
     for category in categories:
         print("\n" + "="*60)
         print(f"🚗 Training model for category: {category}")
@@ -358,48 +407,108 @@ def main():
             print(f"⚠️ Skipping '{category}' due to insufficient data ({len(df_category)} records).")
             continue
 
+        # 1. Feature Engineering
         df_advanced = create_advanced_features(df_category)
-        
         df_advanced = df_advanced.sort_values('Date')
-        train_end = int(len(df_advanced) * 0.7)
-        val_end = int(len(df_advanced) * 0.85)
-        train_df, val_df, test_df = df_advanced.iloc[:train_end], df_advanced.iloc[train_end:val_end], df_advanced.iloc[val_end:]
+        
+        # 2. Global Encoding (Crucial for Consistency)
+        # Define the universe of States for this category
+        all_states = sorted(df_advanced['State'].unique())
+        df_advanced['State'] = pd.Categorical(df_advanced['State'], categories=all_states)
+        df_advanced['Vehicle_Category'] = pd.Categorical(df_advanced['Vehicle_Category']) # Just one cat
+        
+        # Encode
+        df_encoded = df_advanced.copy()
+        df_encoded['State'] = df_encoded['State'].cat.codes
+        df_encoded['Vehicle_Category'] = df_encoded['Vehicle_Category'].cat.codes
+        
+        # Handle other object columns if any (e.g. Month_Name if not dropped)
+        if 'Month_Name' in df_encoded.columns:
+            df_encoded = df_encoded.drop(columns=['Month_Name'])
+            
+        # Select Features
+        feature_columns = [col for col in df_encoded.columns 
+                          if col not in ['Date', 'EV_Sales_Quantity', 'Month_Name'] 
+                          and df_encoded[col].dtype in [np.float64, np.int64, np.int32, np.int8]]
+        
+        X = df_encoded[feature_columns]
+        y = df_encoded['EV_Sales_Quantity']
+        
+        # 3. Split Data
+        train_end = int(len(df_encoded) * 0.7)
+        val_end = int(len(df_encoded) * 0.85)
+        
+        X_train_raw = X.iloc[:train_end]
+        y_train = y.iloc[:train_end]
+        
+        X_val_raw = X.iloc[train_end:val_end]
+        y_val = y.iloc[train_end:val_end]
+        
+        X_test_raw = X.iloc[val_end:]
+        y_test = y.iloc[val_end:]
+        
+        # 4. Scaling (Fit on Train, Transform All)
+        scaler = RobustScaler()
+        X_train = scaler.fit_transform(X_train_raw)
+        X_val = scaler.transform(X_val_raw)
+        X_test = scaler.transform(X_test_raw)
+        
+        # 5. Log Transform Target (if needed)
+        use_log_target = category in ['Bus', '3-Wheelers']
+        if use_log_target:
+            print(f" 📉 Applying Log-Transformation to target for {category}...")
+            y_train_processed = np.log1p(y_train)
+            y_val_processed = np.log1p(y_val)
+        else:
+            y_train_processed = y_train
+            y_val_processed = y_val
 
-        # ✅ CORRECTION: Removed 'feature_subset=top_features' from all calls.
-        # This triggers the inner 'else' block in prepare_data_for_training to select all features.
-        X_train, y_train, feature_names, scaler = prepare_data_for_training(train_df, feature_subset=None)
-        X_val, y_val, _, _ = prepare_data_for_training(val_df, feature_subset=None)
-        X_test, y_test, _, _ = prepare_data_for_training(test_df, feature_subset=None)
+        # 6. Optimization
+        optimized_model, best_params = create_optimized_model(
+            X_train, y_train_processed, X_val, y_val_processed, category_name=category
+        )
 
-        optimized_model, best_params = create_optimized_model(X_train, y_train, X_val, y_val)
-
-        print("\n🧪 Final Evaluation on Test Set:")
+        # 7. Evaluation
         y_pred_optimized = optimized_model.predict(X_test)
+        if use_log_target:
+            y_pred_optimized = np.expm1(y_pred_optimized)
+            y_pred_optimized = np.maximum(y_pred_optimized, 0)
+            
         mae_optimized = mean_absolute_error(y_test, y_pred_optimized)
         r2_optimized = r2_score(y_test, y_pred_optimized)
         print(f"  --> Results for '{category}': MAE={mae_optimized:.4f}, R²={r2_optimized:.4f}")
+
+        # 8. Final Retraining on FULL Data
+        print(f"🔄 Retraining model on FULL dataset...")
         
+        # Fit scaler on FULL data for the final saved model
+        # This ensures the saved scaler covers the entire range of data seen so far
+        final_scaler = RobustScaler()
+        X_full_scaled = final_scaler.fit_transform(X)
+        
+        if use_log_target:
+            y_full_processed = np.log1p(y)
+        else:
+            y_full_processed = y
+            
+        final_full_model = lgb.LGBMRegressor(**best_params)
+        final_full_model.fit(X_full_scaled, y_full_processed)
+        
+        # 9. Save
         category_filename = category.replace(" ", "_").replace("/", "_")
         model_path = MODELS_DIR / f"advanced_model_{category_filename}.pkl"
         
-        old_mae = load_model_metrics(model_path)
-        print(f"  Comparison: New Model MAE ({mae_optimized:.4f}) vs. Old Model MAE ({old_mae:.4f})")
-        
-        # ⚠️ CRITICAL NOTE: If your old models were saved with 3 features and had an
-        # artificially low MAE, the comparison below might prevent saving the new model.
-        # You may need to manually delete the 'models/' directory first to ensure
-        # the new, correct models are saved.
-        if mae_optimized < old_mae:
-            print(f"  🎉 New model for '{category}' is better! Saving...")
-            model_data = {
-                'primary_model': optimized_model, 'scaler': scaler,
-                'feature_names': feature_names, 'best_params': best_params,
-                'test_scores': {'optimized': {'MAE': mae_optimized, 'R2': r2_optimized}}
-            }
-            model_path.parent.mkdir(exist_ok=True)
-            with open(model_path, 'wb') as f: pickle.dump(model_data, f)
-        else:
-            print(f"  ⚠️ New model for '{category}' did not perform better. Keeping previous version.")
+        print(f"  🎉 Saving new model for '{category}'...")
+        model_data = {
+            'primary_model': final_full_model, 
+            'scaler': final_scaler, # Save the scaler fitted on FULL data
+            'feature_names': feature_columns, 
+            'best_params': best_params,
+            'test_scores': {'optimized': {'MAE': mae_optimized, 'R2': r2_optimized}},
+            'state_encoding': list(all_states) # Save the state list for inference!
+        }
+        model_path.parent.mkdir(exist_ok=True)
+        with open(model_path, 'wb') as f: pickle.dump(model_data, f)
 
     print("\n" + "="*60)
     print("🎉 All models trained and validated successfully! 🎉")
