@@ -1,0 +1,187 @@
+Date,State,Predicted_Sales
+2025-01-01,Andhra Pradesh,25
+2025-02-01,Andhra Pradesh,25
+2025-03-01,Andhra Pradesh,25
+2025-04-01,Andhra Pradesh,23
+2025-05-01,Andhra Pradesh,22
+2025-06-01,Andhra Pradesh,21
+2025-01-01,Arunachal Pradesh,40
+2025-02-01,Arunachal Pradesh,40
+2025-03-01,Arunachal Pradesh,40
+2025-04-01,Arunachal Pradesh,39
+2025-05-01,Arunachal Pradesh,38
+2025-06-01,Arunachal Pradesh,35
+2025-01-01,Assam,26
+2025-02-01,Assam,26
+2025-03-01,Assam,26
+2025-04-01,Assam,25
+2025-05-01,Assam,24
+2025-06-01,Assam,25
+2025-01-01,Bihar,31
+2025-02-01,Bihar,31
+2025-03-01,Bihar,31
+2025-04-01,Bihar,30
+2025-05-01,Bihar,29
+2025-06-01,Bihar,27
+2025-01-01,Chandigarh,41
+2025-02-01,Chandigarh,41
+2025-03-01,Chandigarh,41
+2025-04-01,Chandigarh,40
+2025-05-01,Chandigarh,39
+2025-06-01,Chandigarh,37
+2025-01-01,Chhattisgarh,43
+2025-02-01,Chhattisgarh,43
+2025-03-01,Chhattisgarh,43
+2025-04-01,Chhattisgarh,41
+2025-05-01,Chhattisgarh,40
+2025-06-01,Chhattisgarh,37
+2025-01-01,Delhi,43
+2025-02-01,Delhi,43
+2025-03-01,Delhi,43
+2025-04-01,Delhi,42
+2025-05-01,Delhi,42
+2025-06-01,Delhi,40
+2025-01-01,Goa,28
+2025-02-01,Goa,28
+2025-03-01,Goa,28
+2025-04-01,Goa,28
+2025-05-01,Goa,27
+2025-06-01,Goa,27
+2025-01-01,Gujarat,51
+2025-02-01,Gujarat,51
+2025-03-01,Gujarat,51
+2025-04-01,Gujarat,51
+2025-05-01,Gujarat,51
+2025-06-01,Gujarat,49
+2025-01-01,Haryana,17
+2025-02-01,Haryana,17
+2025-03-01,Haryana,18
+2025-04-01,Haryana,18
+2025-05-01,Haryana,18
+2025-06-01,Haryana,19
+2025-01-01,Himachal Pradesh,38
+2025-02-01,Himachal Pradesh,38
+2025-03-01,Himachal Pradesh,38
+2025-04-01,Himachal Pradesh,37
+2025-05-01,Himachal Pradesh,36
+2025-06-01,Himachal Pradesh,33
+2025-01-01,Jharkhand,14
+2025-02-01,Jharkhand,14
+2025-03-01,Jharkhand,14
+2025-04-01,Jharkhand,14
+2025-05-01,Jharkhand,14
+2025-06-01,Jharkhand,14
+2025-01-01,Karnataka,67
+2025-02-01,Karnataka,67
+2025-03-01,Karnataka,67
+2025-04-01,Karnataka,68
+2025-05-01,Karnataka,68
+2025-06-01,Karnataka,69
+2025-01-01,Kerala,27
+2025-02-01,Kerala,27
+2025-03-01,Kerala,27
+2025-04-01,Kerala,25
+2025-05-01,Kerala,24
+2025-06-01,Kerala,23
+2025-01-01,Madhya Pradesh,27
+2025-02-01,Madhya Pradesh,27
+2025-03-01,Madhya Pradesh,27
+2025-04-01,Madhya Pradesh,26
+2025-05-01,Madhya Pradesh,25
+2025-06-01,Madhya Pradesh,23
+2025-01-01,Maharashtra,68
+2025-02-01,Maharashtra,68
+2025-03-01,Maharashtra,69
+2025-04-01,Maharashtra,69
+2025-05-01,Maharashtra,69
+2025-06-01,Maharashtra,70
+2025-01-01,Manipur,39
+2025-02-01,Manipur,39
+2025-03-01,Manipur,39
+2025-04-01,Manipur,38
+2025-05-01,Manipur,37
+2025-06-01,Manipur,34
+2025-01-01,Meghalaya,29
+2025-02-01,Meghalaya,29
+2025-03-01,Meghalaya,29
+2025-04-01,Meghalaya,28
+2025-05-01,Meghalaya,26
+2025-06-01,Meghalaya,24
+2025-01-01,Mizoram,21
+2025-02-01,Mizoram,21
+2025-03-01,Mizoram,21
+2025-04-01,Mizoram,20
+2025-05-01,Mizoram,20
+2025-06-01,Mizoram,20
+2025-01-01,Nagaland,25
+2025-02-01,Nagaland,25
+2025-03-01,Nagaland,25
+2025-04-01,Nagaland,23
+2025-05-01,Nagaland,22
+2025-06-01,Nagaland,21
+2025-01-01,Odisha,41
+2025-02-01,Odisha,41
+2025-03-01,Odisha,41
+2025-04-01,Odisha,40
+2025-05-01,Odisha,39
+2025-06-01,Odisha,37
+2025-01-01,Puducherry,15
+2025-02-01,Puducherry,15
+2025-03-01,Puducherry,15
+2025-04-01,Puducherry,15
+2025-05-01,Puducherry,15
+2025-06-01,Puducherry,17
+2025-01-01,Punjab,22
+2025-02-01,Punjab,22
+2025-03-01,Punjab,22
+2025-04-01,Punjab,20
+2025-05-01,Punjab,20
+2025-06-01,Punjab,19
+2025-01-01,Rajasthan,16
+2025-02-01,Rajasthan,16
+2025-03-01,Rajasthan,16
+2025-04-01,Rajasthan,16
+2025-05-01,Rajasthan,16
+2025-06-01,Rajasthan,18
+2025-01-01,Sikkim,42
+2025-02-01,Sikkim,42
+2025-03-01,Sikkim,42
+2025-04-01,Sikkim,41
+2025-05-01,Sikkim,40
+2025-06-01,Sikkim,37
+2025-01-01,Tamil Nadu,67
+2025-02-01,Tamil Nadu,67
+2025-03-01,Tamil Nadu,67
+2025-04-01,Tamil Nadu,68
+2025-05-01,Tamil Nadu,68
+2025-06-01,Tamil Nadu,68
+2025-01-01,Telangana,15
+2025-02-01,Telangana,15
+2025-03-01,Telangana,15
+2025-04-01,Telangana,15
+2025-05-01,Telangana,15
+2025-06-01,Telangana,17
+2025-01-01,Tripura,26
+2025-02-01,Tripura,26
+2025-03-01,Tripura,26
+2025-04-01,Tripura,26
+2025-05-01,Tripura,25
+2025-06-01,Tripura,26
+2025-01-01,Uttar Pradesh,24
+2025-02-01,Uttar Pradesh,24
+2025-03-01,Uttar Pradesh,24
+2025-04-01,Uttar Pradesh,25
+2025-05-01,Uttar Pradesh,26
+2025-06-01,Uttar Pradesh,26
+2025-01-01,Uttarakhand,22
+2025-02-01,Uttarakhand,22
+2025-03-01,Uttarakhand,22
+2025-04-01,Uttarakhand,21
+2025-05-01,Uttarakhand,20
+2025-06-01,Uttarakhand,20
+2025-01-01,West Bengal,24
+2025-02-01,West Bengal,24
+2025-03-01,West Bengal,24
+2025-04-01,West Bengal,24
+2025-05-01,West Bengal,23
+2025-06-01,West Bengal,24

@@ -1,0 +1,187 @@
+Date,State,Predicted_Sales
+2025-01-01,Andhra Pradesh,308
+2025-02-01,Andhra Pradesh,316
+2025-03-01,Andhra Pradesh,334
+2025-04-01,Andhra Pradesh,334
+2025-05-01,Andhra Pradesh,331
+2025-06-01,Andhra Pradesh,326
+2025-01-01,Arunachal Pradesh,324
+2025-02-01,Arunachal Pradesh,332
+2025-03-01,Arunachal Pradesh,350
+2025-04-01,Arunachal Pradesh,350
+2025-05-01,Arunachal Pradesh,347
+2025-06-01,Arunachal Pradesh,345
+2025-01-01,Assam,411
+2025-02-01,Assam,412
+2025-03-01,Assam,415
+2025-04-01,Assam,413
+2025-05-01,Assam,402
+2025-06-01,Assam,402
+2025-01-01,Bihar,282
+2025-02-01,Bihar,288
+2025-03-01,Bihar,309
+2025-04-01,Bihar,310
+2025-05-01,Bihar,307
+2025-06-01,Bihar,303
+2025-01-01,Chandigarh,414
+2025-02-01,Chandigarh,416
+2025-03-01,Chandigarh,424
+2025-04-01,Chandigarh,422
+2025-05-01,Chandigarh,414
+2025-06-01,Chandigarh,399
+2025-01-01,Chhattisgarh,366
+2025-02-01,Chhattisgarh,367
+2025-03-01,Chhattisgarh,372
+2025-04-01,Chhattisgarh,371
+2025-05-01,Chhattisgarh,365
+2025-06-01,Chhattisgarh,363
+2025-01-01,Delhi,485
+2025-02-01,Delhi,486
+2025-03-01,Delhi,498
+2025-04-01,Delhi,495
+2025-05-01,Delhi,490
+2025-06-01,Delhi,486
+2025-01-01,Goa,318
+2025-02-01,Goa,326
+2025-03-01,Goa,343
+2025-04-01,Goa,344
+2025-05-01,Goa,339
+2025-06-01,Goa,335
+2025-01-01,Gujarat,535
+2025-02-01,Gujarat,535
+2025-03-01,Gujarat,543
+2025-04-01,Gujarat,542
+2025-05-01,Gujarat,539
+2025-06-01,Gujarat,539
+2025-01-01,Haryana,358
+2025-02-01,Haryana,360
+2025-03-01,Haryana,369
+2025-04-01,Haryana,370
+2025-05-01,Haryana,366
+2025-06-01,Haryana,354
+2025-01-01,Himachal Pradesh,372
+2025-02-01,Himachal Pradesh,373
+2025-03-01,Himachal Pradesh,379
+2025-04-01,Himachal Pradesh,379
+2025-05-01,Himachal Pradesh,373
+2025-06-01,Himachal Pradesh,370
+2025-01-01,Jharkhand,301
+2025-02-01,Jharkhand,307
+2025-03-01,Jharkhand,324
+2025-04-01,Jharkhand,325
+2025-05-01,Jharkhand,322
+2025-06-01,Jharkhand,317
+2025-01-01,Karnataka,827
+2025-02-01,Karnataka,827
+2025-03-01,Karnataka,838
+2025-04-01,Karnataka,838
+2025-05-01,Karnataka,831
+2025-06-01,Karnataka,771
+2025-01-01,Kerala,285
+2025-02-01,Kerala,293
+2025-03-01,Kerala,317
+2025-04-01,Kerala,318
+2025-05-01,Kerala,312
+2025-06-01,Kerala,306
+2025-01-01,Madhya Pradesh,279
+2025-02-01,Madhya Pradesh,286
+2025-03-01,Madhya Pradesh,308
+2025-04-01,Madhya Pradesh,308
+2025-05-01,Madhya Pradesh,303
+2025-06-01,Madhya Pradesh,299
+2025-01-01,Maharashtra,748
+2025-02-01,Maharashtra,748
+2025-03-01,Maharashtra,760
+2025-04-01,Maharashtra,760
+2025-05-01,Maharashtra,753
+2025-06-01,Maharashtra,693
+2025-01-01,Manipur,369
+2025-02-01,Manipur,370
+2025-03-01,Manipur,378
+2025-04-01,Manipur,376
+2025-05-01,Manipur,368
+2025-06-01,Manipur,356
+2025-01-01,Meghalaya,293
+2025-02-01,Meghalaya,301
+2025-03-01,Meghalaya,325
+2025-04-01,Meghalaya,326
+2025-05-01,Meghalaya,320
+2025-06-01,Meghalaya,315
+2025-01-01,Mizoram,319
+2025-02-01,Mizoram,326
+2025-03-01,Mizoram,342
+2025-04-01,Mizoram,342
+2025-05-01,Mizoram,333
+2025-06-01,Mizoram,328
+2025-01-01,Nagaland,365
+2025-02-01,Nagaland,366
+2025-03-01,Nagaland,373
+2025-04-01,Nagaland,373
+2025-05-01,Nagaland,366
+2025-06-01,Nagaland,363
+2025-01-01,Odisha,270
+2025-02-01,Odisha,275
+2025-03-01,Odisha,288
+2025-04-01,Odisha,288
+2025-05-01,Odisha,283
+2025-06-01,Odisha,277
+2025-01-01,Puducherry,363
+2025-02-01,Puducherry,364
+2025-03-01,Puducherry,371
+2025-04-01,Puducherry,368
+2025-05-01,Puducherry,360
+2025-06-01,Puducherry,347
+2025-01-01,Punjab,280
+2025-02-01,Punjab,287
+2025-03-01,Punjab,306
+2025-04-01,Punjab,306
+2025-05-01,Punjab,297
+2025-06-01,Punjab,283
+2025-01-01,Rajasthan,285
+2025-02-01,Rajasthan,293
+2025-03-01,Rajasthan,316
+2025-04-01,Rajasthan,317
+2025-05-01,Rajasthan,314
+2025-06-01,Rajasthan,308
+2025-01-01,Sikkim,274
+2025-02-01,Sikkim,282
+2025-03-01,Sikkim,306
+2025-04-01,Sikkim,307
+2025-05-01,Sikkim,302
+2025-06-01,Sikkim,297
+2025-01-01,Tamil Nadu,666
+2025-02-01,Tamil Nadu,667
+2025-03-01,Tamil Nadu,677
+2025-04-01,Tamil Nadu,677
+2025-05-01,Tamil Nadu,667
+2025-06-01,Tamil Nadu,656
+2025-01-01,Telangana,395
+2025-02-01,Telangana,396
+2025-03-01,Telangana,404
+2025-04-01,Telangana,403
+2025-05-01,Telangana,398
+2025-06-01,Telangana,386
+2025-01-01,Tripura,298
+2025-02-01,Tripura,305
+2025-03-01,Tripura,332
+2025-04-01,Tripura,333
+2025-05-01,Tripura,331
+2025-06-01,Tripura,325
+2025-01-01,Uttar Pradesh,429
+2025-02-01,Uttar Pradesh,431
+2025-03-01,Uttar Pradesh,448
+2025-04-01,Uttar Pradesh,444
+2025-05-01,Uttar Pradesh,433
+2025-06-01,Uttar Pradesh,428
+2025-01-01,Uttarakhand,309
+2025-02-01,Uttarakhand,317
+2025-03-01,Uttarakhand,336
+2025-04-01,Uttarakhand,336
+2025-05-01,Uttarakhand,334
+2025-06-01,Uttarakhand,331
+2025-01-01,West Bengal,278
+2025-02-01,West Bengal,285
+2025-03-01,West Bengal,307
+2025-04-01,West Bengal,307
+2025-05-01,West Bengal,302
+2025-06-01,West Bengal,296
