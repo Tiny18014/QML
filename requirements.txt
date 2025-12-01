@@ -6,5 +6,10 @@ streamlit
 plotly
 xgboost
 huggingface_hub
+<<<<<<< HEAD
 openai
 openpyxl
+=======
+openpyxl
+openai
+>>>>>>> a45791092623e6772a604a4880b2df6331deee75
