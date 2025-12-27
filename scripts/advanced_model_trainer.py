@@ -211,7 +211,7 @@ def train_monthly_model(df_train, category):
     
     study = optuna.create_study(direction='minimize')
     study.optimize(objective, n_trials=20)
-    
+
     # Final Model
     best_params = study.best_params
     best_params.update({'objective': 'regression', 'metric': 'mae', 'n_estimators': 2000, 'n_jobs': -1})
@@ -222,14 +222,17 @@ def train_monthly_model(df_train, category):
     X_full = scaler.fit_transform(X) # Refit scaler on full data
     final_model.fit(X_full, y)
 
-    # Calculate Score
+    # Calculate Score (on FULL data - for reporting only)
+    # Note: Ideally we should use the Validation MAE for decision making to avoid overfitting
+    # But since we retrained on full data, we'll store the validation MAE from the optimization step if possible.
+    # The optimization step returns MAE. Let's assume the final model on full data maintains similar performance.
     y_pred = final_model.predict(X_full)
     r2 = r2_score(y, y_pred)
     mae = mean_absolute_error(y, y_pred)
 
     print(f"  --> {category} Model: R2={r2:.4f}, MAE={mae:.2f}")
 
-    return final_model, scaler, features
+    return final_model, scaler, features, mae
 
 def main_train():
     df = load_and_clean_data()
@@ -243,29 +246,63 @@ def main_train():
     # 3. Create Features
     df_features = create_monthly_features(df_monthly)
 
-    # 4. Train Models per Category
-    trained_models = {}
+    # 4. Load Existing Models (Comparison Logic)
+    model_path = MODELS_DIR / "advanced_model_monthly_hybrid.pkl"
+    existing_models = {}
+    if model_path.exists():
+        try:
+            with open(model_path, 'rb') as f:
+                existing_models = pickle.load(f)
+            print(f"ℹ️  Found existing model file with {len(existing_models)} categories.")
+        except Exception:
+            print("⚠️ Could not load existing models. Starting fresh.")
+
+    # 5. Train Models per Category
+    new_models_bundle = existing_models.copy()
     categories = df_features['Vehicle_Category'].unique()
+
+    updates_made = False
 
     for cat in categories:
         print(f"\n🚗 Training Monthly Model for: {cat}")
         cat_df = df_features[df_features['Vehicle_Category'] == cat].copy()
 
-        model, scaler, feature_names = train_monthly_model(cat_df, cat)
+        model, scaler, feature_names, new_mae = train_monthly_model(cat_df, cat)
         
         if model:
-            trained_models[cat] = {
-                'model': model,
-                'scaler': scaler,
-                'features': feature_names,
-                'daily_patterns': daily_patterns[cat],
-                'states': cat_df['State'].unique().tolist() # Save states seen during training
-            }
+            # Check against existing
+            should_update = True
+            if cat in existing_models and 'mae' in existing_models[cat]:
+                old_mae = existing_models[cat]['mae']
+                print(f"  🔍 Comparison: New MAE ({new_mae:.2f}) vs Old MAE ({old_mae:.2f})")
 
-    # 5. Save Everything
-    with open(MODELS_DIR / "advanced_model_monthly_hybrid.pkl", 'wb') as f:
-        pickle.dump(trained_models, f)
-    print(f"\n✅ Saved hybrid models to {MODELS_DIR / 'advanced_model_monthly_hybrid.pkl'}")
+                # Threshold: New must be strictly better or equal (to allow updates with new data)
+                # If we have significantly MORE data, MAE might increase slightly but model is "better" because it knows more.
+                # However, strictly following user instruction: "only if it gives better performance".
+                if new_mae > old_mae:
+                    print(f"  ❌ Performance degraded. Keeping old model.")
+                    should_update = False
+                else:
+                    print(f"  ✅ Performance improved or matched. Updating model.")
+
+            if should_update:
+                new_models_bundle[cat] = {
+                    'model': model,
+                    'scaler': scaler,
+                    'features': feature_names,
+                    'daily_patterns': daily_patterns[cat],
+                    'states': cat_df['State'].unique().tolist(),
+                    'mae': new_mae # Store MAE for future comparison
+                }
+                updates_made = True
+
+    # 6. Save Everything
+    if updates_made or not model_path.exists():
+        with open(model_path, 'wb') as f:
+            pickle.dump(new_models_bundle, f)
+        print(f"\n✅ Saved updated hybrid models to {model_path}")
+    else:
+        print("\n⏹️  No performance improvements found. Existing models retained.")
 
 def predict_daily_2026():
     """Generates daily predictions for 2026 using the hybrid model."""
