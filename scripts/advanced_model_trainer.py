@@ -173,7 +173,7 @@ def train_monthly_model(df_train, category):
     # Ensure we have enough data
     if len(X) < 50:
         return None, None, None
-        
+
     # Train/Val Split
     cutoff_date = pd.Timestamp('2024-06-01')
     mask_train = df_train['Date'] < cutoff_date
@@ -250,7 +250,7 @@ def main_train():
     for cat in categories:
         print(f"\n🚗 Training Monthly Model for: {cat}")
         cat_df = df_features[df_features['Vehicle_Category'] == cat].copy()
-        
+
         model, scaler, feature_names = train_monthly_model(cat_df, cat)
         
         if model:
@@ -261,7 +261,7 @@ def main_train():
                 'daily_patterns': daily_patterns[cat],
                 'states': cat_df['State'].unique().tolist() # Save states seen during training
             }
-            
+
     # 5. Save Everything
     with open(MODELS_DIR / "advanced_model_monthly_hybrid.pkl", 'wb') as f:
         pickle.dump(trained_models, f)
@@ -297,10 +297,10 @@ def predict_daily_2026():
         feature_names = model_data['features']
         patterns = model_data['daily_patterns']
         states = model_data['states']
-        
+
         # Get last known data for this category
         cat_history = df_features[df_features['Vehicle_Category'] == cat].copy()
-        
+
         for state in states:
             state_history = cat_history[cat_history['State'] == state].sort_values('Date')
             if state_history.empty: continue
@@ -387,6 +387,81 @@ def predict_daily_2026():
     output_path.parent.mkdir(exist_ok=True)
     pred_df.to_csv(output_path, index=False)
     print(f"✅ Generated {len(pred_df)} daily predictions for 2026.")
+    print(f"📁 Saved to: {output_path}")
+    return output_path
+
+def generate_model_performance_report():
+    """
+    Evaluates the saved Monthly Hybrid model and generates a performance report.
+    """
+    print("\n📊 Generating Model Performance Report...")
+
+    model_path = MODELS_DIR / "advanced_model_monthly_hybrid.pkl"
+    if not model_path.exists():
+        print("❌ Model not found. Run training first.")
+        return None
+
+    with open(model_path, 'rb') as f:
+        models_data = pickle.load(f)
+
+    # Load data for evaluation
+    df = load_and_clean_data()
+    df_monthly = aggregate_to_monthly(df)
+    df_features = create_monthly_features(df_monthly)
+
+    report_data = []
+
+    for cat, model_data in models_data.items():
+        print(f"  -> Evaluating {cat}...")
+        model = model_data['model']
+        scaler = model_data['scaler']
+        feature_names = model_data['features']
+
+        # Get data for this category
+        cat_df = df_features[df_features['Vehicle_Category'] == cat].copy()
+
+        if cat_df.empty: continue
+
+        # Prepare X and y
+        # Re-encode State
+        cat_df['State'] = cat_df['State'].astype('category')
+        # We need to ensure state codes match training. Ideally we use the same encoder.
+        # But here we just use the code. If states match those in training, codes will match
+        # if we sort or use the saved state list.
+        # Let's map states using the saved state list to be safe.
+        train_states = model_data['states']
+        cat_df = cat_df[cat_df['State'].isin(train_states)] # Filter for known states
+        cat_df['State_Code'] = pd.Categorical(cat_df['State'], categories=train_states).codes
+
+        X = cat_df[feature_names]
+        y = cat_df['EV_Sales_Quantity']
+
+        # Transform
+        X_scaled = scaler.transform(X)
+
+        # Predict
+        y_pred = model.predict(X_scaled)
+        y_pred = np.maximum(0, y_pred)
+
+        # Metrics
+        r2 = r2_score(y, y_pred)
+        mae = mean_absolute_error(y, y_pred)
+        rmse = np.sqrt(np.mean((y - y_pred)**2))
+
+        report_data.append({
+            'Vehicle_Category': cat,
+            'R2_Score': round(r2, 4),
+            'MAE': round(mae, 2),
+            'RMSE': round(rmse, 2)
+        })
+
+    report_df = pd.DataFrame(report_data)
+    output_path = ROOT_DIR / "output" / "model_performance_report.csv"
+    output_path.parent.mkdir(exist_ok=True)
+    report_df.to_csv(output_path, index=False)
+
+    print(f"✅ Performance report generated.")
+    print(report_df.to_string(index=False))
     print(f"📁 Saved to: {output_path}")
     return output_path
 

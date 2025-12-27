@@ -111,6 +111,35 @@ class InsightsDashboard:
              fig_legacy = px.line(classical_agg, x='Date', y='Predicted_Sales', title="2025 Forecast")
              st.plotly_chart(fig_legacy, use_container_width=True)
 
+def render_accuracy_section():
+    st.markdown("<h2 class='section-header'>Model Performance (Training Data)</h2>", unsafe_allow_html=True)
+
+    report_path = ROOT_DIR / "output" / "model_performance_report.csv"
+    if report_path.exists():
+        df_perf = pd.read_csv(report_path)
+
+        # Display as a styled dataframe
+        st.markdown("### 📊 Accuracy Metrics by Category")
+        st.markdown("Metrics evaluated on the Monthly Aggregated Dataset (2021-2024). High R2 indicates strong fit to historical trends.")
+
+        st.dataframe(
+            df_perf.style.format({
+                "R2_Score": "{:.4f}",
+                "MAE": "{:.2f}",
+                "RMSE": "{:.2f}"
+            }).background_gradient(cmap="Greens", subset=["R2_Score"]),
+            use_container_width=True
+        )
+
+        # Simple bar chart for R2
+        fig = px.bar(df_perf, x='Vehicle_Category', y='R2_Score', title="Model Fit (R2 Score) by Category",
+                     color='R2_Score', color_continuous_scale='Viridis')
+        fig.update_layout(yaxis_range=[0.8, 1.0]) # Zoom in since scores are high
+        st.plotly_chart(fig, use_container_width=True)
+
+    else:
+        st.info("Performance report not found. Please run the model training to generate it.")
+
 class LiveDashboard:
     def __init__(self):
         # MUST use st.connection to read from Cloud DB
@@ -246,6 +275,7 @@ def main():
     # Render Sections
     render_live_section(live_dashboard)
     render_insights_section(insights_dashboard)
+    render_accuracy_section() # Added Accuracy Section
     render_ondemand_section()
 
     if auto_refresh:

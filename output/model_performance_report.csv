@@ -1,0 +1,6 @@
+Vehicle_Category,R2_Score,MAE,RMSE
+2-Wheelers,1.0,5.15,8.42
+4-Wheelers,0.9953,16.09,34.68
+Bus,0.9999,0.05,0.24
+Others,0.9969,1.31,3.34
+3-Wheelers,0.9986,10.52,26.5
