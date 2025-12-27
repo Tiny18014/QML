@@ -1,0 +1,279 @@
+\section{Sales Forecasting}\label{sec:demand_forecasting}
+
+\subsection{Overview}
+
+Sales forecasting is a direct and defensible proxy for understanding electric vehicle (EV) demand because sales represent revealed consumer preference, not inferred intent. Unlike search trends or sentiment indicators, sales data captures the final market-clearing outcome where affordability, infrastructure readiness, policy incentives, and consumer confidence converge into an irreversible economic decision. Consequently, forecasting sales equates to forecasting realized demand, making it the most grounded metric for assessing EV adoption dynamics.
+
+Sales forecasting is done in two stages - the QML approach assesses the applicability of quantum models for predicting long term sales, compared to the classical approach for predicting next day sales. We demarcate this further to check the robustness of both models while applying a state based filter or a vehicle based filter to assess a granular prediction of sales.
+
+The sales forecasting module converts enriched multi-source data into short- and medium-term EV sales forecasts. Using hybrid quantum-classical models, it produces 30-day trend forecasts for strategic decision-making (Fig.~\ref{fig:demand_flow}).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\linewidth]{demand_floww.png}
+    \caption{Sales forecasting Dataflow}
+    \label{fig:demand_flow}
+\end{figure}
+
+\subsection{System Architecture and Modeling Strategy}
+
+The pipeline comprises:
+\begin{enumerate}
+    \item \textbf{Ingestion Layer:} Collects state-wise sales and metadata at daily frequency.
+    \item \textbf{Preprocessing \& Feature Store:} Handles alignment, encoding, scaling, and feature versioning.
+    \item \textbf{Modeling Layer:} Uses classical (XGBoost, LSTM) and quantum-classical hybrids. Per-category modeling captures unique sales dynamics for each vehicle type.
+\end{enumerate}
+
+\subsection{Datasets and Key Features}
+
+The VAHAN portal is an ideal data source for EV sales forecasting because it is the Government of India’s official vehicle registration system, ensuring legal authenticity, nationwide coverage, and methodological consistency. Data recorded in VAHAN reflects mandatory, transaction-level vehicle registrations rather than voluntary reporting or survey-based estimates, eliminating selection bias and inflation artifacts. This institutional credibility, coupled with standardized classification across vehicle categories and states, makes VAHAN uniquely suited for high-stakes, policy-relevant EV demand forecasting.
+
+For classical models, this scale supports robust generalization and variance reduction, while for quantum models, it provides sufficient sample diversity to justify expressive feature maps and quantum-enhanced embeddings without degenerating into noise-dominated learning.
+
+The chosen dataset comprising 96,500 sales records spanning 2014–2024 across all Indian states constitutes a structurally rich and statistically credible training base for both classical and quantum learning paradigms. Temporally, it spans multiple policy regimes, subsidy cycles (e.g., FAME phases), and technology inflection points, enabling models to learn long-term trends, seasonal effects, and regime shifts.
+
+\paragraph{Key Features}
+\begin{itemize}
+    \item \textbf{State:} Enables regional-level analysis.
+    \item \textbf{Vehicle Type:} Distinguishes two-, three-, and four-wheelers.
+    \item \textbf{Vehicle Category:} Differentiates commercial and passenger segments.
+    \item \textbf{Electric\_Vehicle\_Sales\_Quantity:} Target variable representing sales.
+\end{itemize}
+
+\subsection{Data Preprocessing}
+
+Preprocessing involves:
+\begin{enumerate}
+    \item Daily timestamp alignment and metadata propagation.
+    \item Linear/median gap imputation.
+    \item Lag and rolling feature creation (~30 engineered features including temporal, cyclical, lag, and rolling statistics).
+    \item Encoding and normalization using training statistics.
+\end{enumerate}
+
+Algorithm~2 details the preprocessing workflow for both quantum and classical approaches. The quantum embeddings are then generated from this preprocessed data through Pennylane.
+
+Quantum-enhanced preprocessing uses Pennylane's angle embedding to map classical data $x_i$ into quantum states:
+\begin{equation}
+\label{eq:state_prep}
+\lvert \psi_i(x_i) \rangle
+= R_Y(\pi x_i), R_X(x_i), \lvert 0 \rangle
+\tag{4.1}
+\end{equation}
+
+\begin{equation}
+\label{eq:rx}
+R_X(x_i)
+= \exp!\left(- i, \frac{x_i}{2}, \sigma_x \right),
+\qquad
+R_Y(\pi x_i)
+= \exp!\left(- i, \frac{\pi x_i}{2}, \sigma_y \right)
+\tag{4.2}
+\end{equation}
+
+Expanding yields:
+\begin{equation}
+| \psi_i(x_i) \rangle
+= \cos\!\left(\tfrac{x_i}{2}\right)\cos\!\left(\tfrac{\pi x_i}{2}\right) |0\rangle
++ \left[ -i \sin\!\left(\tfrac{x_i}{2}\right)\cos\!\left(\tfrac{\pi x_i}{2}\right) 
+- \sin\!\left(\tfrac{\pi x_i}{2}\right)\cos\!\left(\tfrac{x_i}{2}\right) \right] |1\rangle .
+\end{equation}
+
+where,
+\begin{itemize}
+    \item $\lvert \psi_i(x_i) \rangle$ : The resulting single-qubit quantum state after encoding the classical feature $x_i$, representing the quantum embedding of the input on the Bloch sphere.
+
+    \item $\lvert 0 \rangle$ : The computational basis ground state of the qubit, used as the initial state prior to feature encoding.
+
+    \item $x_i \in \mathbb{R}$ : A real-valued classical input feature (e.g., a normalized signal or sentiment score) that parametrizes the quantum rotations.
+
+    \item $R_X(x_i)$ : A unitary rotation operator about the $x$-axis of the Bloch sphere by an angle $x_i$, responsible for introducing phase and amplitude mixing.
+
+    \item $R_Y(\pi x_i)$ : A unitary rotation operator about the $y$-axis by an angle $\pi x_i$, scaling the input to enhance the expressivity of the feature map.
+
+    \item $\sigma_x, \sigma_y$ : The Pauli matrices,
+    \[
+    \sigma_x =
+    \begin{pmatrix}
+        0 & 1 \\
+        1 & 0
+    \end{pmatrix},
+    \quad
+    \sigma_y =
+    \begin{pmatrix}
+        0 & -i \\
+        i & 0
+    \end{pmatrix},
+    \]
+    which generate rotations around the corresponding Bloch sphere axes.
+
+    \item $\exp(\cdot)$ : The matrix exponential defining unitary operators, ensuring norm preservation and physical validity of the quantum evolution.
+
+    \item $R_Y(\pi x_i)\, R_X(x_i)$ : The sequential application of rotation operators, producing a nonlinear quantum feature map from classical input data.
+\end{itemize}
+
+While Qiskit was also tested and implemented on data chunks, PennyLane had multiple advantages with respect to both training and integration into the model.
+PennyLane is structurally superior to Qiskit for embedding generation because it is designed compute-first, not hardware-first. Its architecture treats quantum embeddings as differentiable mathematical objects rather than low-level circuit artifacts, which fundamentally changes how efficiently features are constructed, optimized, and scaled.
+
+From a compute perspective, PennyLane natively supports automatic differentiation across quantum circuits, enabling gradient evaluation of embedding parameters without manual circuit rewriting or costly finite-difference schemes. This allows embedding layers to be trained end-to-end with classical models using standard optimizers, minimizing redundant circuit executions and reducing overall compute overhead.
+
+\begin{algorithm}[H]
+\caption{Preprocessing Pipeline for EV Sales Data}
+\KwIn{Raw dataset file $D$ (Excel or CSV format)}
+\KwOut{Processed dataset $D_{final}$ with engineered features}
+
+\textbf{Step 1: Data Loading and Metadata Extraction} \\
+Load dataset $D$ from input path.
+Extract state name and year from header using regex. \\
+Rename initial columns: first $\rightarrow$ ``S\_No'', second $\rightarrow$ ``Vehicle\_Class''. \\
+
+\textbf{Step 2: Reshape Dataset} \\
+Melt dataset from wide to long format with columns: \{S\_No, Vehicle\_Class, Month\_Name, EV\_Sales\_Quantity\}. 
+Convert EV sales quantities from string with commas $\rightarrow$ integer values. \\
+
+\textbf{Step 3: Add Context Columns} \\
+Insert extracted \textit{Year} and \textit{State} fields. \\
+Reorder columns as \{Month\_Name, Year, State, EV\_Sales\_Quantity, Vehicle\_Class\}. \\
+Derive \textit{Vehicle\_Category} from Vehicle\_Class using mapping function. \\
+
+\textbf{Step 4: Temporal Encoding} \\
+Map month names (Jan–Dec) to numeric values 1–12. \\
+Generate cyclical encodings:
+\[
+month\_sin = \sin\left(\frac{2\pi \times Month}{12}\right), \quad
+month\_cos = \cos\left(\frac{2\pi \times Month}{12}\right).
+\]
+Construct \textit{Date} column from (Year, Month). \\
+
+\textbf{Step 5: Categorical Encoding} \\
+Apply label encoding to \{Vehicle\_Class, Vehicle\_Category\}.
+Group states using \textit{group\_state} function, then label encode \textit{State\_EV\_Group}. \\
+
+\textbf{Step 6: Feature Scaling and Transformations} \\
+Normalize selected features (\{Vehicle\_Class, State\_EV\_Group, Year, Vehicle\_Category, month\_sin, month\_cos\}) with MinMax scaling ($[-1,1]$).
+Compute log-transformed sales: \\
+$Log\_EV\_Sales\_Quantity = \log(1+EV\_Sales\_Quantity)$. \\
+Derive time index: $Days\_Since\_Start = Date - 01\text{-}01\text{-}2014$. \\
+Standardize \{Year, Month, month\_sin, month\_cos, Days\_Since\_Start\} using z-score scaling. \\
+
+\textbf{Step 7: Final Assembly and Storage} \\
+Assemble processed dataset with columns: \{Vehicle\_Class, Vehicle\_Category, Month, month\_sin, month\_cos, State\_EV\_Group, Days\_Since\_Start, Log\_EV\_Sales\_Quantity\}. \\
+Append to existing master dataset and save as \texttt{ready.csv}. \\
+
+\Return{$D_{final}$}
+\end{algorithm}
+
+\subsection{Model Development}
+
+\paragraph{Classical Models}
+\begin{itemize}
+    \item \textbf{XGBoost:}  
+    A strong baseline for tabular forecasting due to its gradient-boosted tree architecture, which effectively models nonlinear relationships and complex feature interactions common in EV sales data. Training separate models per vehicle category allows category-specific demand drivers to be learned without cross-contamination, while storing scalers and feature lists ensures strict reproducibility and stable inference across time.
+
+    \item \textbf{LightGBM / CatBoost:}  
+    Computationally efficient gradient-boosting alternatives optimized for large-scale and heterogeneous data. LightGBM’s leaf-wise tree growth accelerates learning on high-dimensional features, whereas CatBoost natively handles categorical variables and mitigates target leakage, making both well suited for state-wise and policy-driven sales forecasting.
+
+    \item \textbf{LSTM:}  
+    Designed to capture long-range temporal dependencies and nonlinear dynamics in sequential data, enabling the model to learn lag effects, adoption inertia, and delayed responses to policy interventions or price changes. This makes LSTMs particularly effective for multi-step EV sales forecasting where historical context strongly influences future demand.
+
+    \item \textbf{ARIMA / Prophet:}  
+    Classical time-series models used as transparent seasonal baselines. ARIMA provides statistically grounded modeling of autocorrelation and stationarity, while Prophet excels at decomposing trend, seasonality, and holiday effects, offering interpretable benchmarks against which more complex machine learning models can be rigorously evaluated.
+\end{itemize}
+
+\paragraph{Quantum--Classical Hybrids}
+\begin{itemize}
+    \item \textbf{Quantum Embeddings + XGBoost:} Combines quantum embeddings $\Phi_\theta$ with classical features. 
+    Hybrid setup leverages expressive embeddings with GPU-accelerated XGBoost, delivering superior accuracy with minimal additional compute overhead.
+
+    \item \textbf{Variational Quantum Regressor:} Parameterized circuit for direct scalar output. 
+    Computationally intensive, slow to train, lacks GPU support, and scales poorly with feature dimensionality.
+
+    \item \textbf{Quantum SVM:} Quantum kernel evaluated with classical solvers. A Quantum Support Vector Machine (QSVM) was trained on a small feature set due to current hardware limitations. This model is suitable for high-level trend analysis over extended periods (e.g., 30-day rolling curves). 
+    Kernel computation dominates runtime, no GPU acceleration, making it unsuitable for large-scale or fine-grained forecasting.
+\end{itemize}
+
+The hybrid quantum embeddings + XGBoost option was finally chosen for implementation and integration due to it's low compute time, memory analysis and model testing, resulting in quicker analysis and hyperparameter tuning.
+
+In this implementation, quantum embeddings are generated using PennyLane’s highly optimized lightning.qubit simulator, which executes shallow, feature-aligned rotation circuits with low depth and minimal gate overhead. By encoding each feature directly onto a single qubit and extracting expectation values as compact representations, the pipeline reduces feature dimensionality and variance before training. This allows XGBoost to converge faster with fewer effective splits, keeping each training round within a ~20-minute compute window. Crucially, the hybrid design shifts complexity into a lightweight, deterministic embedding stage, enabling the GPU-accelerated XGBoost regressor to operate efficiently without the exponential cost growth typical of deeper quantum or fully classical nonlinear models.
+
+\subsection{Training, Validation and Rolling Evaluation}
+
+Rolling evaluation uses:
+\begin{itemize}
+    \item \textbf{Train:} 180 days
+    \item \textbf{Validation:} 30 days
+    \item \textbf{Test:} 30 days
+\end{itemize}
+
+This rolling evaluation framework is well aligned with the temporal structure of EV sales data, ensuring that model performance is assessed under realistic, forward-looking conditions rather than static train–test splits. A 180-day training window provides sufficient historical depth to capture medium-term adoption trends, policy effects, and seasonal demand patterns, while remaining responsive to structural shifts in the market. The 30-day validation window supports timely hyperparameter calibration without overfitting to transient noise, and the 30-day test horizon reflects practical forecasting needs for short-term planning and inventory decisions. Evaluating MAE, RMSE, and MAPE quantifies both absolute and relative forecast errors, R\textsuperscript{2} measures explanatory power, and interval coverage assesses uncertainty calibration—collectively delivering a rigorous, decision-relevant assessment of predictive reliability against real sales trajectories.
+
+With these metrics for evaluation, it was decided to continue with the hybrid quantum-classical framework for quarterly predictions and the classical model for predictions with a custom timeframe. 
+
+Quantum setups are particularly well suited for quarterly EV demand predictions because their feature embeddings capture high-order, nonlinear interactions in a compressed representation, which stabilizes forecasts over longer horizons. By projecting sales drivers into a richer Hilbert space, quantum models reduce error accumulation that typically degrades classical models when extrapolating beyond short windows. This makes quarterly trends—where smooth structural signals matter more than daily noise—more coherent and robust.
+
+Classical models excel at highly customized, short-term predictions where hand-engineered features dominate, but they often rely on increasingly complex architectures to approximate nonlinearities, inflating compute and overfitting risk. Quantum–classical hybrids achieve comparable or superior expressivity with fewer parameters, yielding cleaner generalization at the quarterly scale.
+
+\subsection{Tech-to-Business Agent Development}
+
+Developed in Agno, this agent identifies model predictions and converts them into actionable business insights, focusing on core sales direction and marketing tone, strongest and weakest performing regions, volatility or uncertanity implications and provides a high level business takeaway for both classical and quantum models. It specifies exact insights based on the forecasting period - either quarterly forecast, or the custom forecast. Point predictions and rolling forecasts are aggregated into growth trajectories, inflection points, and demand acceleration metrics that reflect real-world adoption dynamics. By comparing hybrid quantum–classical outputs against classical baselines under identical feature pipelines, the agent isolates where quantum representations add value, enabling stakeholders to translate model improvements into concrete decisions on production planning, regional deployment, and policy impact assessment in the EV ecosystem.
+
+\subsection{Iterative On-Demand Forecasting}
+
+The workflow follows: data → preprocessing → feature generation → model training → evaluation → deployment. To predict future horizons $H$, the system iteratively forecasts each day, appends the predicted value, recalculates lag and rolling features, and repeats until $H$ is covered, ensuring feature continuity. A classical machine learning regression model has been finalized for short-term, fine-grained predictions (e.g., next-day sales forecasts). This model is intended for use in the final dashboard and includes daily input updates.
+
+To support real-time, granular forecasting, we implemented a high-performance PostgreSQL database hosted on Neon. This architecture allows for the storage and retrieval of high-frequency prediction data, enabling the dashboard to serve 'on-demand' forecasts with minimal latency. By decoupling the inference engine from the visualization layer via this persistent store, the system can handle concurrent write operations from the simulation pipeline while simultaneously serving read requests for the interactive dashboard.
+
+This database integration is particularly effective for granular forecasting as it maintains a structured history of both actual and predicted values, allowing for immediate error calculation and model recalibration. The use of PostgreSQL ensures data integrity and supports complex queries for regional or category-specific aggregations, which are essential for the 'On-Demand' view. This ensures that the granular, daily predictions generated by the recursive forecasting loop are immediately available for analysis, providing stakeholders with a dynamic view of evolving demand patterns without the latency of re-running the full inference pipeline.
+
+\subsection{CI/CD Pipelines for Future Batch Training}
+
+While the VAHAN portal provides verified data, it is Javascript heavy, and is thus difficult to scrape and preprocess for live streamed data. Keeping this in mind, the following pipeline is designed for non periodic updates - it runs whenever a new dataset is uploaded to the repository in the backend. As the VAHAN portal updates monthly, the new dataset can either be added monthly or yearly for each state, thus updating the models and the predictive domain for forecasting. 
+
+Making use of GitHub actions, the CI/CD pipeline operationalizes continuous EV demand learning by automatically retraining quantum–classical models whenever state-level sales data changes. It detects newly added or modified CSV datasets, preprocesses them through the quantum feature pipeline, and retrains the model in a controlled Python environment. This is developed for both the classial and the quantum model, and tracks for changes made to the reporsitory within a particular directory.
+
+\section{Results and Discussion}
+
+\subsection{Comparative Analysis of Models}
+
+The performance of the proposed Hybrid Quantum-Classical model was evaluated against the baseline Classical models (ARIMA, LSTM, XGBoost) using standard error metrics: Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), Mean Absolute Percentage Error (MAPE), and the Coefficient of Determination ($R^2$).
+
+Table~\ref{tab:model_comparison} highlights the aggregate performance across all states. The Hybrid Quantum-XGBoost model demonstrates superior generalization on quarterly trends, achieving a lower MAPE compared to the classical LSTM, validating the hypothesis that quantum embeddings effectively capture nonlinear adoption dynamics.
+
+\begin{table}[h!]
+    \centering
+    \caption{Performance Comparison of Classical vs. Hybrid Quantum Models}
+    \label{tab:model_comparison}
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Model Architecture} & \textbf{MAE} & \textbf{RMSE} & \textbf{MAPE (\%)} & \textbf{$R^2$} \\
+        \midrule
+        Classical ARIMA (Baseline) & 1540.34 & 1709.63 & 8.64 & 0.72 \\
+        Classical LSTM & 2253.89 & 2704.24 & 14.29 & 0.13 \\
+        Classical LightGBM & 1299.61 & 1494.14 & 21.09 & -1.23 \\
+        \textbf{Hybrid Quantum-XGBoost} & \textbf{1097.57} & \textbf{1462.87} & \textbf{7.30} & \textbf{0.74} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Table~\ref{tab:category_comparison} further demarcates the robustness of the models when a vehicle-based filter is applied. The hybrid model maintains stability across both high-volume passenger segments and volatile commercial segments.
+
+\begin{table}[h!]
+    \centering
+    \caption{Segment-wise Forecasting Accuracy (MAPE \%)}
+    \label{tab:category_comparison}
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Vehicle Category} & \textbf{Classical LightGBM} & \textbf{Hybrid Quantum} \\
+        \midrule
+        2-Wheelers (Personal) & 24.64\% & 6.20\% \\
+        3-Wheelers (Commercial) & 38.29\% & 5.97\% \\
+        4-Wheelers (Passenger) & 30.73\% & 6.51\% \\
+        \textbf{Average} & \textbf{31.22\%} & \textbf{6.23\%} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Conclusion and 2026 Outlook}
+
+The integration of quantum-enhanced feature maps with robust classical regressors has established a scalable framework for EV demand forecasting. By leveraging the strengths of both paradigms—granular responsiveness from classical models and structural stability from quantum hybrids—the system provides a comprehensive view of the market.
+
+Looking ahead to 2026, the model projects a sustained acceleration in EV adoption, particularly in the 2-Wheeler and 3-Wheeler segments, driven by the compounding effects of FAME subsidies and infrastructure expansion. The forecast indicates a structural shift where electric mobility transitions from early adoption to mass market penetration, with projected sales volumes in 2026 expected to exceed 2025 levels by approximately 25-30\%, contingent on policy stability. This trajectory underscores the critical need for continued supply chain scaling and grid modernization to support the anticipated surge in demand.
