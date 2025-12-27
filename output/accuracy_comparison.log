@@ -231,3 +231,35 @@
 🎉 Accuracy comparison completed!
 [2025-11-10 23:33:27] 📁 Check the log file: C:\Users\shubh\OneDrive\Desktop\QML\output\accuracy_comparison.log
 [2025-11-10 23:33:27] 📊 Check the results: C:\Users\shubh\OneDrive\Desktop\QML\output\accuracy_comparison_results.csv
+[2025-12-27 17:18:02] 🎯 Starting EV Demand Forecasting Accuracy Comparison
+[2025-12-27 17:18:02] ============================================================
+[2025-12-27 17:18:02] 📊 Measuring accuracy with EV_Dataset.csv...
+[2025-12-27 17:18:02] Loaded EV_Dataset.csv with 278650 records
+[2025-12-27 17:18:02] ✅ Mapped Vehicle_Category to Vehicle_Class for EV_Dataset.csv
+[2025-12-27 17:18:03] ❌ Failed to load model: invalid load key, 'v'.
+[2025-12-27 17:18:03] 📊 Measuring accuracy with Data Push Pipeline (Excel files)...
+[2025-12-27 17:18:04] Loaded preprocessed data with 227515 records
+[2025-12-27 17:18:04] ✅ Mapped Vehicle_Category to Vehicle_Class for EV_Dataset.csv
+[2025-12-27 17:18:04] ❌ Failed to load model: invalid load key, 'v'.
+[2025-12-27 17:18:04] 🔍 Comparing accuracy between both approaches...
+[2025-12-27 17:18:04] ❌ Cannot compare: One or both measurements failed
+[2025-12-27 17:18:04]
+🎉 Accuracy comparison completed!
+[2025-12-27 17:18:04] 📁 Check the log file: /app/output/accuracy_comparison.log
+[2025-12-27 17:18:04] 📊 Check the results: /app/output/accuracy_comparison_results.csv
+[2025-12-27 17:30:07] 🎯 Starting EV Demand Forecasting Accuracy Comparison
+[2025-12-27 17:30:07] ============================================================
+[2025-12-27 17:30:07] 📊 Measuring accuracy with EV_Dataset.csv...
+[2025-12-27 17:30:07] Loaded EV_Dataset.csv with 278650 records
+[2025-12-27 17:30:07] ✅ Mapped Vehicle_Category to Vehicle_Class for EV_Dataset.csv
+[2025-12-27 17:30:08] ❌ Failed to load model: invalid load key, 'v'.
+[2025-12-27 17:30:08] 📊 Measuring accuracy with Data Push Pipeline (Excel files)...
+[2025-12-27 17:30:08] Loaded preprocessed data with 227515 records
+[2025-12-27 17:30:08] ✅ Mapped Vehicle_Category to Vehicle_Class for EV_Dataset.csv
+[2025-12-27 17:30:08] ❌ Failed to load model: invalid load key, 'v'.
+[2025-12-27 17:30:08] 🔍 Comparing accuracy between both approaches...
+[2025-12-27 17:30:08] ❌ Cannot compare: One or both measurements failed
+[2025-12-27 17:30:08]
+🎉 Accuracy comparison completed!
+[2025-12-27 17:30:08] 📁 Check the log file: /app/output/accuracy_comparison.log
+[2025-12-27 17:30:08] 📊 Check the results: /app/output/accuracy_comparison_results.csv

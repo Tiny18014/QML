@@ -304,11 +304,11 @@ def predict_daily_2026():
         for state in states:
             state_history = cat_history[cat_history['State'] == state].sort_values('Date')
             if state_history.empty: continue
-            
+
             # Recursive Forecasting for 12 months
             # We append predictions to history to generate next month's lags
             current_history = state_history.copy()
-            
+
             for date in future_dates:
                 # 1. Create a row for this future date
                 new_row = pd.DataFrame([{
@@ -389,6 +389,80 @@ def predict_daily_2026():
     print(f"✅ Generated {len(pred_df)} daily predictions for 2026.")
     print(f"📁 Saved to: {output_path}")
     return output_path
+
+# =================================================================================================
+# LEGACY COMPATIBILITY FUNCTIONS
+# Restored to support live_simulation.py which depends on them.
+# =================================================================================================
+
+def create_advanced_features(df):
+    """
+    Create feature set for DAILY predictions (Legacy/Simulation compatibility).
+    """
+    df = df.copy()
+    if 'Vehicle_Category' in df.columns:
+        df['Vehicle_Category'] = df['Vehicle_Category'].fillna('Unknown')
+
+    df['Date'] = pd.to_datetime(df['Date'])
+    df = df.sort_values(['State', 'Vehicle_Category', 'Date'])
+
+    # Basic temporal features
+    df['year'] = df['Date'].dt.year
+    df['month'] = df['Date'].dt.month
+    df['day'] = df['Date'].dt.day
+    df['quarter'] = df['Date'].dt.quarter
+    df['day_of_week'] = df['Date'].dt.dayofweek
+    df['week_of_year'] = df['Date'].dt.isocalendar().week.astype(int)
+    df['is_weekend'] = df['day_of_week'].isin([5, 6]).astype(int)
+
+    # Cyclical features
+    df['month_sin'] = np.sin(2 * np.pi * df['month']/12)
+    df['month_cos'] = np.cos(2 * np.pi * df['month']/12)
+    df['day_of_week_sin'] = np.sin(2 * np.pi * df['day_of_week']/7)
+    df['day_of_week_cos'] = np.cos(2 * np.pi * df['day_of_week']/7)
+
+    # Lag features
+    for lag in [1, 7, 30]:
+        df[f'lag_{lag}'] = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].shift(lag)
+
+    # Rolling statistics
+    for window in [7, 30]:
+        grouped_rolling = df.groupby(['State', 'Vehicle_Category'])['EV_Sales_Quantity'].rolling(window=window, min_periods=1)
+        df[f'rolling_mean_{window}'] = grouped_rolling.mean().reset_index(level=[0, 1], drop=True)
+        df[f'rolling_std_{window}'] = grouped_rolling.std().reset_index(level=[0, 1], drop=True)
+
+    df = df.fillna(0)
+    return df
+
+def prepare_features_for_prediction(df, feature_names, scaler):
+    """
+    Prepares a dataframe for prediction using a pre-fitted scaler.
+    """
+    if 'Month_Name' in df.columns:
+        df = df.drop(columns=['Month_Name'])
+
+    feature_columns = [f for f in feature_names if f in df.columns]
+
+    # Ensure categorical columns are present and set the type
+    if 'State' in df.columns:
+        df['State'] = df['State'].astype('category')
+    if 'Vehicle_Category' in df.columns:
+        df['Vehicle_Category'] = df['Vehicle_Category'].astype('category')
+
+    # Encode categorical variables
+    df_encoded = df.copy()
+    if 'State' in df_encoded.columns:
+        df_encoded['State'] = df_encoded['State'].cat.codes
+    if 'Vehicle_Category' in df_encoded.columns:
+        df_encoded['Vehicle_Category'] = df_encoded['Vehicle_Category'].cat.codes
+
+    # Select the final feature set
+    X = df_encoded[feature_columns]
+
+    # Use the pre-fitted scaler to transform the data
+    X_scaled = scaler.transform(X)
+
+    return X_scaled
 
 if __name__ == "__main__":
     import sys
