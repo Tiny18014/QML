@@ -29,18 +29,12 @@ CLASSICAL_MODEL_PREFIX = "advanced_model_"
 
 MODEL_3W_PATH = MODELS_DIR / "specialized_3w_monthly_model.pkl"
 MODEL_BUS_PATH = MODELS_DIR / "specialized_bus_monthly_model.pkl"
-QML_MODEL_PATH = MODELS_DIR / "ev_sales_hybrid_model_simple.pth"
-QML_PARAMS_PATH = MODELS_DIR / "normalization_params.pkl"
 
 sys.path.append(str(ROOT_DIR / "scripts"))
 
 # CRITICAL IMPORTS
 try:
     from advanced_model_trainer import create_advanced_features, prepare_data_for_training
-    from qml_model_trainer import (
-        HybridModel, load_model as load_qml_model, load_norm_params as load_qml_params,
-        prepare_data_for_inference, torch_dtype, device
-    )
 except ImportError as e:
     print(f"Warning: Import failed {e}")
     
@@ -249,26 +243,8 @@ def run_classical_predictions(df_target: pd.DataFrame) -> pd.DataFrame:
 
 @st.cache_data
 def run_qml_predictions(df: pd.DataFrame) -> pd.DataFrame:
-    print("\nRunning predictions with QML model...")
-    if not QML_MODEL_PATH.exists() or not QML_PARAMS_PATH.exists():
-        return pd.DataFrame()
-    
-    df_qml = df.copy()
-    norm_params = load_qml_params(QML_PARAMS_PATH)
-    input_dim = norm_params.get('input_dim')
-    
-    # --- ROBUST INFERENCE CALL ---
-    X_tensor = prepare_data_for_inference(df_qml, norm_params)
-    
-    model = load_qml_model(QML_MODEL_PATH, input_dim)
-    with torch.no_grad():
-        predictions_norm = model(X_tensor).cpu().numpy().flatten()
-    
-    y_mean, y_std = norm_params['y_mean'], norm_params['y_std']
-    predictions = (predictions_norm * y_std) + y_mean
-    df_qml['Predicted_Sales'] = np.maximum(0, predictions).astype(int)
-    
-    return df_qml[['Date', 'State', 'Vehicle_Category', 'Predicted_Sales']]
+    # QML Model deprecated in favor of LightGBM Hybrid
+    return pd.DataFrame()
 
 def generate_agent_report(predictions_df, model_type):
     global report_agent
@@ -355,7 +331,7 @@ def distribute_monthly_sales(total_sales, year, month, weights=None):
 def generate_on_demand_forecast(category: str, state: str, days: int):
     """
     Robust On-Demand Forecast Logic.
-    Handles Specialized Models (Bus/3W), General ML Models, and Statistical Fallback.
+    Prioritizes the Advanced Monthly Hybrid Model for all categories.
     """
     dates = pd.date_range(start=pd.Timestamp.now() + pd.Timedelta(days=1), periods=days)
     source = "Unknown"
@@ -382,186 +358,125 @@ def generate_on_demand_forecast(category: str, state: str, days: int):
             if np.isnan(avg_daily_sales) or avg_daily_sales < 1: 
                 avg_daily_sales = 5
 
-    # --- STRATEGY A: SPECIALIZED MONTHLY MODELS (Bus / 3-Wheelers) ---
-    if category in ['3-Wheelers', 'Bus']:
-        model_path = MODEL_3W_PATH if category == '3-Wheelers' else MODEL_BUS_PATH
-        
-        if model_path.exists():
-            try:
-                start_m = dates[0].replace(day=1)
-                end_m = dates[-1].replace(day=1)
-                future_months = pd.date_range(start=start_m, end=end_m, freq='MS')
-                
-                if len(future_months) == 0:
-                    future_months = [start_m]
+    # --- STRATEGY A: MONTHLY HYBRID MODEL (The Hero Model) ---
+    hybrid_model_path = MODELS_DIR / "advanced_model_monthly_hybrid.pkl"
 
-                source = f"Specialized Monthly Model ({category})"
+    if hybrid_model_path.exists():
+        try:
+            with open(hybrid_model_path, 'rb') as f:
+                models_data = pickle.load(f)
+
+            if category in models_data:
+                source = f"Hybrid Monthly Model ({category})"
+                model_data = models_data[category]
+                model = model_data['model']
+                scaler = model_data['scaler']
+                feature_names = model_data['features']
+                patterns = model_data['daily_patterns']
+                
+                # We need to simulate monthly predictions for the span of 'days'
+                # 1. Determine months involved
+                start_date = dates[0]
+                end_date = dates[-1]
+                future_months = pd.date_range(start=start_date.replace(day=1), end=end_date.replace(day=1), freq='MS')
+                if len(future_months) == 0: future_months = [start_date.replace(day=1)]
+                
+                # 2. Prepare History for Lags (Monthly Aggregation)
+                cat_hist = df_hist[df_hist['Vehicle_Category'] == category].copy()
+                cat_hist['Year'] = cat_hist['Date'].dt.year
+                cat_hist['Month'] = cat_hist['Date'].dt.month
+                monthly_hist = cat_hist.groupby(['State', 'Vehicle_Category', 'Year', 'Month'])['EV_Sales_Quantity'].sum().reset_index()
+                monthly_hist['Date'] = pd.to_datetime(monthly_hist[['Year', 'Month']].assign(Day=1))
+                
+                # Filter for this state
+                state_history = monthly_hist[monthly_hist['State'] == state].sort_values('Date')
+                
+                # 3. Recursive Forecasting Loop
+                current_history = state_history.copy()
                 all_daily_preds = []
                 
+                from advanced_model_trainer import create_monthly_features
+                
+                # Ensure we have enough history dummies if empty
+                if current_history.empty:
+                    # Create dummy history based on avg
+                    dummy_dates = pd.date_range(end=start_date, periods=13, freq='MS')
+                    current_history = pd.DataFrame({
+                        'Date': dummy_dates,
+                        'State': state,
+                        'Vehicle_Category': category,
+                        'Year': dummy_dates.year,
+                        'Month': dummy_dates.month,
+                        'EV_Sales_Quantity': avg_daily_sales * 30
+                    })
+
                 for m_date in future_months:
-                    pred_monthly_total = (avg_daily_sales * 30) * 1.05
-                    weights = get_daily_weights(df_hist, state, category, m_date.month)
-                    daily_df = distribute_monthly_sales(pred_monthly_total, m_date.year, m_date.month, weights)
-                    all_daily_preds.append(daily_df)
+                    # Create temp row
+                    new_row = pd.DataFrame([{
+                        'State': state,
+                        'Vehicle_Category': category,
+                        'Date': m_date,
+                        'Year': m_date.year,
+                        'Month': m_date.month,
+                        'EV_Sales_Quantity': 0
+                    }])
+                    
+                    temp_df = pd.concat([current_history, new_row], ignore_index=True)
+                    temp_features = create_monthly_features(temp_df)
+                    row_to_predict = temp_features.iloc[[-1]].copy()
+                    
+                    # Encode State (using saved states list if available, else simple code)
+                    # For on-demand, we rely on the robust scaler handling distribution,
+                    # but state encoding is tricky if state is new.
+                    # We try to map to known states or use 0.
+                    known_states = model_data.get('states', [])
+                    if state in known_states:
+                        row_to_predict['State_Code'] = known_states.index(state)
+                    else:
+                        row_to_predict['State_Code'] = 0 # Default/Unknown
+
+                    # Predict
+                    X_pred = row_to_predict[feature_names]
+                    X_pred_scaled = scaler.transform(X_pred)
+                    pred_total = model.predict(X_pred_scaled)[0]
+                    pred_total = max(0, pred_total)
+                    
+                    # Update History
+                    current_history = pd.concat([
+                        current_history,
+                        pd.DataFrame([{
+                            'State': state, 'Vehicle_Category': category,
+                            'Date': m_date, 'Year': m_date.year, 'Month': m_date.month,
+                            'EV_Sales_Quantity': pred_total
+                        }])
+                    ], ignore_index=True)
+                    
+                    # Distribute to Daily
+                    days_in_month = pd.Period(m_date, freq='M').days_in_month
+                    month_weights = patterns.get(m_date.month, {})
+                    
+                    daily_vals = []
+                    range_start = m_date
+                    for d in range(1, days_in_month + 1):
+                        w = month_weights.get(d, 1.0/days_in_month)
+                        val = int(pred_total * w)
+                        daily_vals.append({
+                            'Date': pd.Timestamp(year=m_date.year, month=m_date.month, day=d),
+                            'Forecasted_Sales': val
+                        })
+                    
+                    all_daily_preds.append(pd.DataFrame(daily_vals))
                 
                 if all_daily_preds:
                     df_final = pd.concat(all_daily_preds)
+                    # Filter for requested date range
                     df_final = df_final[(df_final['Date'] >= dates[0]) & (df_final['Date'] <= dates[-1])]
-                    
-            except Exception as e:
-                print(f"Specialized model failed: {e}")
-                df_final = pd.DataFrame()
 
-    # --- STRATEGY B: GENERAL ML MODEL (2-Wheelers / 4-Wheelers) ---
-    elif category not in ['3-Wheelers', 'Bus']:
-        cat_filename = category.replace(" ", "_").replace("/", "_")
-        model_path = MODELS_DIR / f"advanced_model_{cat_filename}.pkl"
-        
-        if model_path.exists():
-            try:
-                with open(model_path, 'rb') as f: 
-                    model_data = pickle.load(f)
-                model = model_data['primary_model']
-                scaler = model_data.get('scaler')
-                use_log_transform = category in ['Bus', '3-Wheelers']  # Check if model uses log
-                source = "General AI Model"
-                
-                # ✅ CRITICAL: Get proper State/Category encodings from historical data
-                if not df_hist.empty:
-                    all_states = sorted(df_hist['State'].unique())
-                    all_categories = sorted(df_hist['Vehicle_Category'].unique())
-                    
-                    state_to_code = {s: i for i, s in enumerate(all_states)}
-                    category_to_code = {c: i for i, c in enumerate(all_categories)}
-                    
-                    state_code = state_to_code.get(state, 0)
-                    category_code = category_to_code.get(category, 0)
-                    
-                    state_overall_mean = df_hist[df_hist['State'] == state]['EV_Sales_Quantity'].mean()
-                    category_overall_mean = df_hist[df_hist['Vehicle_Category'] == category]['EV_Sales_Quantity'].mean()
-                    state_daily_mean = df_hist[(df_hist['State'] == state) & 
-                                               (df_hist['Vehicle_Category'] == category)]['EV_Sales_Quantity'].mean()
-                else:
-                    state_code, category_code = 0, 0
-                    state_overall_mean, category_overall_mean, state_daily_mean = avg_daily_sales, avg_daily_sales, avg_daily_sales
+        except Exception as e:
+            print(f"Hybrid model forecast failed: {e}")
+            df_final = pd.DataFrame()
 
-                # ✅ Calculate day-of-week patterns
-                dow_patterns = {}
-                if not df_hist.empty:
-                    hist_for_dow = df_hist[
-                        (df_hist['State'] == state) & 
-                        (df_hist['Vehicle_Category'] == category) &
-                        (df_hist['EV_Sales_Quantity'] > 0)
-                    ]
-                    if not hist_for_dow.empty:
-                        dow_patterns = hist_for_dow.groupby(hist_for_dow['Date'].dt.dayofweek)['EV_Sales_Quantity'].mean().to_dict()
-                
-                preds = []
-                
-                # ✅ CRITICAL FIX: Initialize with ACTUAL historical data
-                if not df_hist.empty:
-                    hist_subset = df_hist[
-                        (df_hist['State'] == state) & 
-                        (df_hist['Vehicle_Category'] == category)
-                    ].sort_values('Date')
-                    
-                    non_zero_hist = hist_subset[hist_subset['EV_Sales_Quantity'] > 0]
-                    
-                    if len(non_zero_hist) >= 90:
-                        recent_predictions = non_zero_hist.tail(90)['EV_Sales_Quantity'].tolist()
-                    elif len(hist_subset) >= 90:
-                        recent_predictions = hist_subset.tail(90)['EV_Sales_Quantity'].tolist()
-                    else:
-                        actual_values = hist_subset['EV_Sales_Quantity'].tolist()
-                        pad_value = non_zero_hist['EV_Sales_Quantity'].mean() if not non_zero_hist.empty else avg_daily_sales
-                        padding_needed = 90 - len(actual_values)
-                        recent_predictions = [pad_value] * padding_needed + actual_values
-                else:
-                    recent_predictions = [avg_daily_sales] * 90
-                
-                for i, date in enumerate(dates):
-                    # Rolling features calc
-                    current_lag_1 = recent_predictions[-1]
-                    current_lag_7 = recent_predictions[-7]
-                    current_lag_14 = recent_predictions[-14]
-                    current_lag_30 = recent_predictions[-30]
-                    
-                    rolling_7 = np.mean(recent_predictions[-7:])
-                    rolling_30 = np.mean(recent_predictions[-30:])
-                    rolling_60 = np.mean(recent_predictions[-60:])
-                    rolling_90 = np.mean(recent_predictions[-90:])
-                    
-                    row_feats = pd.DataFrame([{
-                        'year': date.year, 'month': date.month, 'day': date.day,
-                        'day_of_week': date.dayofweek, 'quarter': date.quarter,
-                        'is_weekend': 1 if date.dayofweek >= 5 else 0,
-                        'time_index': i, 'is_holiday': 0,
-                        'day_of_year': date.dayofyear, 'week_of_year': date.isocalendar()[1],
-                        'is_month_start': 1 if date.day == 1 else 0,
-                        'is_month_end': 1 if date.day == date.days_in_month else 0,
-                        'is_quarter_start': 1 if date.month in [1,4,7,10] and date.day == 1 else 0,
-                        'is_quarter_end': 1 if date.month in [3,6,9,12] and date.day == pd.Timestamp(date.year, date.month, 1).days_in_month else 0,
-                        # Lags & Rolling
-                        'lag_1': current_lag_1, 'lag_2': recent_predictions[-2], 'lag_3': recent_predictions[-3],
-                        'lag_7': current_lag_7, 'lag_14': current_lag_14, 'lag_30': current_lag_30,
-                        'lag_60': recent_predictions[-60], 'lag_90': recent_predictions[-90],
-                        'rolling_mean_7': rolling_7, 'rolling_mean_14': np.mean(recent_predictions[-14:]),
-                        'rolling_mean_30': rolling_30, 'rolling_mean_60': rolling_60, 'rolling_mean_90': rolling_90,
-                        'rolling_std_7': np.std(recent_predictions[-7:]), 'rolling_std_30': np.std(recent_predictions[-30:]),
-                        'rolling_min_7': np.min(recent_predictions[-7:]), 'rolling_max_7': np.max(recent_predictions[-7:]),
-                        'rolling_median_7': np.median(recent_predictions[-7:]),
-                        'ema_7': rolling_7, 'ema_30': rolling_30, 'ema_60': rolling_60, 'ema_90': rolling_90,
-                        'seasonal_7': rolling_7, 'seasonal_30': rolling_30, 'seasonal_60': rolling_60,
-                        'trend_7': 0, 'trend_30': 0, 'trend_60': 0,
-                        'volatility_7': np.std(recent_predictions[-7:]), 'volatility_30': np.std(recent_predictions[-30:]),
-                        'month_sin': np.sin(2 * np.pi * date.month / 12), 'month_cos': np.cos(2 * np.pi * date.month / 12),
-                        'day_of_week_sin': np.sin(2 * np.pi * date.dayofweek / 7), 'day_of_week_cos': np.cos(2 * np.pi * date.dayofweek / 7),
-                        'day_of_year_sin': np.sin(2 * np.pi * date.dayofyear / 365), 'day_of_year_cos': np.cos(2 * np.pi * date.dayofyear / 365),
-                        # State/Category Encodings
-                        'State': state_code, 'Vehicle_Category': category_code,
-                        'state_daily_mean': state_daily_mean, 'state_overall_mean': state_overall_mean,
-                        'category_overall_mean': category_overall_mean,
-                        'state_category_interaction': state_overall_mean * category_overall_mean,
-                        'sales_ratio_to_state_mean': current_lag_1 / (state_daily_mean + 1),
-                        'sales_ratio_to_category_mean': current_lag_1 / (category_overall_mean + 1),
-                        'sales_frequency_30d': 30,
-                    }])
-                    
-                    # Feature Prep
-                    for feat in model_data['feature_names']:
-                        if feat not in row_feats.columns: row_feats[feat] = 0
-                    X_input = row_feats[model_data['feature_names']]
-                    
-                    if scaler is not None:
-                        X_input_scaled = scaler.transform(X_input)
-                        p = model.predict(X_input_scaled)[0]
-                    else:
-                        p = model.predict(X_input)[0]
-                    
-                    if use_log_transform: p = np.expm1(p)
-                    
-                    val = max(0, int(p))
-                    
-                    # Dow Pattern Adjustment
-                    if dow_patterns:
-                        dow = date.dayofweek
-                        if dow in dow_patterns:
-                            dow_avg = dow_patterns[dow]
-                            overall_avg = np.mean(list(dow_patterns.values()))
-                            dow_factor = dow_avg / overall_avg if overall_avg > 0 else 1.0
-                            val = int(val * dow_factor)
-                    
-                    preds.append(val)
-                    recent_predictions.append(val)
-                    recent_predictions.pop(0)
-                
-                if np.std(preds) > 0: 
-                    df_final = pd.DataFrame({'Date': dates, 'Forecasted_Sales': preds})
-                    
-            except Exception as e:
-                print(f"General ML failed: {e}")
-
-    # --- STRATEGY C: FALLBACK ---
+    # --- STRATEGY B: FALLBACK ---
     if df_final.empty:
         source = "Statistical Projection (History Based)"
         current_val = avg_daily_sales
