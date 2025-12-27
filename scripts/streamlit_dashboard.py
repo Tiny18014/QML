@@ -76,38 +76,40 @@ class InsightsDashboard:
             st.error(f"Analysis Error: {e}")
 
     def display_forecast_visualizations(self):
-        st.markdown("<h3 class='section-header'>Forecast Visualizations (2025)</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 class='section-header'>Forecast Visualizations (2026 Daily)</h3>", unsafe_allow_html=True)
         
-        if st.session_state.classical_preds.empty and st.session_state.qml_preds.empty:
+        # Load 2026 Predictions if available
+        pred_path = ROOT_DIR / "output" / "daily_predictions_2026.csv"
+        if pred_path.exists():
+            df_2026 = pd.read_csv(pred_path)
+            df_2026['Date'] = pd.to_datetime(df_2026['Date'])
+
+            # Aggregate for faster plotting
+            daily_agg = df_2026.groupby('Date')['Predicted_Sales'].sum().reset_index()
+
+            fig = px.line(daily_agg, x='Date', y='Predicted_Sales', title="Daily Market Forecast (2026)")
+            st.plotly_chart(fig, use_container_width=True)
+
+            col1, col2 = st.columns(2)
+            with col1:
+                state_sales = df_2026.groupby('State')['Predicted_Sales'].sum().sort_values(ascending=False).head(10)
+                fig_state = px.bar(state_sales, x=state_sales.index, y='Predicted_Sales', title="Top 10 States (2026 Total)")
+                st.plotly_chart(fig_state, use_container_width=True)
+            with col2:
+                category_sales = df_2026.groupby('Vehicle_Category')['Predicted_Sales'].sum().sort_values(ascending=False)
+                fig_cat = px.bar(category_sales, x=category_sales.index, y='Predicted_Sales', title="Sales by Category (2026 Total)")
+                st.plotly_chart(fig_cat, use_container_width=True)
+
+        elif st.session_state.classical_preds.empty and st.session_state.qml_preds.empty:
+            st.info("No forecast data available. Please run the Advanced Model pipeline.")
             return
 
-        classical_agg = pd.DataFrame()
-        qml_agg = pd.DataFrame()
-        
+        # Legacy 2025 view (if 2026 not present or just to show comparison)
         if not st.session_state.classical_preds.empty:
-            classical_agg = st.session_state.classical_preds.groupby('Date')['Predicted_Sales'].sum().reset_index()
-        if not st.session_state.qml_preds.empty:
-            qml_agg = st.session_state.qml_preds.groupby('Date')['Predicted_Sales'].sum().reset_index()
-
-        fig = px.line(title="Overall Market Forecast (2025)")
-        if not classical_agg.empty:
-            fig.add_scatter(x=classical_agg['Date'], y=classical_agg['Predicted_Sales'], name="Classical Forecast", mode='lines')
-        if not qml_agg.empty:
-            fig.add_scatter(x=qml_agg['Date'], y=qml_agg['Predicted_Sales'], name="QML Forecast", mode='lines', line=dict(dash='dash'))
-        
-        st.plotly_chart(fig, use_container_width=True) 
-
-        col1, col2 = st.columns(2)
-        with col1:
-            if not st.session_state.classical_preds.empty:
-                state_sales = st.session_state.classical_preds.groupby('State')['Predicted_Sales'].sum().sort_values(ascending=False).head(10)
-                fig_state = px.bar(state_sales, x=state_sales.index, y='Predicted_Sales', title="Top 10 States")
-                st.plotly_chart(fig_state, use_container_width=True)
-        with col2:
-            if not st.session_state.classical_preds.empty:
-                category_sales = st.session_state.classical_preds.groupby('Vehicle_Category')['Predicted_Sales'].sum().sort_values(ascending=False)
-                fig_cat = px.bar(category_sales, x=category_sales.index, y='Predicted_Sales', title="Sales by Category")
-                st.plotly_chart(fig_cat, use_container_width=True)
+             st.markdown("#### 2025 Forecasts (Legacy)")
+             classical_agg = st.session_state.classical_preds.groupby('Date')['Predicted_Sales'].sum().reset_index()
+             fig_legacy = px.line(classical_agg, x='Date', y='Predicted_Sales', title="2025 Forecast")
+             st.plotly_chart(fig_legacy, use_container_width=True)
 
 class LiveDashboard:
     def __init__(self):

@@ -175,70 +175,27 @@ def run_incremental_training():
 
 def run_advanced_model():
     """
-    Loads the correct category-specific model for each row of data and makes predictions.
+    Generates 2026 Daily Forecasts using the Hybrid LightGBM Model.
     """
-    print("🚀 Running Advanced Model (High Performance)...")
+    print("🚀 Running Advanced Model (2026 Daily Forecast)...")
     print("=" * 50)
     try:
-        preprocessed_path = OUTPUT_DIR / "preprocessed_data.csv"
-        if not preprocessed_path.exists():
-            print("📊 No preprocessed data found. Please run the data push pipeline (option 8) first.")
-            return
-
-        print("📊 Using preprocessed data for prediction...")
-        df = pd.read_csv(preprocessed_path)
-        
-        # Ensure Vehicle_Category column exists and is filled
-        df['Vehicle_Category'] = df['Vehicle_Category'].fillna('Unknown')
-        
-        all_predictions = []
-        loaded_models = {} # A cache to avoid loading the same model multiple times
-
-        # Get the same feature engineering logic
         sys.path.insert(0, str(SCRIPTS_DIR))
-        # *** FIX: Import the correct prediction preparation function ***
-        from advanced_model_trainer import create_advanced_features, prepare_features_for_prediction
-        df_features = create_advanced_features(df)
-
-        print("\nPredicting for each category...")
-        for category in df['Vehicle_Category'].unique():
-            print(f"  -> Processing category: {category}")
-            
-            category_filename = category.replace(" ", "_").replace("/", "_")
-            model_path = MODELS_DIR / f"advanced_model_{category_filename}.pkl"
-
-            if not model_path.exists():
-                print(f"    ⚠️ Warning: Model for category '{category}' not found. Skipping.")
-                continue
-
-            if category not in loaded_models:
-                with open(model_path, 'rb') as f:
-                    loaded_models[category] = pickle.load(f)
-
-            model_data = loaded_models[category]
-            model = model_data['primary_model']
-            feature_names = model_data['feature_names']
-            scaler = model_data['scaler']
-
-            category_df_features = df_features[df_features['Vehicle_Category'] == category].copy()
-            if category_df_features.empty:
-                continue
-
-            # *** FIX: Use the correct prediction preparation function ***
-            X_pred_scaled = prepare_features_for_prediction(category_df_features, feature_names, scaler)
-            
-            predictions = pd.Series(model.predict(X_pred_scaled), index=category_df_features.index)
-            all_predictions.append(predictions)
-
-        if not all_predictions:
-            print("❌ No predictions were made. Check if models exist.")
-            return
-
-        df['Advanced_Predictions'] = pd.concat(all_predictions).sort_index()
+        from advanced_model_trainer import predict_daily_2026
         
-        print("\n📊 Sample Predictions:")
-        print(df[['Date', 'State', 'Vehicle_Category', 'EV_Sales_Quantity', 'Advanced_Predictions']].tail(10).to_string(index=False))
-
+        output_path = predict_daily_2026()
+        
+        if output_path and output_path.exists():
+            print(f"\n✅ Forecast generation complete!")
+            print(f"📁 Predictions saved to: {output_path}")
+            
+            # Show a sample
+            df_pred = pd.read_csv(output_path)
+            print("\n📊 Sample 2026 Predictions:")
+            print(df_pred.head(10).to_string(index=False))
+        else:
+            print("\n❌ Forecasting failed.")
+            
     except Exception as e:
         print(f"❌ Advanced model prediction failed: {e}")
     finally:
