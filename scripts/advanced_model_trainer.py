@@ -396,7 +396,7 @@ def predict_daily_2026():
 
                 # 2. Distribute to Daily
                 month_num = date.month
-                # Get number of days in this month
+                    # Get number of days in this month
                 days_in_month = pd.Period(date, freq='M').days_in_month
 
                 month_weights = patterns.get(month_num, {})
