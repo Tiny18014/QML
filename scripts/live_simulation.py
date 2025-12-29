@@ -8,7 +8,6 @@ Live Simulation Runner (Cloud/Postgres Version)
 import time
 import pandas as pd
 import numpy as np
-import joblib
 import pickle
 from datetime import datetime
 from pathlib import Path
@@ -23,39 +22,25 @@ DB_CONNECTION_STRING = "postgresql://neondb_owner:npg_kKiXxzOD5H3t@ep-muddy-snow
 ROOT_DIR = Path(__file__).parent.parent.resolve()
 sys.path.append(str(ROOT_DIR / "scripts"))
 
-DATA_PATH = ROOT_DIR / "data" / "EV_Dataset.csv"
+# Paths
 MODELS_DIR = ROOT_DIR / "models"
-
-MODEL_3W_PATH = MODELS_DIR / "specialized_3w_monthly_model.pkl"
-MODEL_BUS_PATH = MODELS_DIR / "specialized_bus_monthly_model.pkl"
+HYBRID_MODEL_PATH = MODELS_DIR / "advanced_model_monthly_hybrid.pkl"
 
 warnings.filterwarnings('ignore')
 
-# --- Feature Engineering (Same as before) ---
+# --- Import from Trainer ---
 try:
-    from advanced_model_trainer import create_advanced_features, prepare_features_for_prediction
+    from advanced_model_trainer import (
+        load_and_clean_data,
+        aggregate_to_monthly,
+        create_monthly_features
+    )
 except ImportError:
-    print("⚠️ Could not import advanced_model_trainer.")
+    print("⚠️ Could not import advanced_model_trainer. Ensure the script is in the scripts/ directory.")
+    sys.exit(1)
 
-def create_monthly_features_exact(df):
-    df = df.copy()
-    df['month'] = df['Date'].dt.month
-    df['year'] = df['Date'].dt.year
-    df['quarter'] = df['Date'].dt.quarter
-    for lag in [1, 2, 3, 6, 12]:
-        df[f'lag_month_{lag}'] = df.groupby('State')['EV_Sales_Quantity'].shift(lag)
-    for w in [3, 6, 12]:
-        g = df.groupby('State')['EV_Sales_Quantity']
-        df[f'roll_mean_{w}m'] = g.rolling(window=w, min_periods=1).mean().reset_index(level=0, drop=True)
-        df[f'roll_std_{w}m'] = g.rolling(window=w, min_periods=1).std().reset_index(level=0, drop=True)
-        df[f'roll_max_{w}m'] = g.rolling(window=w, min_periods=1).max().reset_index(level=0, drop=True)
-    df['momentum'] = df['roll_mean_3m'] / (df['roll_mean_12m'] + 1)
-    df['state_avg'] = df.groupby('State')['EV_Sales_Quantity'].expanding().mean().reset_index(level=0, drop=True)
-    numeric = df.select_dtypes(include=[np.number]).columns
-    df[numeric] = df[numeric].fillna(0)
-    return df
 
-# --- DATABASE FUNCTIONS (Updated for Postgres) ---
+# --- DATABASE FUNCTIONS ---
 def init_db():
     """Initialize Cloud Database Table"""
     print("🔌 Connecting to Cloud Database...")
@@ -84,58 +69,113 @@ def init_db():
     print("☁️ Cloud Database initialized.")
 
 def precompute_all_predictions():
-    """Runs models on history to ensure 0% leakage."""
+    """
+    Runs the Hybrid Monthly+Daily model on historical data.
+    Generates daily predictions by predicting monthly totals and distributing them.
+    """
     print("⏳ Pre-computing predictions (Model Playback)...")
-    df = pd.read_csv(DATA_PATH, parse_dates=['Date'])
-    if 'Vehicle_Class' in df.columns: df.rename(columns={'Vehicle_Class': 'Vehicle_Category'}, inplace=True)
     
-    all_preds_df = []
+    # 1. Load Data
+    df = load_and_clean_data()
     
-    # 1. Monthly Models (Bus/3W)
-    for cat in ['3-Wheelers', 'Bus']:
-        path = MODEL_3W_PATH if cat == '3-Wheelers' else MODEL_BUS_PATH
-        if not path.exists(): continue
-        
-        df_cat = df[df['Vehicle_Category'] == cat].copy()
-        df_cat['YearMonth'] = df_cat['Date'].dt.to_period('M')
-        monthly_agg = df_cat.groupby(['State', 'YearMonth']).agg({'EV_Sales_Quantity': 'sum', 'Date': 'first'}).reset_index()
-        monthly_agg['Date'] = monthly_agg['YearMonth'].dt.to_timestamp()
-        monthly_agg = create_monthly_features_exact(monthly_agg)
-        
-        state_means = monthly_agg.groupby('State')['EV_Sales_Quantity'].mean()
-        monthly_agg['state_encoded'] = monthly_agg['State'].map(state_means)
-        
-        feature_cols = [
-            'month', 'year', 'quarter', 'lag_month_1', 'lag_month_2', 'lag_month_3', 'lag_month_6', 'lag_month_12',
-            'roll_mean_3m', 'roll_std_3m', 'roll_max_3m', 'roll_mean_6m', 'roll_std_6m', 'roll_max_6m',
-            'roll_mean_12m', 'roll_std_12m', 'roll_max_12m', 'momentum', 'state_avg', 'state_encoded'
-        ]
-        
-        try:
-            model = joblib.load(path)
-            monthly_agg['Monthly_Pred'] = model.predict(monthly_agg[feature_cols])
-            df_cat['YearMonth'] = df_cat['Date'].dt.to_period('M')
-            merged = df_cat.merge(monthly_agg[['State', 'YearMonth', 'Monthly_Pred']], on=['State', 'YearMonth'], how='left')
-            merged['Predicted_Sales'] = (merged['Monthly_Pred'] / 30).fillna(0).astype(int)
-            all_preds_df.append(merged[['Date', 'State', 'Vehicle_Category', 'EV_Sales_Quantity', 'Predicted_Sales']])
-        except Exception: pass
+    # 2. Load Model
+    if not HYBRID_MODEL_PATH.exists():
+        print(f"❌ Model file not found: {HYBRID_MODEL_PATH}")
+        return pd.DataFrame()
 
-    # 2. Daily Models
-    df_daily = df[~df['Vehicle_Category'].isin(['3-Wheelers', 'Bus'])].copy()
-    if not df_daily.empty:
-        df_featured = create_advanced_features(df_daily)
-        for cat in df_daily['Vehicle_Category'].unique():
-            path = MODELS_DIR / f"advanced_model_{cat.replace(' ', '_').replace('/', '_')}.pkl"
-            if not path.exists(): continue
-            try:
-                with open(path, 'rb') as f: pack = pickle.load(f)
-                subset = df_featured[df_featured['Vehicle_Category'] == cat].copy()
-                X = prepare_features_for_prediction(subset, pack['feature_names'], pack['scaler'])
-                subset['Predicted_Sales'] = np.maximum(pack['primary_model'].predict(X), 0).astype(int)
-                all_preds_df.append(subset[['Date', 'State', 'Vehicle_Category', 'EV_Sales_Quantity', 'Predicted_Sales']])
-            except Exception: pass
+    with open(HYBRID_MODEL_PATH, 'rb') as f:
+        models_data = pickle.load(f)
+        
+    # 3. Aggregate to Monthly & Create Features
+    # We do this for the entire history to enable "playback"
+    df_monthly = aggregate_to_monthly(df)
+    df_features = create_monthly_features(df_monthly)
 
-    return pd.concat(all_preds_df, ignore_index=True) if all_preds_df else pd.DataFrame()
+    all_daily_preds = []
+
+    # 4. Predict & Distribute
+    for cat, model_data in models_data.items():
+        print(f"  -> Processing {cat}...")
+        model = model_data['model']
+        scaler = model_data['scaler']
+        feature_names = model_data['features']
+        patterns = model_data['daily_patterns'] # {Month: {Day: weight}}
+        train_states = model_data['states']
+
+        # Filter for category
+        cat_df = df_features[df_features['Vehicle_Category'] == cat].copy()
+        if cat_df.empty: continue
+
+        # Filter states
+        cat_df = cat_df[cat_df['State'].isin(train_states)]
+        
+        # Prepare X
+        # Re-encode State
+        cat_df['State_Code'] = pd.Categorical(cat_df['State'], categories=train_states).codes
+        
+        X = cat_df[feature_names]
+        X_scaled = scaler.transform(X)
+        
+        # Predict Monthly
+        cat_df['Predicted_Monthly'] = model.predict(X_scaled)
+        cat_df['Predicted_Monthly'] = np.maximum(0, cat_df['Predicted_Monthly'])
+
+        # Distribute to Daily
+        # We iterate through the monthly predictions and generate daily rows
+        for _, row in cat_df.iterrows():
+            month = int(row['Month'])
+            year = int(row['Year'])
+            state = row['State']
+            monthly_pred = row['Predicted_Monthly']
+
+            # Get weights for this month
+            weights = patterns.get(month, {})
+
+            # Determine days in this specific month/year
+            days_in_month = pd.Period(f"{year}-{month}-01").days_in_month
+
+            for day in range(1, days_in_month + 1):
+                weight = weights.get(day, 1.0/days_in_month)
+                daily_pred = monthly_pred * weight
+
+                all_daily_preds.append({
+                    'Date': pd.Timestamp(year=year, month=month, day=day),
+                    'State': state,
+                    'Vehicle_Category': cat,
+                    'Predicted_Sales': int(daily_pred)
+                })
+
+    # 5. Merge with Actuals
+    pred_df = pd.DataFrame(all_daily_preds)
+
+    # We merge with the original daily dataframe to get Actuals
+    # Note: df has 'Date', 'State', 'Vehicle_Category', 'EV_Sales_Quantity'
+
+    merged_df = pd.merge(
+        df[['Date', 'State', 'Vehicle_Category', 'EV_Sales_Quantity']],
+        pred_df,
+        on=['Date', 'State', 'Vehicle_Category'],
+        how='inner' # Only keep rows where we have both (or left if we want to show gaps)
+    )
+
+    # If inner join drops too much (e.g. if daily pattern generates days that don't exist in actuals?
+    # Actually actuals might be missing days if 0 sales?
+    # But load_and_clean_data loads the CSV. If the CSV is sparse, we might miss 0-sales days.
+    # But for simulation, we usually want to simulate existing data points or continuous time.
+    # The original script did: df_cat.merge(..., how='left') onto the original data.
+    # So we should probably do a Right Join onto the original data or Inner.
+    # Let's do Inner to simulate "known" days, or Left on df to keep all actuals.
+
+    merged_df = pd.merge(
+        df[['Date', 'State', 'Vehicle_Category', 'EV_Sales_Quantity']],
+        pred_df,
+        on=['Date', 'State', 'Vehicle_Category'],
+        how='left'
+    )
+    merged_df['Predicted_Sales'] = merged_df['Predicted_Sales'].fillna(0).astype(int)
+
+    print(f"✅ Generated predictions for {len(merged_df)} daily records.")
+    return merged_df
 
 def run_simulation():
     print("⚡ Live Simulation Started (Cloud Mode)")
@@ -152,6 +192,7 @@ def run_simulation():
 
     try:
         while True:
+            # Sample a random record to simulate a "live" event
             row = augmented_df.sample(1).iloc[0]
             actual = int(row['EV_Sales_Quantity'])
             pred = int(row['Predicted_Sales'])
