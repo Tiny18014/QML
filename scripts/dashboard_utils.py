@@ -1,12 +1,15 @@
 """
 Dashboard Utilities
 ===================
-REFACTOR v4: Implements a custom DashboardAgent class to encapsulate the LLM persona 
-for executive-level EV market intelligence.
+REFACTOR v14: FINAL PRODUCTION FIX.
+1. Explicit Lag Generation (verified via debug script).
+2. Explicit Sorting & Grouping for Recursive Loop.
+3. Manual State Encoding Injection.
 """
 
 import pandas as pd
 import numpy as np
+import torch
 import joblib
 import pickle
 from pathlib import Path
@@ -19,19 +22,15 @@ import os
 from openai import OpenAI
 
 # --- Path and Model Setup ---
-
 ROOT_DIR = Path(__file__).parent.parent.resolve()
-DATA_PATH = ROOT_DIR /"data" / "EV_Dataset.csv"
-MODELS_DIR = ROOT_DIR /"model"
+DATA_PATH = ROOT_DIR / "data" / "EV_Dataset.csv"
+MODELS_DIR = ROOT_DIR / "models"
 CLASSICAL_MODEL_PREFIX = "advanced_model_"
 
-# Special model mappings for renamed models
-SPECIAL_MODEL_MAPPING = {
-    "3W": "specialized_3w_monthly_model",
-    "Bus": "specialized_Bus_monthly_model"
-}
+MODEL_3W_PATH = MODELS_DIR / "specialized_3w_monthly_model.pkl"
+MODEL_BUS_PATH = MODELS_DIR / "specialized_bus_monthly_model.pkl"
 
-sys.path.append(str(ROOT_DIR /"model"))
+sys.path.append(str(ROOT_DIR / "scripts"))
 
 # CRITICAL IMPORTS
 try:

@@ -14,9 +14,3 @@ __pycache__/
 .vscode/
 .idea/
 *.DS_Store
-
-models/
-*.pkl
-*.pth
-*.pt
-*.onnx
