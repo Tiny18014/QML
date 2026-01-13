@@ -1,0 +1,133 @@
+# Dashboard Configuration
+# Settings for the EV Demand Forecasting Dashboard
+
+# Application Settings
+app:
+  title: "EV Demand Intelligence Hub"
+  page_icon: "⚡"
+  layout: "wide"
+  initial_sidebar_state: "expanded"
+
+# Data Settings
+data:
+  models_dir: "models"
+  output_dir: "output"
+  data_dir: "data"
+  predictions_dir: "predictions"
+  
+  # Main dataset file
+  dataset_file: "data/EV_Dataset.csv"
+  
+  # Prediction files
+  predictions_2026: "output/daily_predictions_2026.csv"
+
+# Model Settings
+models:
+  # Model file patterns
+  advanced_model_prefix: "advanced_model_"
+  specialized_3w_model: "specialized_3w_monthly_model.pkl"
+  specialized_bus_model: "specialized_bus_monthly_model.pkl"
+  qml_model: "ev_sales_hybrid_model_simple.pth"
+  normalization_params: "normalization_params.pkl"
+  
+  # Caching settings
+  enable_cache: true
+  cache_ttl_seconds: 300  # 5 minutes
+
+# Dashboard Components
+components:
+  # Sentiment Gauge
+  sentiment:
+    enabled: true
+    thresholds:
+      low: 40
+      high: 70
+  
+  # Volatility Analysis
+  volatility:
+    enabled: true
+    default_window: 7
+    show_heatmap: true
+  
+  # Trend Lines
+  trends:
+    enabled: true
+    default_categories: 5
+    show_growth_rates: true
+  
+  # Market Health
+  market_health:
+    enabled: true
+    show_alerts: true
+    show_drilldown: true
+
+# Refresh Settings
+refresh:
+  auto_refresh: true
+  default_interval_seconds: 300  # 5 minutes
+  check_for_updates: true
+
+# Visualization Settings
+visualization:
+  theme: "plotly_white"
+  color_palette:
+    - "#4A90E2"
+    - "#50C878"
+    - "#FF6B6B"
+    - "#FFA500"
+    - "#9B59B6"
+  
+  default_height: 400
+  chart_types:
+    - "line"
+    - "bar"
+    - "scatter"
+    - "heatmap"
+    - "gauge"
+
+# API Settings (Optional)
+api:
+  enabled: false
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+
+# Performance Settings
+performance:
+  max_data_points: 10000
+  enable_lazy_loading: true
+  cache_predictions: true
+
+# Export Settings
+export:
+  formats:
+    - "csv"
+    - "json"
+    - "pdf"
+  default_format: "csv"
+
+# Agno Agent Settings
+agent:
+  enabled: true
+  model_id: "openai/gpt-oss-20b"
+  temperature: 0.25
+  max_tokens: 512
+  
+  # Fallback behavior when agent unavailable
+  show_fallback_metrics: true
+
+# Alert Settings
+alerts:
+  # Growth alert threshold (percentage)
+  growth_threshold: 20
+  
+  # Volatility alert threshold (CV percentage)
+  volatility_threshold: 50
+  
+  # Market concentration threshold (percentage)
+  concentration_threshold: 60
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(levelname)s - %(message)s"
