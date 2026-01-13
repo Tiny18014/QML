@@ -3,7 +3,14 @@ Data Refresh Utilities
 Auto-refresh and data update mechanisms for the dashboard
 """
 
-import streamlit as st
+# Make streamlit optional
+try:
+    import streamlit as st
+    STREAMLIT_AVAILABLE = True
+except ImportError:
+    STREAMLIT_AVAILABLE = False
+    st = None
+
 import pandas as pd
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -58,11 +65,18 @@ class DataRefreshManager:
         }
         
         # Check if we have stored timestamps
-        if 'last_model_check' not in st.session_state:
-            st.session_state.last_model_check = None
-        
-        if 'last_data_check' not in st.session_state:
-            st.session_state.last_data_check = None
+        if STREAMLIT_AVAILABLE:
+            if 'last_model_check' not in st.session_state:
+                st.session_state.last_model_check = None
+            
+            if 'last_data_check' not in st.session_state:
+                st.session_state.last_data_check = None
+            
+            last_model_check = st.session_state.last_model_check
+            last_data_check = st.session_state.last_data_check
+        else:
+            last_model_check = None
+            last_data_check = None
         
         # Check models directory
         if self.models_dir.exists():
@@ -70,8 +84,7 @@ class DataRefreshManager:
             if latest_model:
                 model_time = datetime.fromtimestamp(latest_model.stat().st_mtime)
                 
-                if st.session_state.last_model_check is None or \
-                   model_time > st.session_state.last_model_check:
+                if last_model_check is None or model_time > last_model_check:
                     updates['models_updated'] = True
                     updates['latest_model'] = latest_model.name
                     updates['model_time'] = model_time.isoformat()
@@ -82,8 +95,7 @@ class DataRefreshManager:
             if latest_data:
                 data_time = datetime.fromtimestamp(latest_data.stat().st_mtime)
                 
-                if st.session_state.last_data_check is None or \
-                   data_time > st.session_state.last_data_check:
+                if last_data_check is None or data_time > last_data_check:
                     updates['data_updated'] = True
                     updates['latest_data'] = latest_data.name
                     updates['data_time'] = data_time.isoformat()
@@ -113,8 +125,9 @@ class DataRefreshManager:
     def mark_as_checked(self):
         """Mark current time as last check time."""
         now = datetime.now()
-        st.session_state.last_model_check = now
-        st.session_state.last_data_check = now
+        if STREAMLIT_AVAILABLE:
+            st.session_state.last_model_check = now
+            st.session_state.last_data_check = now
     
     def get_latest_predictions(self, limit: Optional[int] = None) -> pd.DataFrame:
         """

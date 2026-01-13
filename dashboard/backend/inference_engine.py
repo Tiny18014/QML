@@ -5,11 +5,18 @@ Handles real-time predictions using loaded models
 
 import pandas as pd
 import numpy as np
-import torch
 from typing import Dict, Any, Optional, List
 import logging
 from pathlib import Path
 import sys
+
+# Optional torch import
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    torch = None
 
 # Add scripts to path for feature engineering
 ROOT_DIR = Path(__file__).parent.parent.parent.resolve()

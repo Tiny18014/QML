@@ -5,12 +5,19 @@ Handles loading and caching of trained models from the CI/CD pipeline
 
 import pickle
 import joblib
-import torch
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 import logging
 from datetime import datetime
 import numpy as np
+
+# Optional torch import
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    torch = None
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -125,6 +132,9 @@ class ModelLoader:
     
     def _load_pytorch_model(self, model_path: Path) -> Dict[str, Any]:
         """Load a PyTorch model file."""
+        if not TORCH_AVAILABLE:
+            raise ImportError("PyTorch not available. Install torch to load .pth models.")
+        
         # Try to load state dict
         try:
             state_dict = torch.load(model_path, map_location='cpu')
