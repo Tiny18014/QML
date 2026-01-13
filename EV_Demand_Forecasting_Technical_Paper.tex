@@ -1,10 +1,194 @@
-\section{Sales Forecasting}\label{sec:demand_forecasting}
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}%
+\usepackage{float}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{graphicx}%
+\usepackage{multirow}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{amsthm}%
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{xcolor}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+\usepackage{booktabs}%
+\usepackage{algorithm}%
+\usepackage{algorithmicx}%
+\usepackage{algpseudocode}%
+\usepackage{listings}%
+\usepackage{natbib}
 
-\subsection{Overview}
+
+\begin{document}
+
+\title[Article Title]{Forecasting Electric Vehicle Demand using Quantum and Classical Machine Learning with Sentiment Analysis}
+
+
+
+\author*[1]{\fnm{Stuthi} \sur{Shrisha}}\email{stuthi.cd22@bmsce.ac.in}
+
+\author*[2]{\fnm{Sindhu} \sur{K}}\email{ksindhu.ise@bmsce.ac.in}
+
+\author[3]{\fnm{Shubham} \sur{Mahanti}}\email{shubhammahanti2004@gmail.com}
+\equalcont{These authors contributed equally to this work.}
+
+\author[4]{\fnm{Atharva} \sur{Sreekar}}\email{atharvasreekar13@gmail.com}
+\equalcont{These authors contributed equally to this work.}
+
+\affil*[1,2,3,4]{\orgdiv{CSE(Data Science)}, \orgname{B.M.S College of Engineering}, \orgaddress{\city{Bengaluru}, \postcode{560004}, \state{Karnataka}, \country{India}}}
+
+
+%%==================================%%
+%% Sample for unstructured abstract %%
+%%==================================%%
+
+\abstract{This paper presents a comprehensive framework integrating quantum and classical machine learning techniques for electric vehicle (EV) demand forecasting in India. The proposed system combines sentiment analysis of consumer opinions with historical sales data to predict EV market trends across different vehicle categories and Indian states. The study experimentally evaluates the potential of Quantum embeddings in a classical XGBoost model for high-level 30-day sales curve predictions and classical models for fine-grained next-day forecasting. The sentiment analysis pipeline utilizes DistilBERT and VADER to quantify public sentiment from news articles and social media, achieving 80\% accuracy in brand-specific predictions. Maharashtra, Delhi, and Karnataka demonstrate the highest variance in monthly sales, with two-wheelers dominating growth trends in Tier-2 cities. }
+
+\keywords{electric vehicle, quantum machine learning, demand forecasting, sentiment analysis, sustainability, India}
+
+\maketitle
+
+\section{Introduction}\label{sec1}
+
+India's electric vehicle (EV) sector is experiencing some unprecedented growth, mainly driven by government initiatives, environmental concerns, and technological advancement \cite{bib1}. This rapidly evolving market presents some significant forecasting challenges for manufacturers, policymakers and infrastructure planners who require accurate predictions for strategic decision making. Traditional forecasting models can often fail to capture the complex interdependencies between consumer sentiment, regional variations, and vehicle category preferences, particularly in the Indian context. The absence of a robust predictive framework can hamper effective planning and resource allocation in this sector.
+
+The Indian EV market presents unique characteristics that distinguish it from other countries. Unlike developed markets where consumer preferences drive adoption, India's EV trajectory is heavily influenced by policy interventions, infrastructure availability, and economic constraints \cite{bib2}. The country's diverse socio-economic landscape creates regional variations in adoption patterns. Factors such as income levels, urban development, and charging infrastructure availability play crucial roles in determining market penetration. Findings also reveal that historical EV sales, share of EVs sold, and electricity demand are key causal factors \cite{bib3}.
+
+Recent research has demonstrated the complexity of EV demand prediction. Studies have shown that traditional statistical methods fall short in capturing the non-linear relationships present in EV adoption patterns, and machine learning based models can achieve superior performance compared to conventional approaches \cite{bib4}.
+
+This research aims to address these challenges by developing an integrated quantum-classical machine learning framework that combines sentiment analysis with demand forecasting. The hybrid approach explores the potential of quantum computing for pattern recognition while also utilizing classical machine learning techniques for practical implementation and interpretation. The contribution of this work is twofold: (1) development of a hybrid quantum-classical forecasting model that attempts to outperform traditional approaches by incorporating quantum computing principles for enhanced pattern recognition and feature extraction, and (2) integration of sentiment analysis as a predictive feature for demand estimation, leveraging natural language processing techniques to quantify consumer opinions and preferences from social media and online platforms. This integrated approach addresses the limitations of existing methodologies by combining the strengths of quantum computing, classical machine learning, and sentiment analysis to create a comprehensive framework for EV demand forecasting.
+
+The remainder of this study is structured as follows: Section 2 reviews the relevant literature on quantum machine learning, EV demand forecasting, sentiment analysis and supply chain optimization. Section 3 describes the proposed methodology, including the system architecture, sentiment forecasting framework, shift to online learning models and demand forecasting. Section 4 presents the results obtained, followed by a comparative analysis. Section 5 concludes the study with key findings, limitations, and directions for future work.
+
+
+\section{Literature Review}\label{sec2}
+\subsection{Quantum Machine Learning in Forecasting }
+Quantum Machine Learning (QML) models such as Quantum Support Vector Machines (QSVM), Quantum Neural Networks (QNN), and Variational Quantum Classifiers (VQC) have been demonstrating high classification accuracy on datasets like MNIST and IRIS \cite{bib5}. VQCs have outperformed QSVMs in sentiment analysis tasks using both simulators and real quantum backends like IBM Qiskit Osaka \cite{bib6}. Hybrid QML approaches, including dressed quantum circuits, quantum autoencoders, and QNNs integrated with classical layers, showed promise in reducing trainable parameters and improving performance as seen in \cite{bib7,bib8,bib9}. Ensemble frameworks using classical models (e.g., XGBoost) with QML components reported a 5\% error rate reduction \cite{bib10}. However practical deployment is limited by hardware dependency, shallow network architectures, and quantum decoherence.
+\subsection{EV Demand Forecasting}
+Recent deep learning models like EVs PredNet, combining CNN and LSTM, have further improved forecast accuracy across different EV categories using cross validation techniques \cite{bib11}.
+Discrete choice and hybrid choice models have also been applied to EV adoption studies. Glerum et al. developed a stated-preference survey and a hybrid choice model, enabling more realistic market share forecasts for electric cars \cite{bib22}. An LSTM model with an attention mechanism has been proposed to predict EV charging demand at 15-minute intervals, achieving higher accuracy than univariate models and offering interpretability through SHAP analysis of factors \cite{bib23}.
+\subsection{Sentiment Analysis in Market Prediction}
+Behavioral finance studies indicate that cognitive biases like overconfidence, herding, and loss aversion influence investor decisions significantly, leading to market volatility, unpredictability and anomalies \cite{bib12}. Prospect Theory explains deviations from expected utility, revealing behaviors like the disposition effect. Integrating sentiment analysis and psychological insights into predictive models can improve risk assessment and investment strategy under uncertainty \cite{bib13}.
+\subsection{Supply Chain, Inventory and Pricing Optimization}
+Studies show that supply chain expenses can constitute up to 55\% of a product’s final price, with transportation identified as the most significant cost factor \cite{bib14}. Optimization techniques using linear programming and AI are increasingly being used to reduce logistics, warehousing, and inventory costs \cite{bib15}. Big Data Information (BDI) providers are reshaping pricing strategies by enhancing demand sensing and enabling more efficient coordination across supply chain entities \cite{bib16}. Game theoretic models demonstrate how data companies influence pricing and control in multistage supply chains. Demand forecasting can be used to aid in inventory management \cite{bib17}.
+\subsection{Electric Vehicle Sector and Business Intelligence}
+Analyses of EV literature reveal that electrical engineering and computer science dominate research trends \cite{bib18}. BI based forecasting frameworks that integrate sales, inventory, and calendar data show that machine learning models consistently outperform human predictions, with architectures like DeepAR yielding highly accurate forecasts \cite{bib19}.
+
+\section{Methodology}\label{sec3}
+\subsection{System Architecture}
+The proposed framework is built upon a synergistic architecture that consists of two integrated components: sentiment analysis and quantum-classical demand forecasting. This dual-component design is crucial because it recognizes that EV demand is driven not only by historical patterns but also by public perception and market sentiment. The system is engineered to process multiple heterogeneous data sources, including structured historical sales data, semi-structured vehicle specifications, and unstructured text from news articles and social media content.
+
+The data pipeline begins by ingesting these disparate sources. Unstructured textual data undergoes natural language processing to extract sentiment scores, which are then quantified and time-stamped. This sentiment data is treated as a dynamic, leading indicator of market behavior. Concurrently, historical sales figures and vehicle specifications are cleaned and structured. Finally, the sentiment scores are integrated as a feature set alongside traditional sales data, creating an enriched dataset that feeds into the demand forecasting models. This holistic approach allows the system to capture the complex interplay between consumer opinion, media coverage, and actual purchasing behavior.
+
+\subsection{Sentiment Forecasting and Competitor Brand Analysis}
+Consumer sentiment often serves as a key leading indicator of market demand. A surge in positive online conversations or favorable news coverage can presage an increase in sales, while negative press can signal a downturn. By analyzing sentiment, this framework allows one to make better decisions about identifying the key competitors influencing demand in the highly dynamic electric vehicle market. Addtionally, integrating model predictions, volatility graphs and derived insights in the dashboard can provide a well rounded analysis. For example, a sudden increase in negative sentiment for a rival brand could present a strategic opportunity. The final goal is to integrate the trained model with live data feeds to forecast sentiment for the next week. This is achieved by training the model incrementally on data from the past month, using a sliding window approach to ensure the model adapts to the latest market discourse and evolving consumer attitudes.
+\subsubsection{Datasets Used}
+To gauge public sentiment and external market influences on EV demand, the following data sources were integrated and analyzed for five prominent Indian brands: Ashok Leyland, Hero MotoCorp, Mahindra, Tata Motors, and TVS Motors. The overall data flow is illustrated in Fig.~\ref{fig:data_flow}:
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{sentdiag.png} % <-- replace with your file name
+    \caption{Overall data flow for sentiment and market analysis.}
+    \label{fig:data_flow}
+\end{figure}
+
+
+\begin{itemize}
+    \item \textbf{Google Trends:} This data source captures the popularity of EV-related search queries over time, serving as a powerful proxy for public interest and awareness. Tracking keywords such as ``Tata Motors'' or ``Hero electric scooter review'' provides a direct measure of consumer curiosity and purchase intent, often before it translates into actual sales.
+
+    \item \textbf{Yahoo Finance (yfinance API):} This API provides historical stock market data for publicly traded EV companies. This data is used as a proxy for investor sentiment and broader industry outlook. A company's stock performance often reflects investor confidence in its strategy, technology, and market position, which can indirectly influence consumer trust and perception.
+
+    \item \textbf{Google News:} This service aggregates recent news articles related to electric vehicles. By processing the headlines and body text of these articles, the framework enables the extraction of sentiment-bearing textual data for deep natural language analysis.
+\end{itemize}
+
+\subsubsection{Flow of Development}
+\paragraph{Data Preprocessing}
+The initial phase involved a multi-step preprocessing pipeline. Sentiment scores were extracted from news using two distinct methods: DistilBERT, a lightweight transformer model effective at understanding context in formal text, and VADER, a lexicon and rule-based sentiment analysis tool optimized for short and informal texts. When individually applied, DistilBERT fails because it captures contextual semantics but ignores temporal dynamics and event persistence, producing static sentiment signals with limited predictive value. VADER fails because it cannot interpret journalistic framing, implicit sentiment, or event-driven language shifts. Used together, DistilBERT supplies contextual understanding while VADER provides stable polarity anchoring, and their combination yields a more robust, noise-resistant sentiment signal for forecasting from news. The daily count of news articles was also aggregated, as a high volume of media coverage can itself influence demand, regardless of sentiment. This was followed by time series preprocessing, which included resampling data to a consistent daily frequency, handling missing values through forward-filling, and normalizing features.
+
+\begin{algorithm}[H]
+\caption{Data Preprocessing Pipeline for Sentiment Analysis and Forecasting}
+\KwIn{Raw data; time period $[s, e]$}
+\KwOut{Feature matrix $X$, target vector $y$}
+\BlankLine
+
+\textbf{Step 1: Data Retrieval} \\
+\Indp
+Retrieve monthly data for companies: Ashok Leyland, Hero MotoCorp, Mahindra, Tata Motors, TVS Motors. Concatenate all records into a unified dataset $D$. \\
+Convert date fields to standard format and sort chronologically. \\
+\Indm
+
+\textbf{Step 2: Sentiment Extraction} \\
+\Indp
+Apply \textit{DistilBERT} on textual descriptions: extract polarity (positive/negative) and confidence score. Apply \textit{VADER} to obtain compound sentiment scores suitable for short social media text. \\
+Store both results as new sentiment features. \\
+\Indm
+
+\textbf{Step 3: Sentiment Feature Engineering} \\
+\Indp
+Compute momentum: difference between consecutive VADER scores. \\
+Compute rolling averages (window size = 3) for both DistilBERT and VADER scores. \\
+Compute standard deviation of daily VADER sentiment as a measure of volatility. \\
+\Indm
+
+\textbf{Step 4: Volume Features} \\
+\Indp
+Aggregate daily counts of news articles into a feature $news\_volume$. \\
+Merge volume statistics with sentiment data. \\
+\Indm
+
+\textbf{Step 5: Interaction Features} \\
+Calculate trend deltas: day-to-day changes in trend score.
+Compute interactions:
+\begin{enumerate}
+    \item VADER sentiment $\times$ trend delta,
+    \item news volume $\times$ sentiment volatility.
+\end{enumerate}
+Add transition indicators for sentiment label switches and rolling counts over 3 days. \\
+
+\textbf{Step 6: Categorical Encoding} \\
+\Indp
+Map brand names to categorical variables and encode numerically. \\
+Generate lagged features for sentiment labels, DistilBERT scores, and VADER scores. \\
+\Indm
+
+\textbf{Step 7: Final Assembly} \\
+Drop missing values. \\
+Define feature matrix $X$ using engineered variables:
+\[
+\begin{aligned}
+X = \{ & vader\_compound, vader\_momentum, vader\_roll\_avg, sentiment\_stddev, \\
+       &  news\_volume, brand\_encoded, trend\_delta, bert\_roll\_avg, sentiment\_label\_lag1, \\
+       & bert\_score\_lag1,vader\_lag1, transition, vader\_trend\_interaction,  \\
+       & volume\_volatility\_interaction,transition\_count\_last\_3\_days \}
+\end{aligned}
+\]
+Set target vector $y =$ sentiment labels. \\
+\Indm
+
+\Return{$X, y$}
+
+\end{algorithm}
+
+\paragraph{Model Development}
+To select the most impactful features, a preliminary analysis was conducted using an XGBoost model, which has a built-in mechanism for ranking feature importance. The high-importance features identified from this plot were then fed into a variety of machine learning models. The target variable was the sentiment score, framed as a binary classification problem to classify sentiment as positive (1) or negative (-1). Models such as decision trees, random forests, and XGBoost were trained and subsequently tested on unseen data to evaluate their generalization capabilities. The models were specifically trained to predict the final sentiment transition value of a given period, thereby indicating the likely sentiment for the following week. Once trained and validated, the best-performing models were serialized for deployment, allowing for easy inference without the need for retraining.
+\paragraph{Hyperparameter Tuning}
+To maximize model performance, systematic hyperparameter tuning was performed. Methods such as GridSearchCV, which exhaustively searches through a manually specified grid of parameters, and RandomizedSearchCV, which samples a fixed number of parameter settings from specified distributions, were implemented. The optimization process focused on maximizing a combination of key classification metrics: precision, recall, accuracy, and F1 score. This ensured the final models were not only accurate but also robust and reliable, particularly in scenarios with potential class imbalance.
+
+\subsection{The Shift to Online Learning Models (Sentiment Analysis)}
+\subsubsection{Model Choice and Development}
+The existing XGBoost model currently faces 2 limitations if implemented with live data. Firstly, incremental learning would not be possible, as the model architecture limits it from being trained in stages. Secondly, even if data would be collected at regular intervals of time, it would have to be added to a single central dataset, and then the model would have to be trained on the entire dataset instead of just the increments. This in turn would lead to large amounts of memory being used to store the dataset as the model scales with time, additionally long periods of time would be wasted in repeatedly training the model, and then using it to predict values. With this in consideration the proposed method would ideally involve data collection and model training once per week, to forecast sentiment for the next day. This allows the previous week’s context for accurate and rolling predictions, which would be most relevant to forecast binary sentiment for the next day.
+The River incremental learning framework offers a robust approach for real-time sentiment forecasting through the use of a Leveraging Bagging (LevBag) ensemble with Hoeffding Tree classifiers as base learners. Leveraging Bagging enhances traditional online bagging by incorporating dynamic resampling with Poisson-distributed weights, adaptive instance weighting, and drift detection, thereby improving resilience to concept drift—an inherent challenge in sentiment analysis where opinions and language usage evolve over time. The Hoeffding Tree, an incremental decision tree algorithm, efficiently processes streaming data without repeated scans, making it highly suitable for continuous, high-velocity sentiment streams. In binary sentiment classification, this configuration excels by maintaining high predictive accuracy while adapting to distributional changes in near real-time, ensuring that the model remains both computationally efficient and contextually relevant.
+\subsubsection{Pipeline Design and Dashboard Integration}
+The continuous integration (CI) pipeline automates the periodic retraining and deployment of the River model to ensure sustained model relevance and adaptability. It is orchestrated via GitHub Actions, configured to execute weekly while also supporting manual triggers for on-demand retraining. The workflow provisions a Python 3.10 environment, installs dependencies within a virtual environment, and executes a dedicated retraining script.
+The training script serves as the operational core of the retraining pipeline, enabling adaptive, incremental learning on a rolling temporal window of data. It dynamically constructs the training interval—here defined as the preceding seven days—before invoking a preprocessing routine to generate feature and target datasets, which are also persisted for auditability and reproducibility. The script then reloads the previously stored model checkpoint and incrementally updates it with the new data, thereby maintaining continuity in the learning process without discarding prior knowledge. To ensure transparency and performance monitoring, the updated model is evaluated using an accuracy metric, and both datasets and the retrained model are versioned by overwriting the serialized model file.
+Post-training, the pipeline version-controls updated artifacts, including feature and target datasets as well as the serialized model object. This mechanism allows the dashboard to pull the latest model artifacts and pre-computed metrics automatically, ensuring that the user interface always reflects the most current sentiment forecasts, weekly performance indicators, sentiment volatility, and momentum graphs without manual intervention. By automatically committing and pushing these updates to the repository, the pipeline enforces a systematic, hands-free lifecycle for maintaining model accuracy and robustness, thereby minimizing technical debt and reducing manual overhead in model governance.
+
+\subsection{Sales Forecasting}\label{sec:demand_forecasting}
+
+\subsubsection{Overview}
 
 Sales forecasting is a direct and defensible proxy for understanding electric vehicle (EV) demand because sales represent revealed consumer preference, not inferred intent. Unlike search trends or sentiment indicators, sales data captures the final market-clearing outcome where affordability, infrastructure readiness, policy incentives, and consumer confidence converge into an irreversible economic decision. Consequently, forecasting sales equates to forecasting realized demand, making it the most grounded metric for assessing EV adoption dynamics.
 
-Sales forecasting is done in two stages - the QML approach assesses the applicability of quantum models for predicting long term sales, compared to the classical approach for predicting next day sales. We demarcate this further to check the robustness of both models while applying a state based filter or a vehicle based filter to assess a granular prediction of sales.
+Sales forecasting is done in two stages - the QML approach assesses the feasibility of quantum models for predicting long term sales, compared to the classical approach for predicting next day sales. We demarcate this further to check the robustness of both models while applying a state based filter or a vehicle based filter to assess a granular prediction of sales.
 
 The sales forecasting module converts enriched multi-source data into short- and medium-term EV sales forecasts. Using hybrid quantum-classical models, it produces 30-day trend forecasts for strategic decision-making (Fig.~\ref{fig:demand_flow}).
 
@@ -15,7 +199,7 @@ The sales forecasting module converts enriched multi-source data into short- and
     \label{fig:demand_flow}
 \end{figure}
 
-\subsection{System Architecture and Modeling Strategy}
+\subsubsection{System Architecture and Modeling Strategy}
 
 The pipeline comprises:
 \begin{enumerate}
@@ -24,7 +208,7 @@ The pipeline comprises:
     \item \textbf{Modeling Layer:} Uses classical (XGBoost, LSTM) and quantum-classical hybrids. Per-category modeling captures unique sales dynamics for each vehicle type.
 \end{enumerate}
 
-\subsection{Datasets and Key Features}
+\subsubsection{Datasets and Key Features}
 
 The VAHAN portal is an ideal data source for EV sales forecasting because it is the Government of India’s official vehicle registration system, ensuring legal authenticity, nationwide coverage, and methodological consistency. Data recorded in VAHAN reflects mandatory, transaction-level vehicle registrations rather than voluntary reporting or survey-based estimates, eliminating selection bias and inflation artifacts. This institutional credibility, coupled with standardized classification across vehicle categories and states, makes VAHAN uniquely suited for high-stakes, policy-relevant EV demand forecasting.
 
@@ -40,7 +224,7 @@ The chosen dataset comprising 96,500 sales records spanning 2014–2024 across a
     \item \textbf{Electric\_Vehicle\_Sales\_Quantity:} Target variable representing sales.
 \end{itemize}
 
-\subsection{Data Preprocessing}
+\subsubsection{Data Preprocessing}
 
 Preprocessing involves:
 \begin{enumerate}
@@ -162,7 +346,7 @@ Append to existing master dataset and save as \texttt{ready.csv}. \\
 \Return{$D_{final}$}
 \end{algorithm}
 
-\subsection{Model Development}
+\subsubsection{Model Development}
 
 \paragraph{Classical Models}
 \begin{itemize}
@@ -180,6 +364,7 @@ Append to existing master dataset and save as \texttt{ready.csv}. \\
 \end{itemize}
 
 \paragraph{Quantum--Classical Hybrids}
+The integration of quantum computing in this study is experimental, aiming to evaluate potential advantages in the NISQ (Noisy Intermediate-Scale Quantum) era.
 \begin{itemize}
     \item \textbf{Quantum Embeddings + XGBoost:} Combines quantum embeddings $\Phi_\theta$ with classical features. 
     Hybrid setup leverages expressive embeddings with GPU-accelerated XGBoost, delivering superior accuracy with minimal additional compute overhead.
@@ -195,7 +380,7 @@ The hybrid quantum embeddings + XGBoost option was finally chosen for implementa
 
 In this implementation, quantum embeddings are generated using PennyLane’s highly optimized lightning.qubit simulator, which executes shallow, feature-aligned rotation circuits with low depth and minimal gate overhead. By encoding each feature directly onto a single qubit and extracting expectation values as compact representations, the pipeline reduces feature dimensionality and variance before training. This allows XGBoost to converge faster with fewer effective splits, keeping each training round within a ~20-minute compute window. Crucially, the hybrid design shifts complexity into a lightweight, deterministic embedding stage, enabling the GPU-accelerated XGBoost regressor to operate efficiently without the exponential cost growth typical of deeper quantum or fully classical nonlinear models.
 
-\subsection{Training, Validation and Rolling Evaluation}
+\subsubsection{Training, Validation and Rolling Evaluation}
 
 Rolling evaluation uses:
 \begin{itemize}
@@ -212,11 +397,11 @@ Quantum setups are particularly well suited for quarterly EV demand predictions 
 
 Classical models excel at highly customized, short-term predictions where hand-engineered features dominate, but they often rely on increasingly complex architectures to approximate nonlinearities, inflating compute and overfitting risk. Quantum–classical hybrids achieve comparable or superior expressivity with fewer parameters, yielding cleaner generalization at the quarterly scale.
 
-\subsection{Tech-to-Business Agent Development}
+\subsubsection{Tech-to-Business Agent Development}
 
 Developed in Agno, this agent identifies model predictions and converts them into actionable business insights, focusing on core sales direction and marketing tone, strongest and weakest performing regions, volatility or uncertanity implications and provides a high level business takeaway for both classical and quantum models. It specifies exact insights based on the forecasting period - either quarterly forecast, or the custom forecast. Point predictions and rolling forecasts are aggregated into growth trajectories, inflection points, and demand acceleration metrics that reflect real-world adoption dynamics. By comparing hybrid quantum–classical outputs against classical baselines under identical feature pipelines, the agent isolates where quantum representations add value, enabling stakeholders to translate model improvements into concrete decisions on production planning, regional deployment, and policy impact assessment in the EV ecosystem.
 
-\subsection{Iterative On-Demand Forecasting}
+\subsubsection{Iterative On-Demand Forecasting}
 
 The workflow follows: data → preprocessing → feature generation → model training → evaluation → deployment. To predict future horizons $H$, the system iteratively forecasts each day, appends the predicted value, recalculates lag and rolling features, and repeats until $H$ is covered, ensuring feature continuity. A classical machine learning regression model has been finalized for short-term, fine-grained predictions (e.g., next-day sales forecasts). This model is intended for use in the final dashboard and includes daily input updates.
 
@@ -224,56 +409,316 @@ To support real-time, granular forecasting, we implemented a high-performance Po
 
 This database integration is particularly effective for granular forecasting as it maintains a structured history of both actual and predicted values, allowing for immediate error calculation and model recalibration. The use of PostgreSQL ensures data integrity and supports complex queries for regional or category-specific aggregations, which are essential for the 'On-Demand' view. This ensures that the granular, daily predictions generated by the recursive forecasting loop are immediately available for analysis, providing stakeholders with a dynamic view of evolving demand patterns without the latency of re-running the full inference pipeline.
 
-\subsection{CI/CD Pipelines for Future Batch Training}
+\subsubsection{CI/CD Pipelines for Future Batch Training}
 
 While the VAHAN portal provides verified data, it is Javascript heavy, and is thus difficult to scrape and preprocess for live streamed data. Keeping this in mind, the following pipeline is designed for non periodic updates - it runs whenever a new dataset is uploaded to the repository in the backend. As the VAHAN portal updates monthly, the new dataset can either be added monthly or yearly for each state, thus updating the models and the predictive domain for forecasting. 
 
 Making use of GitHub actions, the CI/CD pipeline operationalizes continuous EV demand learning by automatically retraining quantum–classical models whenever state-level sales data changes. It detects newly added or modified CSV datasets, preprocesses them through the quantum feature pipeline, and retrains the model in a controlled Python environment. This is developed for both the classial and the quantum model, and tracks for changes made to the reporsitory within a particular directory.
 
-\section{Results and Discussion}
+\subsubsection{Dashboard Implementation}
 
-\subsection{Comparative Analysis of Models}
+To integrate the pipeline successfully, the dashboard incorporates a live inference engine that deserializes the latest Hoeffding Tree ensemble model updated by the weekly CI/CD pipeline. The dashboard architecture is designed as a dynamic decision support system, acting as a real-time visualization layer that consumes artifacts produced by the data processing pipeline. It loads the serialized River model and pre-computed metrics, ensuring that users interact with the most up-to-date forecasting data without requiring manual refreshes.
 
-The performance of the proposed Hybrid Quantum-Classical model was evaluated against the baseline Classical models (ARIMA, LSTM, XGBoost) using standard error metrics: Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), Mean Absolute Percentage Error (MAPE), and the Coefficient of Determination ($R^2$).
+Visualizations include real-time sentiment gauges, volatility plots, and brand-specific trend lines that allow stakeholders to monitor market health at a glance. Additionally, the dashboard integrates the Agno agent's output, providing automated strategic summaries alongside raw data visualizations. This comprehensive view enables users to correlate sentiment shifts with demand fluctuations, providing a holistic tool for market analysis.
 
-Table~\ref{tab:model_comparison} highlights the aggregate performance across all states. The Hybrid Quantum-XGBoost model demonstrates superior generalization on quarterly trends, achieving a lower MAPE compared to the classical LSTM, validating the hypothesis that quantum embeddings effectively capture nonlinear adoption dynamics.
+\section{Results}\label{sec4}
+\subsection{Sentiment Forecasting and Competitive Brand Analysis}
+\subsubsection{Metrics Assessed}
+With classification being the primary target, the following metrics were incorporated to check and compare model performance before dashboard integration:
+\begin{itemize}
+    \item{Precision}
+    \item{Recall}
+    \item{Accuracy}
+    \item{F1-Score}
+\end{itemize}
+
+\subsubsection{Model Results}
+The random forest classifier that was initially employed for binary sentiment classification achieved an accuracy of 76.65\%, with balanced precision and recall scores ($\sim$0.77) for both positive and negative sentiment classes. The XGBoost model, fine-tuned using \texttt{RandomizedSearchCV}, yielded a higher classification accuracy of 78.75\%, indicating improved generalization through optimized hyperparameters. Fig.~\ref{fig:features} shows the final selected features for model training, and Table~\ref{tab:models} shows the models implemented and their respective accuracies.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\linewidth]{featureimp.png}
+    \caption{Final selected features for model training.}
+    \label{fig:features}
+\end{figure}
+
+\begin{table}[h!]
+\centering
+\caption{Models implemented and their respective accuracies.}
+\label{tab:models}
+\begin{tabular}{|l|c|p{7cm}|}
+\hline
+\textbf{Model} & \textbf{Accuracy} & \textbf{Implication} \\ \hline
+Decision Tree  & 70\%    & Not preferred, accuracy can be improved \\ \hline
+Random Forest  & 76.65\% & Improved accuracy, can be improved further by boosting \\ \hline
+XGBoost        & 78.75\% & Further hyperparameter tuning can be employed \\ \hline
+\end{tabular}
+\end{table}
+
+On the basis of these results, XGBoost was then applied to the 5 brands individually, to assess sentiment trends at a granular level. Across all brands, the model maintained strong consistency, with accuracies ranging from 82\% to 86\%, and macro-averaged F1-scores. Hero MotoCorp recorded the highest performance (86\% accuracy, 0.85 F1), highlighting XGBoost's robustness in brand-specific sentiment forecasting within the electric vehicle domain.
+
+\subsubsection{Results Obtained from River Models}
+Over the six-week retraining window, the leveraging-bagging ensemble with Hoeffding classifiers demonstrated non-linear accuracy dynamics—peaking initially at 95\% (2025-07-06 to 2025-07-13), plummeting to 87.78\% (2025-08-03 to 2025-08-10), and recovering moderately to 82.35\% (2025-08-17 to 2025-08-24)—mirroring concurrent sentiment volatility in India’s EV sector. During the early July period, Tata Motors launched its mid-size Harrier EV. This investor optimism likely contributed to the early accuracy high.
+Conversely, in early August, supply-chain headwinds—particularly rare-earth magnet shortages—hampered electric two-wheeler brands like TVS, while regulatory shifts, including potential GST realignments, dampened sentiment for traditional manufacturers such as Tata and Hero MotoCorp. Sentiment began stabilizing by mid-August as supply conditions eased (e.g., improved magnet availability for Bajaj) and strategic policy support materialized; during this stabilization, classifier accuracy rebounded.
+
+\subsubsection{Comparative Analysis Between XGBoost and River Models for Sentiment Analysis}
+\begin{table}[h!]
+\centering
+\caption{Comparison between XGBoost and Bagging Classifier + Hoeffding Tree}
+\label{tab:xgb-hoeffding}
+\begin{tabular}{|l|p{5cm}|p{5cm}|}
+\hline
+\textbf{Aspect} & \textbf{XGBoost} & \textbf{Bagging Classifier + Hoeffding Tree} \\ \hline
+Learning Paradigm & Batch learning – retrains on full dataset at once & Online/streaming learning – incrementally updates with new data \\ \hline
+Data Handling & Requires full dataset in memory; not efficient for continuous updates & Processes one instance at a time; efficient for streaming or evolving data \\ \hline
+Model Update Frequency & Periodic retraining needed (computationally expensive) & Continuous updates with every new data point (lightweight) \\ \hline
+Adaptability & Struggles with non-stationary data unless frequently retrained & Naturally adapts to concept drift via incremental learning \\ \hline
+Complexity & High computational and memory overhead, especially for large datasets & Lower resource usage, scalable for long-term streaming \\ \hline
+Performance & 80--85\% accuracy based on brand & 87--95\% accuracy based on brand \\ \hline
+Latency & High training latency, low inference latency & Negligible training latency, low inference latency \\ \hline
+Interpretability & Moderate, but tree-ensemble structure can be opaque & More interpretable as Hoeffding trees are closer to decision-tree logic \\ \hline
+Use Case Fit & Better for static datasets with periodic refresh & Better for live/streaming data where models must evolve continuously \\ \hline
+\end{tabular}
+\end{table}
+
+In Table 2, we compare both models with respect to parameters like data handling, adaptability, and performance, to name a few. As a result, the choice to opt for River models provides a wider scope for scalability, flexibility, and avoids computation and memory issues.
+
+\subsection{Demand Forecasting}
+\subsubsection{Metrics Assessed}
+We evaluate models using:
+\begin{itemize}
+    \item \textbf{Mean Absolute Error (MAE)}: average magnitude of errors.
+    \item \textbf{Root Mean Square Error (RMSE)}: penalizes large errors, sensitive to spikes.
+    \item \textbf{R\textsuperscript{2} Score}: proportion of variance explained by the model.
+    \item \textbf{MAPE}: scale-independent percentage error.
+\end{itemize}
+
+\subsubsection{Model Results}
+The experimental results (next-day forecasting unless specified) are summarized in Tables~\ref{tab:classical_results} and~\ref{tab:quantum_results}. These values are produced from rolling-window evaluation aggregated across states and vehicle categories.
 
 \begin{table}[h!]
     \centering
-    \caption{Performance Comparison of Classical vs. Hybrid Quantum Models}
-    \label{tab:model_comparison}
-    \begin{tabular}{lcccc}
+    \caption{Classical ML Model Implementation}\label{tab:classical_results}
+    \begin{tabular}{lccc}
         \toprule
-        \textbf{Model Architecture} & \textbf{MAE} & \textbf{RMSE} & \textbf{MAPE (\%)} & \textbf{$R^2$} \\
+        Model & MAE & R\textsuperscript{2} & Implication \\
         \midrule
-        Classical ARIMA (Baseline) & 1540.34 & 1709.63 & 8.64 & 0.72 \\
-        Classical LSTM & 2253.89 & 2704.24 & 14.29 & 0.13 \\
-        Classical LightGBM & 1299.61 & 1494.14 & 21.09 & -1.23 \\
-        \textbf{Hybrid Quantum-XGBoost} & \textbf{1097.57} & \textbf{1462.87} & \textbf{7.30} & \textbf{0.74} \\
+        XGBoost & $\approx$ 71.34 & $\approx$ 0.92 & Best overall performance across vehicle categories and regions \\
+        LSTM & RMSE $<$ 90 & $\approx$ 0.88 & Excels in metro regions with temporal sales continuity \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-Table~\ref{tab:category_comparison} further demarcates the robustness of the models when a vehicle-based filter is applied. The hybrid model maintains stability across both high-volume passenger segments and volatile commercial segments.
-
 \begin{table}[h!]
     \centering
-    \caption{Segment-wise Forecasting Accuracy (MAPE \%)}
-    \label{tab:category_comparison}
+    \caption{Quantum ML Model Implementation}\label{tab:quantum_results}
     \begin{tabular}{lcc}
         \toprule
-        \textbf{Vehicle Category} & \textbf{Classical LightGBM} & \textbf{Hybrid Quantum} \\
+        Model & R\textsuperscript{2} Score & Implication \\
         \midrule
-        2-Wheelers (Personal) & 24.64\% & 6.20\% \\
-        3-Wheelers (Commercial) & 38.29\% & 5.97\% \\
-        4-Wheelers (Passenger) & 30.73\% & 6.51\% \\
-        \textbf{Average} & \textbf{31.22\%} & \textbf{6.23\%} \\
+        Quantum SVM & $\approx$ 0.65 & Limited by current hardware noise and shallow circuits \\
+        Optimizer-enhanced QML & $\approx$ 0.68 & Small gains after tuning and noise reduction \\
+        Quantum Embeddings + XGBoost & $\approx$ 0.75 & Hybrid approach improved classical accuracy by $\sim$5--6\% \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-\subsection{Conclusion and 2026 Outlook}
+\subsubsection{Graphs and Interpretation of Results}
 
-The integration of quantum-enhanced feature maps with robust classical regressors has established a scalable framework for EV demand forecasting. By leveraging the strengths of both paradigms—granular responsiveness from classical models and structural stability from quantum hybrids—the system provides a comprehensive view of the market.
+Key visual diagnostics are shown below:
+\begin{itemize}
+    \item \textbf{Fig.~\ref{fig:actual_pred}}: Actual vs Predicted Sales scatter — strong fit at low-to-mid volumes; underprediction at high sales.
+    \item \textbf{Fig.~\ref{fig:residuals}}: Residual plot — error increases with magnitude of sales.
+    \item \textbf{Fig.~\ref{fig:resid_dist}}: Residual distribution — clustered near zero with heavy tail of outliers.
+\end{itemize}
 
-Looking ahead to 2026, the model projects a sustained acceleration in EV adoption, particularly in the 2-Wheeler and 3-Wheeler segments, driven by the compounding effects of FAME subsidies and infrastructure expansion. The forecast indicates a structural shift where electric mobility transitions from early adoption to mass market penetration, with projected sales volumes in 2026 expected to exceed 2025 levels by approximately 25-30\%, contingent on policy stability. This trajectory underscores the critical need for continued supply chain scaling and grid modernization to support the anticipated surge in demand.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{actual_vs_predicted.png} % replace with your file
+    \caption{Actual vs Predicted EV sales.}
+    \label{fig:actual_pred}
+\end{figure}
+
+\noindent\textbf{Interpretation (Fig.~\ref{fig:actual_pred}):}
+The scatter plot provides an intuitive visualization of how closely the model’s predictions align with the true sales values. Ideally, all points should lie along the 45-degree diagonal, which represents perfect prediction. In the low-to-mid sales volume range, most points are clustered close to this line, indicating that the model is effective at capturing general demand trends for everyday sales scenarios.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{residual_plot.png} % replace with your file
+    \caption{Residuals vs Predicted values.}
+    \label{fig:residuals}
+\end{figure}
+
+\noindent\textbf{Interpretation (Fig.~\ref{fig:residuals}):}
+The residual plot illustrates how errors vary as a function of predicted sales values. For lower predicted values, residuals remain relatively small and symmetrically distributed around zero, which confirms that the model performs reliably under typical demand conditions. However, as the predicted values increase, residuals become more widely spread and skew positively, indicating that the model increasingly underestimates sales as demand grows.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{residual_dist.png} % replace with your file
+    \caption{Residual distribution (denormalized).}
+    \label{fig:resid_dist}
+\end{figure}
+
+\noindent\textbf{Interpretation (Fig.~\ref{fig:resid_dist}):}
+The residual distribution provides a global view of model errors across all predictions. The majority of residuals are tightly centered around zero, indicating that the model generally achieves accurate predictions across the dataset. This clustering reflects a strong overall performance, which is encouraging given the complexity of EV demand forecasting.
+
+
+
+The demand forecasting pipeline demonstrates that classical models (notably XGBoost) provide robust next-day forecasts, while quantum-classical hybrids (quantum embeddings + XGBoost) show promise in improving trend-level forecasts for monthly horizons. The integration of sentiment-derived features meaningfully enhances predictive performance and offers operational value when combined with state-wise sales and policy/infrastructure co variates.
+
+
+
+\subsection{Overall Understanding}
+Based on the research conducted, it can be concluded that classical models provide higher accuracies for next day predictions. As seen in the study for demand forecasting, XGBoost can be implemented to predict next day sales, and Quantum Embeddings with XGBoost would be considered to provide broad predictions for the next month. Based on the preprocessed dataset used for training [16] and [17], it was observed that Maharashtra, Delhi, and Karnataka demonstrated the highest variance in monthly sales, with two-wheelers dominating growth trends in Tier-2 cities. Similarly, the trained sentiment forecasting model, taken from the months of April-May projected positive sentiments for Ashok Leyland, Hero MotoCorp, TVS Motors and Mahindra and negative sentiment for Tata Motors.
+\section{Conclusion}\label{sec5}
+This research presents a novel hybrid framework that integrates classical and quantum machine learning models for electric vehicle (EV) demand forecasting in the Indian context. The experimental results indicate that classical models currently outperform quantum methods due to hardware constraints, particularly in scenarios requiring fine-grained, short-term forecasts. However, quantum models show promise in long-term, high-level trend prediction when using smaller feature sets. The integration of DistilBERT-based sentiment analysis significantly enhanced forecasting performance, underscoring the value of public opinion data in understanding EV adoption patterns.
+Future work will focus on:
+\begin{itemize}
+    \item Expanding the framework to incorporate real-time data streams from social media and dashboards
+    \item Improving the robustness of quantum algorithms through hyperparameter tuning.
+    \item Developing specialized models for forecasting of energy consumption through charging behavior.
+    \item Applying the methodology to infrastructure planning and policy simulations for sustainable mobility through dashboards.
+\end{itemize}
+This study lays the foundation for intelligent EV demand modeling in data-scarce and rapidly evolving markets. The integration of sentiment-aware forecasting with quantum ma chine learning contributes a unique, forward-looking approach to sustainable transportation planning.
+
+\section*{Declarations}
+
+\subsection*{Data Availability Statement}
+All data utilized in this study were obtained from publicly available datasets on Kaggle, Vahan Portal, YFinance stock price data, Google Search Trends and news sources through APIs (GNews). The datasets are open source and freely accessible.
+
+\subsection*{Authors’ Contributions}
+All authors contributed significantly to the work.
+\begin{itemize}
+    \item \textbf{Stuthi Shrisha} (corresponding author): designed and implemented the sentiment analysis framework, quantum models for demand forecasting, and coordinated manuscript preparation.
+    \item \textbf{Sindhu K}: performed the critical review of the manuscript and provided supervision as the course instructor.
+    \item \textbf{Shubham Mahanti}: developed and implemented the classical models for demand forecasting applied in the study.
+    \item \textbf{Atharva Sreekar}: conducted the literature review and organized the theoretical background, with analysis of the model results.
+\end{itemize}
+All authors reviewed and approved the final manuscript and accept accountability for the integrity and accuracy of the work.
+
+\subsection*{Funding}
+This research did not receive any funding from public, commercial, or not-for-profit agencies.
+
+\subsection*{Competing Interests}
+The authors declare that they have no competing interests.
+
+\subsection*{Acknowledgements}
+The corresponding author gratefully acknowledges the valuable contributions of the co-authors in the planning, development, and refinement of this research work. Their constructive suggestions and collaborative efforts were essential to the completion of this study.
+
+
+\begin{thebibliography}{99}
+
+\bibitem{bib1}
+Desai, Abhi. "Revolutionizing Mobility: An In-Depth Analysis of India's Electric Vehicle Market and Its Future Trajectory." Available at SSRN 5209739 (2025).
+
+\bibitem{bib2}
+Das, Nabanita, Amaresh Sahu, Hemanta Kumar Bhuyan, and Anurag Nanda.
+"Predicting Electric Vehicle Adoption in India: A Machine Learning Approach and Text Analysis of Consumer Sentiment for OLA Electric Vehicles."
+\textit{Srusti Management Review} 17 (2024): 142--150.
+
+\bibitem{bib3}
+Kumar, Sachin, Vinay Singh, and Rachit Goel.
+"Strategic forecasting for electric vehicle sales: A cutting edge holistic model leveraging key factors and machine learning technique."
+\textit{Transportation in Developing Economies} 10, no. 2 (2024): 23.
+
+\bibitem{bib4}
+Mishra, Rishav Dev, Santanu Kumar Dash, Saichol Chudjuarjeen, Satyajit Mohanty, Shivam Prakash Gautam, Rupali Mohanty, and Md Tasnin Tanvir.
+"Hybrid LSTM-GBRT based machine learning technique implementation for electric vehicle sales prediction analysis."
+\textit{International Journal of Sustainable Engineering} 17, no. 1 (2024): 843--858.
+
+\bibitem{bib5}
+Sheoran, S.K. and Yadav, V.
+"Comparative analysis of classification efficiency of quantum machine learning algorithms."
+In \textit{Proc. IEEE Int. Conf. on Computing, Power and Communication Technologies (IC2PCT)}, vol. 5, pp. 1818–1823, 2024.
+
+\bibitem{bib6}
+Sunkavalli, J., Rao, B.M., Basu, M.T., Sharma, H.D., Kumar, P.A. and Anand, K.
+"Experimentation analysis of VQC and QSVM on sentence classification in quantum paradigm."
+In \textit{Proc. Int. Conf. on Computing, Sciences and Communications (ICCSC)}, pp. 1–5, 2024.
+
+\bibitem{bib7}
+Sünkel, L., Altmann, P., Köle, M. and Gabor, T.
+"On the quantum impact in hybrid classical-quantum transfer learning."
+In \textit{Proc. IEEE Int. Conf. on Quantum Computing and Engineering (QCE)}, vol. 2, pp. 11–15, 2024.
+
+\bibitem{bib8}
+Fadli, S., Rawal, B.S. and Mentges, A.
+"Hybrid quantum machine learning using quantum integrated cloud architecture (QICA)."
+In \textit{Proc. Int. Conf. on Computing, Networking and Communications (ICNC)}, pp. 419–425, 2023.
+
+\bibitem{bib9}
+Zhang, B., Zheng, G. and Van Huynh, N.
+"A hybrid quantum-classical autoencoder framework for end-to-end communication systems."
+\textit{IEEE Wireless Communications Letters}, 2024.
+
+\bibitem{bib10}
+Ibrahim, N.R., Radescu, V.A.M., Grossi, M., Von Altrock, C.H.P. and Muentner, K.
+"Mixed quantum-classical method for fraud detection with quantum feature selection."
+U.S. Patent 11,983,720, issued May 14, 2024.
+
+\bibitem{bib11}
+Simsek, A.I., Koç, E., Tasdemir, B.D., Aksoz, A., Turkoglu, M. and Sengur, A.
+"Deep learning forecasting model for market demand of electric vehicles."
+\textit{Applied Sciences}, vol. 14, no. 23, p. 10974, 2024.
+
+\bibitem{bib12}
+Padmavathy, M.
+"Behavioral finance and stock market anomalies: Exploring psychological factors influencing investment decisions."
+\textit{Shanlax Int. J. of Management}, vol. 11, no. S1, pp. 191–197, 2024.
+
+\bibitem{bib13}
+Lapinskaitė, I. and Kuckailytė, J.
+"The impact of supply chain cost on the price of the final product."
+\textit{Business, Management and Education}, vol. 12, no. 1, pp. 109–126, 2014.
+
+\bibitem{bib14}
+Khedr, Ayman E., and Nagwa Yaseen.
+"Predicting stock market behavior using data mining technique and news sentiment analysis."
+\textit{International Journal of Intelligent Systems and Applications} 9, no. 7 (2017): 22.
+
+\bibitem{bib15}
+Danach, K., El Dirani, A. and Rkein, H.
+"Revolutionizing supply chain management with AI: A path to efficiency and sustainability."
+\textit{IEEE Access}, 2024.
+
+\bibitem{bib16}
+Liu, P.
+"Pricing strategies of a three-stage supply chain: A new research in the big data era."
+\textit{Discrete Dynamics in Nature and Society}, Article ID 9024712, 2017.
+
+\bibitem{bib17}
+Cisse Sory, I., Xue, J. and Gueye, T.
+"Inventory management and demand forecasting: Improvement of a forecasting model based on artificial neural networks."
+\textit{Journal of Management Science \& Engineering Research}, vol. 4, no. 2, pp. 33–39, 2021.
+
+\bibitem{bib18}
+Haghani, M., Sprei, F., Kazemzadeh, K., Shahhoseini, Z. and Aghaei, J.
+"Trends in electric vehicles research."
+\textit{Transportation Research Part D: Transport and Environment}, vol. 123, p. 103881, 2023.
+
+\bibitem{bib19}
+Khan, M.A., Saqib, S., Alyas, T., Rehman, A.U., Saeed, Y., Zeb, A., Zareei, M. and Mohamed, E.M.
+"Effective demand forecasting model using business intelligence empowered with machine learning."
+\textit{IEEE Access}, vol. 8, pp. 116013–116023, 2020.
+
+\bibitem{bib20}
+Afzal, M.
+"Electric Vehicle Sales by State in India." Kaggle dataset (2024).
+Available at: \url{https://www.kaggle.com/datasets/mafzal19/electric-vehicle-sales-by-state-in-india}.
+
+\bibitem{bib21}
+Choudhary, P.
+"Electric Vehicle Sales in India." Kaggle dataset (2023).
+Available at: \url{https://www.kaggle.com/datasets/praveenchoudhary1217/electric-vehicle-sales-in-india?select=Ev+Sales.xlsx}.
+
+\bibitem{bib22}
+Glerum, A., Stankovikj, L., Thémans, M. and Bierlaire, M., 2014. Forecasting the demand for electric vehicles: accounting for attitudes and perceptions. Transportation science, 48(4), pp.483-499.
+
+\bibitem{bib23}
+Sanami, S., Mosalli, H., Yang, Y., Yeh, H.G. and Aghdam, A.G., 2025. Demand forecasting for electric vehicle charging stations using multivariate time-series analysis. arXiv preprint arXiv:2502.16365.
+
+\end{thebibliography}
+
+\end{document}
