@@ -50,8 +50,10 @@ class InferenceEngine:
             from advanced_model_trainer import create_advanced_features, prepare_data_for_training
             self.create_advanced_features = create_advanced_features
             self.prepare_data_for_training = prepare_data_for_training
-        except ImportError:
-            logger.warning("Could not import feature engineering functions")
+            logger.info("Feature engineering functions loaded successfully")
+        except ImportError as e:
+            logger.warning(f"Could not import feature engineering functions: {e}")
+            logger.warning("Advanced features will not be available")
             self.create_advanced_features = None
             self.prepare_data_for_training = None
     

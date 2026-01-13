@@ -211,11 +211,13 @@ def run_api(host='0.0.0.0', port=5000, debug=False):
     Args:
         host: Host to bind to
         port: Port to run on
-        debug: Enable debug mode
+        debug: Enable debug mode (NOT recommended for production)
     """
     logger.info(f"Starting API server on {host}:{port}")
+    logger.warning("Debug mode should NEVER be enabled in production environments")
     app.run(host=host, port=port, debug=debug)
 
 
 if __name__ == '__main__':
-    run_api(debug=True)
+    # Debug mode disabled for security - only enable for local development
+    run_api(debug=False)
